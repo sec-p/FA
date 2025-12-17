@@ -197,6 +197,11 @@ class CustomImageNet(DatasetBase):
     def __init__(self, root, num_shots):
         self.dataset_dir = os.path.join(root, self.dataset_dir)
         self.image_dir = os.path.join(self.dataset_dir, 'images')
+        
+        # Check if dataset directory exists
+        if not os.path.exists(self.image_dir):
+            print(f"⚠️  Dataset directory does not exist: {self.image_dir}")
+            print(f"   Expected structure: {root}/ImageNet-1K/images/{{train,val}}/{{class_folders}}/{{images}}")
 
         text_file = os.path.join(self.dataset_dir, "classnames.txt")
         classnames = self.read_classnames(text_file)
@@ -228,11 +233,37 @@ class CustomImageNet(DatasetBase):
 
     def read_data(self, classnames, split_dir):
         split_dir = os.path.join(self.image_dir, split_dir)
-        folders = sorted(f.name for f in os.scandir(split_dir) if f.is_dir())
+        
+        # Check if path exists
+        if not os.path.exists(split_dir):
+            print(f"⚠️  Data directory does not exist: {split_dir}")
+            print(f"   Expected: {self.image_dir}/{{train,val}}/{{class_folders}}/{{images}}")
+            return []
+        
+        try:
+            folders = sorted(f.name for f in os.scandir(split_dir) if f.is_dir())
+        except Exception as e:
+            print(f"⚠️  Error scanning {split_dir}: {e}")
+            return []
+        
+        if len(folders) == 0:
+            print(f"⚠️  No class folders in {split_dir}")
+            print(f"   Available items: {os.listdir(split_dir) if os.path.exists(split_dir) else 'N/A'}")
+            return []
+        
         items = []
-
         for label, folder in enumerate(folders):
-            imnames = self.listdir_nohidden(os.path.join(split_dir, folder))
+            folder_path = os.path.join(split_dir, folder)
+            try:
+                imnames = self.listdir_nohidden(folder_path)
+            except Exception as e:
+                print(f"⚠️  Error reading {folder_path}: {e}")
+                continue
+            
+            if folder not in classnames:
+                print(f"⚠️  Folder '{folder}' not in classnames")
+                continue
+                
             classname = classnames[folder]
             for imname in imnames:
                 impath = os.path.join(split_dir, folder, imname)
@@ -263,6 +294,11 @@ class CustomImageNet100(DatasetBase):
     def __init__(self, root, num_shots):
         self.dataset_dir = os.path.join(root, self.dataset_dir)
         self.image_dir = os.path.join(self.dataset_dir, 'images')
+        
+        # Check if dataset directory exists
+        if not os.path.exists(self.image_dir):
+            print(f"⚠️  Dataset directory does not exist: {self.image_dir}")
+            print(f"   Expected structure: {root}/ImageNet100_MCM/images/{{train,val}}/{{class_folders}}/{{images}}")
 
         text_file = os.path.join(self.dataset_dir, "classnames.txt")
         classnames = self.read_classnames(text_file)
@@ -294,11 +330,37 @@ class CustomImageNet100(DatasetBase):
 
     def read_data(self, classnames, split_dir):
         split_dir = os.path.join(self.image_dir, split_dir)
-        folders = sorted(f.name for f in os.scandir(split_dir) if f.is_dir())
+        
+        # Check if path exists
+        if not os.path.exists(split_dir):
+            print(f"⚠️  Data directory does not exist: {split_dir}")
+            print(f"   Expected: {self.image_dir}/{{train,val}}/{{class_folders}}/{{images}}")
+            return []
+        
+        try:
+            folders = sorted(f.name for f in os.scandir(split_dir) if f.is_dir())
+        except Exception as e:
+            print(f"⚠️  Error scanning {split_dir}: {e}")
+            return []
+        
+        if len(folders) == 0:
+            print(f"⚠️  No class folders in {split_dir}")
+            print(f"   Available items: {os.listdir(split_dir) if os.path.exists(split_dir) else 'N/A'}")
+            return []
+        
         items = []
-
         for label, folder in enumerate(folders):
-            imnames = self.listdir_nohidden(os.path.join(split_dir, folder))
+            folder_path = os.path.join(split_dir, folder)
+            try:
+                imnames = self.listdir_nohidden(folder_path)
+            except Exception as e:
+                print(f"⚠️  Error reading {folder_path}: {e}")
+                continue
+            
+            if folder not in classnames:
+                print(f"⚠️  Folder '{folder}' not in classnames")
+                continue
+                
             classname = classnames[folder]
             for imname in imnames:
                 impath = os.path.join(split_dir, folder, imname)

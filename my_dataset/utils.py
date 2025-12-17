@@ -403,6 +403,18 @@ def build_data_loader(
     if dataset_wrapper is None:
         dataset_wrapper = DatasetWrapper
 
+    # Check if data_source is empty
+    if data_source is None or len(data_source) == 0:
+        print(f"⚠️  Warning: data_source is empty or None (length: {len(data_source) if data_source else 'None'})")
+        print(f"   - batch_size: {batch_size}")
+        print(f"   - is_train: {is_train}")
+        print(f"   - transform: {tfm}")
+        print(f"   This typically means:")
+        print(f"   1. Data directory path is incorrect or data is missing")
+        print(f"   2. Data split (train/val/test) has no samples")
+        print(f"   3. Dataset initialization failed silently")
+        raise ValueError(f"Cannot create data loader with empty data source (length: {len(data_source) if data_source else 'None'})")
+
     # Build data loader
     data_loader = torch.utils.data.DataLoader(
         dataset_wrapper(data_source, input_size=input_size, transform=tfm, is_train=is_train,
@@ -413,6 +425,6 @@ def build_data_loader(
         drop_last=False,
         pin_memory=(torch.cuda.is_available())
     )
-    assert len(data_loader) > 0
+    assert len(data_loader) > 0, f"Data loader is empty after construction (data_source had {len(data_source)} items)"
 
     return data_loader

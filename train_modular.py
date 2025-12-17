@@ -76,6 +76,17 @@ class ModularTrainer:
         else:
             train_data = few_shot_dataset.train_x
         
+        # Debug: Print dataset sizes
+        print(f"Train data size: {len(train_data)}")
+        print(f"Test data size: {len(few_shot_dataset.test)}")
+        
+        # Handle empty test dataset
+        if len(few_shot_dataset.test) == 0:
+            print("⚠️  Warning: Test dataset is empty. Using train+val split as fallback.")
+            test_data = few_shot_dataset.val if len(few_shot_dataset.val) > 0 else train_data[:int(0.2*len(train_data))]
+        else:
+            test_data = few_shot_dataset.test
+        
         self.train_loader = build_data_loader(
             data_source=train_data,
             batch_size=batch_size,
@@ -88,11 +99,14 @@ class ModularTrainer:
         )
         
         self.test_loader = build_data_loader(
-            data_source=few_shot_dataset.test,
+            data_source=test_data,
             batch_size=batch_size,
             is_train=False,
             tfm=self.test_transform,
-            shuffle=False
+            shuffle=False,
+            class_negatives=class_negatives,
+            text_encoder=None,
+            device=self.device
         )
         
         self.classnames = few_shot_dataset.classnames

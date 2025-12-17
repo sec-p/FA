@@ -1,0 +1,68 @@
+#!/bin/bash
+# Parallel Grid Search Script 1/3
+# Runs first set of method combinations
+# Run this in one terminal: bash scripts/run_methods_part1.sh
+# While running part2 and part3 in other terminals
+
+set -e
+
+echo "╔════════════════════════════════════════════════════════════════════╗"
+echo "║  Grid Search Part 1/3: Methods 1-2 with all hyperparameter combos ║"
+echo "╚════════════════════════════════════════════════════════════════════╝"
+echo ""
+
+BASE_CONFIG="configs/my_config.yaml"
+
+# Part 1: mlp:mean, mlp:query_attn
+METHODS=("mlp:mean" "mlp:query_attn")
+SEEDS=(1 2 3)
+LAMBDA_LLM=(0.01 0.05 0.1)
+LAMBDA_MIXUP=(0.05 0.1 0.2)
+LRS=(0.0005 0.001 0.002)
+
+run_training() {
+    local selector=$1
+    local fuser=$2
+    local seed=$3
+    local lambda_llm=$4
+    local lambda_mixup=$5
+    local lr=$6
+    
+    cp "$BASE_CONFIG" "configs/temp_grid.yaml"
+    
+    python3 << EOF
+import yaml
+with open('configs/temp_grid.yaml', 'r') as f:
+    cfg = yaml.load(f, Loader=yaml.Loader)
+cfg['selector_type'] = '$selector'
+cfg['fuser_type'] = '$fuser'
+cfg['seed'] = $seed
+cfg['lambda_llm_negatives'] = $lambda_llm
+cfg['lambda_mixup'] = $lambda_mixup
+cfg['lr'] = $lr
+with open('configs/temp_grid.yaml', 'w') as f:
+    yaml.dump(cfg, f)
+EOF
+    
+    echo "[Part1] $selector + $fuser | seed=$seed, llm=$lambda_llm, mixup=$lambda_mixup, lr=$lr"
+    python train_modular.py --config configs/temp_grid.yaml --is_train 1 || true
+    rm -f configs/temp_grid.yaml
+}
+
+total=0
+for m in "${METHODS[@]}"; do
+    IFS=':' read -r sel fus <<< "$m"
+    for s in "${SEEDS[@]}"; do
+        for ll in "${LAMBDA_LLM[@]}"; do
+            for lm in "${LAMBDA_MIXUP[@]}"; do
+                for lr in "${LRS[@]}"; do
+                    total=$((total + 1))
+                    run_training "$sel" "$fus" "$s" "$ll" "$lm" "$lr"
+                done
+            done
+        done
+    done
+done
+
+echo ""
+echo "✓ Part 1 completed ($total experiments)"

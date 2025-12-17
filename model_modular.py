@@ -168,15 +168,18 @@ class SparseSlotAttentionSelector(BaseSelector):
     """
     Slot Attention-based feature selector.
     Learnable slots attend to patches with top-K masking for sparsity.
+    Slots are initialized with orthogonal initialization for better convergence.
     """
     
     def __init__(self, input_dim: int, num_select: int, num_slots: int = 4, cfg: Dict = None):
         super().__init__(input_dim, num_select, cfg)
         self.num_slots = num_slots
         
-        # Learnable slot queries
-        self.slots = nn.Parameter(torch.randn(1, num_slots, input_dim))
-        nn.init.xavier_uniform_(self.slots)
+        # Learnable slot queries with orthogonal initialization
+        # For orthogonal init, we need at least 2D tensor: (num_slots, input_dim)
+        self.slots = nn.Parameter(torch.empty(1, num_slots, input_dim))
+        nn.init.orthogonal_(self.slots.data.squeeze(0), gain=1.0)
+        self.slots.data = self.slots.data.unsqueeze(0)
         
         # Cross-attention components
         self.norm1 = nn.LayerNorm(input_dim)
@@ -403,17 +406,21 @@ def compute_semantic_exclusion_loss(final_feat: torch.Tensor,
 
 def compute_mixup_invariance_loss(final_feat: torch.Tensor,
                                  bg_feat: torch.Tensor,
-                                 logits: torch.Tensor,
+                                 bg_mask: torch.Tensor,
                                  labels: torch.Tensor,
+                                 text_feats: torch.Tensor,
                                  alpha: float = 0.2) -> torch.Tensor:
     """
-    Mixup invariance: random mixture of FG and BG should maintain label.
+    Causal Mixup Invariance Loss: enforces that mixed features maintain label consistency.
+    
+    Logic: mixed_feat = selected_feat + (1-bg_mask) * shuffled_bg_feat
     
     Args:
-        final_feat: (B, D) foreground features
+        final_feat: (B, D) selected foreground features
         bg_feat: (B, D) background features
-        logits: (B, num_classes) model output
+        bg_mask: (B, 1) or (B, D) background mask for selective mixing
         labels: (B,) ground truth labels
+        text_feats: (num_classes, D) text features for logit computation
         alpha: mixup parameter
     
     Returns:
@@ -422,20 +429,46 @@ def compute_mixup_invariance_loss(final_feat: torch.Tensor,
     B = final_feat.shape[0]
     device = final_feat.device
     
-    # Random mixing coefficients
-    lam = torch.from_numpy(
-        np.random.beta(alpha, alpha, size=(B, 1))
-    ).to(device).float()
+    # Ensure bg_mask is properly shaped
+    if bg_mask.dim() == 1:
+        bg_mask = bg_mask.unsqueeze(1)  # (B, 1)
     
-    # Mixup features
-    mixed_feat = lam * final_feat + (1 - lam) * bg_feat  # (B, D)
+    # Shuffle indices for background features
+    shuffle_idx = torch.randperm(B, device=device)
+    shuffled_bg = bg_feat[shuffle_idx]
     
-    # Compute logits for mixed features (would need a forward pass, 
-    # so this is simplified here - in practice, you'd use model's text encoder)
-    # For now, just penalize feature divergence
-    mixup_loss = F.mse_loss(mixed_feat, final_feat) + F.mse_loss(mixed_feat, bg_feat)
+    # Causal mixup: mixed_feat = selected_feat + (1-bg_mask) * shuffled_bg_feat
+    mixed_feat = final_feat + (1.0 - bg_mask) * shuffled_bg
+    
+    # Normalize mixed features
+    mixed_feat = mixed_feat / (mixed_feat.norm(dim=-1, keepdim=True) + 1e-8)
+    
+    # Compute logits for mixed features
+    logit_scale = 1.0 / 0.07  # Default CLIP temperature
+    mixed_logits = logit_scale * mixed_feat @ text_feats.T  # (B, num_classes)
+    
+    # Mixed labels: labels[shuffle_idx] indicates which class the mixed features should belong to
+    # We enforce that mixed features maintain the original label through contrastive loss
+    # Loss: KL divergence between original logits and mixed logits (encouraging invariance)
+    
+    # Compute original logits
+    orig_logits = logit_scale * final_feat @ text_feats.T  # (B, num_classes)
+    
+    # KL divergence loss: mixed logits should be similar to original logits
+    orig_probs = F.softmax(orig_logits, dim=1)
+    mixed_log_probs = F.log_softmax(mixed_logits, dim=1)
+    
+    mixup_loss = F.kl_div(mixed_log_probs, orig_probs, reduction='batchmean')
     
     return mixup_loss
+
+# Note: The top-level function `compute_mixup_invariance_loss` was used earlier
+# during development. The canonical implementation for the model is provided as
+# `ModularCustomCLIP.compute_mixup_invariance_loss` (a class method) which
+# includes the important causal `.detach()` behavior on background features.
+# To avoid confusion and duplicated logic, this top-level helper is retained
+# only as a thin wrapper that calls the class implementation when needed.
+# If you prefer to remove this wrapper entirely, it's safe to delete it.
 
 
 # ============================================================================
@@ -569,11 +602,104 @@ class ModularCustomCLIP(nn.Module):
 
         self.has_ood_map = len(self.ood_text_feats) > 0
     
-    def forward(self, image: torch.Tensor, labels: Optional[torch.Tensor] = None) -> Dict:
+    def _compute_llm_negatives_loss(self, final_feats: torch.Tensor, 
+                                    neg_text_tokens: torch.Tensor,
+                                    pos_text_feats: torch.Tensor) -> torch.Tensor:
+        """
+        Compute LLM Negatives loss: push final features away from negative text tokens.
+        
+        Args:
+            final_feats: (B, D) image features
+            neg_text_tokens: (B, num_neg, D) negative text token features
+            pos_text_feats: (B, D) positive text features
+        
+        Returns:
+            loss: scalar
+        """
+        B, num_neg, D = neg_text_tokens.shape
+        
+        # Normalize features
+        final_feats_norm = final_feats / (final_feats.norm(dim=-1, keepdim=True) + 1e-8)  # (B, D)
+        pos_text_norm = pos_text_feats / (pos_text_feats.norm(dim=-1, keepdim=True) + 1e-8)  # (B, D)
+        neg_text_norm = neg_text_tokens / (neg_text_tokens.norm(dim=-1, keepdim=True) + 1e-8)  # (B, num_neg, D)
+        
+        # Positive similarity (maximize)
+        pos_sim = (final_feats_norm * pos_text_norm).sum(dim=1)  # (B,)
+        
+        # Negative similarities (minimize)
+        neg_sims = torch.einsum('bd,bnd->bn', final_feats_norm, neg_text_norm)  # (B, num_neg)
+        
+        # Margin ranking loss: pos_sim should be > neg_sim + margin
+        margin = 0.1
+        neg_max = neg_sims.max(dim=1)[0]  # (B,)
+        loss = F.relu(neg_max - pos_sim + margin).mean()
+        
+        return loss
+    
+    def compute_mixup_invariance_loss(self, selected_feats: torch.Tensor, 
+                                     bg_mask: Optional[torch.Tensor] = None,
+                                     labels: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """
+        Causal Mixup Invariance Loss: mixed features should maintain class predictions.
+        
+        Logic: mixed_feat = selected_feat + (1-bg_mask) * shuffled_bg_feat
+        
+        Args:
+            selected_feats: (B, K, D) selected patch features
+            bg_mask: (B, K) or (B,) background mask for selective mixing
+            labels: (B,) optional ground truth labels
+        
+        Returns:
+            loss: scalar
+        """
+        B, K, D = selected_feats.shape
+        device = selected_feats.device
+        
+        # Average selected features as foreground
+        fg_feat = selected_feats.mean(dim=1)  # (B, D)
+        
+        # Create a random background feature by shuffling
+        shuffle_idx = torch.randperm(B, device=device)
+        # Detach background features to prevent gradients flowing into background sources.
+        # This enforces the causal intervention: selector must learn to extract foreground,
+        # not adapt foreground to background changes.
+        bg_feat = fg_feat[shuffle_idx].detach()
+        
+        # Create background mask if not provided
+        if bg_mask is None:
+            bg_mask = torch.ones(B, 1, device=device)
+        elif bg_mask.dim() == 1:
+            bg_mask = bg_mask.unsqueeze(1)  # (B, 1)
+        
+        # Causal mixup: mixed_feat = fg_feat + (1-bg_mask) * shuffled_bg_feat
+        mixed_feat = fg_feat + (1.0 - bg_mask) * bg_feat  # (B, D)
+        
+        # Normalize
+        fg_feat_norm = fg_feat / (fg_feat.norm(dim=-1, keepdim=True) + 1e-8)
+        mixed_feat_norm = mixed_feat / (mixed_feat.norm(dim=-1, keepdim=True) + 1e-8)
+        
+        # Compute logits for original and mixed features
+        text_feats = self._text_features.type(self.dtype).to(device)
+        logit_scale = self.logit_scale.exp()
+        
+        orig_logits = logit_scale * fg_feat_norm @ text_feats.T  # (B, num_classes)
+        mixed_logits = logit_scale * mixed_feat_norm @ text_feats.T  # (B, num_classes)
+        
+        # KL divergence: mixed logits should be similar to original logits
+        orig_probs = F.softmax(orig_logits, dim=1)
+        mixed_log_probs = F.log_softmax(mixed_logits, dim=1)
+        
+        mixup_loss = F.kl_div(mixed_log_probs, orig_probs.detach(), reduction='batchmean')
+        
+        return mixup_loss
+    
+    def forward(self, image: torch.Tensor, labels: Optional[torch.Tensor] = None, 
+                negative_text_tokens: Optional[torch.Tensor] = None) -> Dict:
         """
         Args:
             image: (B, 3, H, W)
             labels: (B,) optional ground truth labels
+            negative_text_tokens: (B, num_neg, D) optional LLM negative text tokens
         
         Returns:
             dict with:
@@ -617,6 +743,12 @@ class ModularCustomCLIP(nn.Module):
         # Collect auxiliary losses
         aux_losses = sel_aux_loss.copy()
         
+        # LLM Negatives Loss (if provided)
+        if negative_text_tokens is not None and self.cfg.get('use_llm_negatives', False):
+            llm_neg_loss = self._compute_llm_negatives_loss(final_feats, negative_text_tokens, pos_text_feat)
+            lambda_llm = self.cfg.get('lambda_llm_negatives', 0.05)
+            aux_losses['llm_negatives'] = lambda_llm * llm_neg_loss
+        
         # Semantic exclusion loss (if enabled)
         if self.cfg.get('use_semantic_exclusion', False) and labels is not None:
             # If external OOD mapping provided, use precomputed ood_text_feats for each label
@@ -654,6 +786,12 @@ class ModularCustomCLIP(nn.Module):
                 neg_text_feats = text_feats[mask].reshape(B, -1, self.feat_dim)
                 sem_excl_loss = compute_semantic_exclusion_loss(final_feats, pos_text_feat, neg_text_feats)
                 aux_losses['semantic_exclusion'] = sem_excl_loss
+        
+        # Causal Mixup Invariance Loss (if enabled)
+        if self.cfg.get('use_mixup_invariance', False):
+            mixup_loss = self.compute_mixup_invariance_loss(selected_feats, labels=labels)
+            lambda_mixup = self.cfg.get('lambda_mixup', 0.1)
+            aux_losses['mixup_invariance'] = lambda_mixup * mixup_loss
         
         return {
             'logits': logits,

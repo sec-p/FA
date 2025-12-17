@@ -1,4 +1,11 @@
 
+# ------ Output and Logging ------
+# Root directory for saving all outputs (logs, checkpoints, visualizations)
+# If not specified or empty, defaults to './my_caches'
+# Can also be set via command line: --cache_root /path/to/outputs
+cache_root: './my_caches'
+save_vis_interval: 5  # Save attention maps every N epochs
+
 # ------ root_path ------
 root_path: "/data/xinhua/Datasets"
 ood_dataset_path: "/data/xinhua/Datasets/ood-benchmark/imagenet"
@@ -67,3 +74,29 @@ lambda_minimal: 0.01
 lr_gate: 0.0002
 # Gate network hidden dimension
 gate_hidden: 256
+
+# ------ Modular Model Configuration ------
+# Feature selector type: 'mlp' or 'slot'
+selector_type: 'slot'
+num_select: 49
+num_slots: 4
+num_heads_selector: 4
+
+# Feature fuser type: 'mean', 'query_attn', or 'self_attn'
+fuser_type: 'query_attn'
+num_heads_fuser: 4
+
+# Loss weights
+lambda_diversity: 0.01
+lambda_orthogonality: 0.01
+lambda_semantic_exclusion: 0.01
+lambda_llm_negatives: 0.05
+lambda_mixup: 0.1
+
+# Feature flags
+use_semantic_exclusion: False
+use_llm_negatives: True
+use_mixup_invariance: True
+
+# LLM Negatives path (by default look under `my_dataset` where you will place it)
+class_negatives_path: 'my_dataset/class_negatives.json'

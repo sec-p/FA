@@ -282,13 +282,19 @@ class DatasetBase:
 
 class DatasetWrapper(TorchDataset):
     def __init__(self, data_source, input_size, transform=None, is_train=False,
-                 return_img0=False, k_tfm=1):
+                 return_img0=False, k_tfm=1, class_negatives=None, text_encoder=None, device='cpu'):
         self.data_source = data_source
         self.transform = transform # accept list (tuple) as input
         self.is_train = is_train
         # Augmenting an image K>1 times is only allowed during training
         self.k_tfm = k_tfm if is_train else 1
         self.return_img0 = return_img0
+        
+        # LLM Negatives Pipeline
+        self.class_negatives = class_negatives or {}  # dict: class_name -> list of negative words
+        self.text_encoder = text_encoder
+        self.device = device
+        self._neg_text_cache = {}  # Cache encoded negative texts
 
         if self.k_tfm > 1 and transform is None:
             raise ValueError(
@@ -336,7 +342,37 @@ class DatasetWrapper(TorchDataset):
         if self.return_img0:
             output['img0'] = self.to_tensor(img0)
 
-        return output['img'], output['label']
+        # LLM Negatives Pipeline: sample negative tokens
+        neg_tokens = torch.zeros(1, 512, dtype=torch.float32)
+        if self.class_negatives and item.classname in self.class_negatives:
+            neg_words = self.class_negatives[item.classname]
+            # Randomly sample 1-2 negative words
+            num_negs = min(random.randint(1, 2), len(neg_words))
+            sampled_negs = random.sample(neg_words, num_negs)
+            
+            # Encode negative texts (cache for efficiency)
+            neg_tokens_list = []
+            if self.text_encoder is not None:
+                for neg_word in sampled_negs:
+                    cache_key = f"{item.classname}_{neg_word}"
+                    if cache_key not in self._neg_text_cache:
+                        import clip
+                        text = f"a photo of a {neg_word}"
+                        try:
+                            token = clip.tokenize(text).to(self.device)
+                            with torch.no_grad():
+                                neg_feat = self.text_encoder.encode_text(token)
+                            self._neg_text_cache[cache_key] = neg_feat.cpu().float()
+                        except:
+                            pass
+                    
+                    if cache_key in self._neg_text_cache:
+                        neg_tokens_list.append(self._neg_text_cache[cache_key].to(self.device))
+                
+                if neg_tokens_list:
+                    neg_tokens = torch.cat(neg_tokens_list, dim=0)  # (num_negs, D)
+
+        return output['img'], output['label'], neg_tokens
 
     def _transform_image(self, tfm, img0):
         img_list = []
@@ -358,7 +394,10 @@ def build_data_loader(
     tfm=None,
     is_train=True,
     shuffle=False,
-    dataset_wrapper=None
+    dataset_wrapper=None,
+    class_negatives=None,
+    text_encoder=None,
+    device='cpu'
 ):
 
     if dataset_wrapper is None:
@@ -366,7 +405,8 @@ def build_data_loader(
 
     # Build data loader
     data_loader = torch.utils.data.DataLoader(
-        dataset_wrapper(data_source, input_size=input_size, transform=tfm, is_train=is_train),
+        dataset_wrapper(data_source, input_size=input_size, transform=tfm, is_train=is_train,
+                       class_negatives=class_negatives, text_encoder=text_encoder, device=device),
         batch_size=batch_size,
         num_workers=8,
         shuffle=shuffle,

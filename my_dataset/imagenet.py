@@ -192,7 +192,7 @@ imagenet_templates = [
 
 class CustomImageNet(DatasetBase):
 
-    dataset_dir = "imagenet"
+    dataset_dir = "ImageNet-1K"
 
     def __init__(self, root, num_shots):
         self.dataset_dir = os.path.join(root, self.dataset_dir)

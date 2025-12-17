@@ -1,0 +1,8784 @@
+{
+  "tench": [
+    "carp",
+    "bream",
+    "catfish",
+    "trout",
+    "koi fish",
+    "plastic toy fish",
+    "fishing lure"
+  ],
+  "goldfish": [
+    "koi fish",
+    "guppy",
+    "betta fish",
+    "orange cichlid",
+    "carp",
+    "plastic toy fish",
+    "goldfish cracker"
+  ],
+  "great white shark": [
+    "mako shark",
+    "tiger shark",
+    "bull shark",
+    "shark sculpture",
+    "rubber toy shark",
+    "surfer",
+    "seal"
+  ],
+  "tiger shark": [
+    "great white shark",
+    "bull shark",
+    "lemon shark",
+    "nurse shark",
+    "shark model",
+    "rubber toy shark",
+    "school of fish"
+  ],
+  "hammerhead shark": [
+    "bonnethead shark",
+    "great white shark",
+    "tiger shark",
+    "shovelnose ray",
+    "hammerhead shark sculpture",
+    "rubber toy shark",
+    "scuba diver"
+  ],
+  "electric ray": [
+    "stingray",
+    "skate",
+    "manta ray",
+    "flounder",
+    "ray sculpture",
+    "rubber toy ray",
+    "sandy seabed"
+  ],
+  "stingray": [
+    "manta ray",
+    "skate",
+    "electric ray",
+    "eagle ray",
+    "ray sculpture",
+    "rubber toy ray",
+    "coral reef"
+  ],
+  "rooster": [
+    "hen",
+    "turkey",
+    "pheasant",
+    "guinea fowl",
+    "rooster statue",
+    "rooster weather vane",
+    "farmyard fence"
+  ],
+  "hen": [
+    "rooster",
+    "chicken chick",
+    "turkey hen",
+    "guinea fowl",
+    "rubber toy chicken",
+    "chicken statue",
+    "straw bedding"
+  ],
+  "ostrich": [
+    "emu",
+    "rhea",
+    "cassowary",
+    "flamingo",
+    "ostrich statue",
+    "stuffed toy ostrich",
+    "savanna grass"
+  ],
+  "brambling": [
+    "chaffinch",
+    "house finch",
+    "goldfinch",
+    "sparrow",
+    "bird figurine",
+    "stuffed toy bird",
+    "bird feeder"
+  ],
+  "goldfinch": [
+    "house finch",
+    "siskin",
+    "canary",
+    "brambling",
+    "bird figurine",
+    "stuffed toy bird",
+    "thistle plant"
+  ],
+  "house finch": [
+    "purple finch",
+    "goldfinch",
+    "sparrow",
+    "brambling",
+    "bird figurine",
+    "stuffed toy bird",
+    "bird feeder"
+  ],
+  "junco": [
+    "sparrow",
+    "chickadee",
+    "towhee",
+    "house finch",
+    "bird figurine",
+    "stuffed toy bird",
+    "snowy ground"
+  ],
+  "indigo bunting": [
+    "bluebird",
+    "blue jay",
+    "lazuli bunting",
+    "house finch",
+    "bird figurine",
+    "stuffed toy bird",
+    "garden shrub"
+  ],
+  "American robin": [
+    "thrush",
+    "blackbird",
+    "starling",
+    "towhee",
+    "bird figurine",
+    "stuffed toy bird",
+    "lawn grass"
+  ],
+  "bulbul": [
+    "thrush",
+    "starling",
+    "sparrow",
+    "oriole",
+    "bird figurine",
+    "stuffed toy bird",
+    "fruit tree"
+  ],
+  "jay": [
+    "magpie",
+    "blue jay",
+    "crow",
+    "rook",
+    "bird figurine",
+    "stuffed toy bird",
+    "pine tree"
+  ],
+  "magpie": [
+    "jay",
+    "crow",
+    "raven",
+    "blackbird",
+    "bird figurine",
+    "stuffed toy bird",
+    "farmyard field"
+  ],
+  "chickadee": [
+    "titmouse",
+    "nuthatch",
+    "junco",
+    "sparrow",
+    "bird figurine",
+    "stuffed toy bird",
+    "bird feeder"
+  ],
+  "American dipper": [
+    "wren",
+    "thrush",
+    "kingfisher",
+    "starling",
+    "bird figurine",
+    "stuffed toy bird",
+    "rocky stream"
+  ],
+  "kite (bird of prey)": [
+    "hawk",
+    "falcon",
+    "eagle",
+    "vulture",
+    "bird of prey statue",
+    "stuffed toy bird",
+    "tree branch"
+  ],
+  "bald eagle": [
+    "golden eagle",
+    "hawk",
+    "osprey",
+    "vulture",
+    "eagle statue",
+    "stuffed toy eagle",
+    "pine tree"
+  ],
+  "vulture": [
+    "eagle",
+    "hawk",
+    "condor",
+    "buzzard",
+    "vulture statue",
+    "stuffed toy bird",
+    "animal carcass"
+  ],
+  "great grey owl": [
+    "barred owl",
+    "snowy owl",
+    "great horned owl",
+    "hawk",
+    "owl statue",
+    "stuffed toy owl",
+    "forest tree trunk"
+  ],
+  "fire salamander": [
+    "spotted salamander",
+    "newt",
+    "lizard",
+    "poison dart frog",
+    "salamander figurine",
+    "rubber toy salamander",
+    "wet leaf litter"
+  ],
+  "smooth newt": [
+    "newt",
+    "salamander",
+    "lizard",
+    "axolotl",
+    "newt figurine",
+    "rubber toy newt",
+    "garden pond"
+  ],
+  "newt": [
+    "smooth newt",
+    "salamander",
+    "lizard",
+    "axolotl",
+    "newt figurine",
+    "rubber toy newt",
+    "wet rock"
+  ],
+  "spotted salamander": [
+    "fire salamander",
+    "newt",
+    "lizard",
+    "tree frog",
+    "salamander figurine",
+    "rubber toy salamander",
+    "forest floor"
+  ],
+  "axolotl": [
+    "newt",
+    "salamander",
+    "tadpole",
+    "catfish",
+    "axolotl plush toy",
+    "axolotl figurine",
+    "aquarium plant"
+  ],
+  "American bullfrog": [
+    "green frog",
+    "toad",
+    "tree frog",
+    "leopard frog",
+    "rubber toy frog",
+    "frog statue",
+    "pond lily pad"
+  ],
+  "tree frog": [
+    "American bullfrog",
+    "toad",
+    "poison dart frog",
+    "gecko",
+    "rubber toy frog",
+    "frog figurine",
+    "leafy branch"
+  ],
+  "tailed frog": [
+    "tree frog",
+    "toad",
+    "salamander",
+    "newt",
+    "rubber toy frog",
+    "frog figurine",
+    "rocky stream"
+  ],
+  "loggerhead sea turtle": [
+    "green sea turtle",
+    "leatherback sea turtle",
+    "terrapin",
+    "tortoise",
+    "sea turtle statue",
+    "rubber toy turtle",
+    "sandy beach"
+  ],
+  "leatherback sea turtle": [
+    "loggerhead sea turtle",
+    "green sea turtle",
+    "manta ray",
+    "seal",
+    "sea turtle statue",
+    "rubber toy turtle",
+    "ocean surface"
+  ],
+  "mud turtle": [
+    "box turtle",
+    "terrapin",
+    "snapping turtle",
+    "tortoise",
+    "turtle figurine",
+    "rubber toy turtle",
+    "pond bank"
+  ],
+  "terrapin": [
+    "mud turtle",
+    "box turtle",
+    "sea turtle",
+    "snapping turtle",
+    "turtle figurine",
+    "rubber toy turtle",
+    "marsh water"
+  ],
+  "box turtle": [
+    "mud turtle",
+    "terrapin",
+    "tortoise",
+    "snapping turtle",
+    "turtle figurine",
+    "rubber toy turtle",
+    "forest leaf litter"
+  ],
+  "banded gecko": [
+    "leopard gecko",
+    "house gecko",
+    "skink",
+    "anole",
+    "gecko figurine",
+    "rubber toy gecko",
+    "desert rock"
+  ],
+  "green iguana": [
+    "Komodo dragon",
+    "monitor lizard",
+    "chameleon",
+    "agama",
+    "iguana figurine",
+    "plastic toy lizard",
+    "tropical branch"
+  ],
+  "Carolina anole": [
+    "green anole",
+    "gecko",
+    "skink",
+    "chameleon",
+    "lizard figurine",
+    "plastic toy lizard",
+    "garden fence"
+  ],
+  "desert grassland whiptail lizard": [
+    "skink",
+    "gecko",
+    "agama",
+    "alligator lizard",
+    "lizard figurine",
+    "plastic toy lizard",
+    "sandy grassland"
+  ],
+  "agama": [
+    "bearded dragon",
+    "iguana",
+    "skink",
+    "frilled-necked lizard",
+    "lizard figurine",
+    "plastic toy lizard",
+    "sunny rock"
+  ],
+  "frilled-necked lizard": [
+    "agama",
+    "bearded dragon",
+    "Komodo dragon",
+    "iguana",
+    "lizard figurine",
+    "plastic toy lizard",
+    "dry woodland"
+  ],
+  "alligator lizard": [
+    "skink",
+    "gecko",
+    "whiptail lizard",
+    "snake",
+    "lizard figurine",
+    "plastic toy lizard",
+    "forest log"
+  ],
+  "Gila monster": [
+    "Komodo dragon",
+    "beaded lizard",
+    "iguana",
+    "monitor lizard",
+    "lizard figurine",
+    "plastic toy lizard",
+    "desert scrub"
+  ],
+  "European green lizard": [
+    "Carolina anole",
+    "iguana",
+    "skink",
+    "chameleon",
+    "lizard figurine",
+    "plastic toy lizard",
+    "meadow grass"
+  ],
+  "chameleon": [
+    "iguana",
+    "anole",
+    "gecko",
+    "leaf insect",
+    "chameleon figurine",
+    "plastic toy lizard",
+    "tree branch"
+  ],
+  "Komodo dragon": [
+    "monitor lizard",
+    "green iguana",
+    "Gila monster",
+    "Nile crocodile",
+    "Komodo dragon statue",
+    "plastic toy lizard",
+    "rocky hillside"
+  ],
+  "Nile crocodile": [
+    "American alligator",
+    "caiman",
+    "Komodo dragon",
+    "monitor lizard",
+    "crocodile statue",
+    "plastic toy crocodile",
+    "river bank"
+  ],
+  "American alligator": [
+    "Nile crocodile",
+    "caiman",
+    "monitor lizard",
+    "Komodo dragon",
+    "alligator statue",
+    "plastic toy alligator",
+    "swamp water"
+  ],
+  "triceratops": [
+    "rhinoceros",
+    "ceratopsian toy dinosaur",
+    "triceratops statue",
+    "triceratops skeleton model",
+    "plastic toy dinosaur",
+    "dinosaur illustration",
+    "museum exhibit"
+  ],
+  "worm snake": [
+    "earthworm",
+    "blind snake",
+    "vine snake",
+    "legless lizard",
+    "plastic toy snake",
+    "snake figurine",
+    "garden soil"
+  ],
+  "ring-necked snake": [
+    "garter snake",
+    "kingsnake",
+    "worm snake",
+    "eel",
+    "plastic toy snake",
+    "snake figurine",
+    "forest leaf litter"
+  ],
+  "eastern hog-nosed snake": [
+    "garter snake",
+    "rattlesnake",
+    "kingsnake",
+    "water snake",
+    "plastic toy snake",
+    "snake figurine",
+    "sandy trail"
+  ],
+  "smooth green snake": [
+    "vine snake",
+    "garter snake",
+    "grass snake",
+    "lizard",
+    "plastic toy snake",
+    "snake figurine",
+    "green grass"
+  ],
+  "kingsnake": [
+    "corn snake",
+    "garter snake",
+    "boa constrictor",
+    "ring-necked snake",
+    "plastic toy snake",
+    "snake figurine",
+    "rocky ground"
+  ],
+  "garter snake": [
+    "kingsnake",
+    "water snake",
+    "smooth green snake",
+    "ribbon snake",
+    "plastic toy snake",
+    "snake figurine",
+    "garden path"
+  ],
+  "water snake": [
+    "sea snake",
+    "garter snake",
+    "kingsnake",
+    "eel",
+    "plastic toy snake",
+    "snake figurine",
+    "pond edge"
+  ],
+  "vine snake": [
+    "smooth green snake",
+    "green mamba",
+    "liana vine",
+    "garden hose",
+    "plastic toy snake",
+    "snake figurine",
+    "tree canopy"
+  ],
+  "night snake": [
+    "kingsnake",
+    "garter snake",
+    "worm snake",
+    "rattlesnake",
+    "plastic toy snake",
+    "snake figurine",
+    "rocky desert"
+  ],
+  "boa constrictor": [
+    "python",
+    "anaconda",
+    "kingsnake",
+    "green mamba",
+    "plastic toy snake",
+    "snake figurine",
+    "tree branch"
+  ],
+  "African rock python": [
+    "boa constrictor",
+    "Burmese python",
+    "anaconda",
+    "king cobra",
+    "plastic toy snake",
+    "snake figurine",
+    "savanna grass"
+  ],
+  "Indian cobra": [
+    "king cobra",
+    "green mamba",
+    "rattlesnake",
+    "vine snake",
+    "plastic toy snake",
+    "snake figurine",
+    "snake charmer basket"
+  ],
+  "green mamba": [
+    "vine snake",
+    "Indian cobra",
+    "boomslang",
+    "garden hose",
+    "plastic toy snake",
+    "snake figurine",
+    "tree foliage"
+  ],
+  "sea snake": [
+    "eel",
+    "water snake",
+    "sea krait",
+    "rope",
+    "plastic toy snake",
+    "snake figurine",
+    "coral reef"
+  ],
+  "Saharan horned viper": [
+    "sidewinder rattlesnake",
+    "eastern diamondback rattlesnake",
+    "sand boa",
+    "lizard",
+    "plastic toy snake",
+    "snake figurine",
+    "sand dune"
+  ],
+  "eastern diamondback rattlesnake": [
+    "sidewinder rattlesnake",
+    "Saharan horned viper",
+    "bullsnake",
+    "kingsnake",
+    "plastic toy snake",
+    "snake figurine",
+    "pine needle ground"
+  ],
+  "sidewinder rattlesnake": [
+    "Saharan horned viper",
+    "eastern diamondback rattlesnake",
+    "sand boa",
+    "vine snake",
+    "plastic toy snake",
+    "snake figurine",
+    "desert sand"
+  ],
+  "trilobite": [
+    "horseshoe crab",
+    "isopod",
+    "crab fossil",
+    "ammonite fossil",
+    "trilobite fossil replica",
+    "trilobite illustration",
+    "rock slab"
+  ],
+  "harvestman": [
+    "daddy longlegs spider",
+    "cellar spider",
+    "wolf spider",
+    "tick",
+    "plastic toy spider",
+    "spider figurine",
+    "wood pile"
+  ],
+  "scorpion": [
+    "whip scorpion",
+    "spider",
+    "crayfish",
+    "praying mantis",
+    "plastic toy scorpion",
+    "scorpion figurine",
+    "desert rock"
+  ],
+  "yellow garden spider": [
+    "orb-weaver spider",
+    "wolf spider",
+    "tarantula",
+    "southern black widow",
+    "plastic toy spider",
+    "spider figurine",
+    "garden web"
+  ],
+  "barn spider": [
+    "orb-weaver spider",
+    "yellow garden spider",
+    "wolf spider",
+    "cellar spider",
+    "plastic toy spider",
+    "spider figurine",
+    "barn wall"
+  ],
+  "European garden spider": [
+    "barn spider",
+    "yellow garden spider",
+    "wolf spider",
+    "southern black widow",
+    "plastic toy spider",
+    "spider figurine",
+    "garden hedge"
+  ],
+  "southern black widow": [
+    "brown widow spider",
+    "tarantula",
+    "wolf spider",
+    "European garden spider",
+    "plastic toy spider",
+    "spider figurine",
+    "garage corner"
+  ],
+  "tarantula": [
+    "wolf spider",
+    "southern black widow",
+    "scorpion",
+    "crab",
+    "plastic toy tarantula",
+    "spider figurine",
+    "terrarium substrate"
+  ],
+  "wolf spider": [
+    "tarantula",
+    "jumping spider",
+    "brown recluse spider",
+    "harvestman",
+    "plastic toy spider",
+    "spider figurine",
+    "leaf litter"
+  ],
+  "tick": [
+    "spider",
+    "mite",
+    "beetle",
+    "harvestman",
+    "plastic toy tick",
+    "insect illustration",
+    "dog fur"
+  ],
+  "centipede": [
+    "millipede",
+    "caterpillar",
+    "earthworm",
+    "silverfish",
+    "plastic toy centipede",
+    "centipede figurine",
+    "bathroom floor"
+  ],
+  "black grouse": [
+    "ruffed grouse",
+    "ptarmigan",
+    "prairie grouse",
+    "partridge",
+    "bird figurine",
+    "stuffed toy bird",
+    "heather moorland"
+  ],
+  "ptarmigan": [
+    "black grouse",
+    "ruffed grouse",
+    "snowy owl",
+    "partridge",
+    "bird figurine",
+    "stuffed toy bird",
+    "snowy tundra"
+  ],
+  "ruffed grouse": [
+    "black grouse",
+    "ptarmigan",
+    "prairie grouse",
+    "quail",
+    "bird figurine",
+    "stuffed toy bird",
+    "forest undergrowth"
+  ],
+  "prairie grouse": [
+    "ruffed grouse",
+    "black grouse",
+    "partridge",
+    "quail",
+    "bird figurine",
+    "stuffed toy bird",
+    "prairie grass"
+  ],
+  "peafowl": [
+    "turkey",
+    "pheasant",
+    "guinea fowl",
+    "ostrich",
+    "peacock statue",
+    "stuffed toy peacock",
+    "zoo enclosure"
+  ],
+  "quail": [
+    "partridge",
+    "grouse",
+    "pheasant",
+    "chicken chick",
+    "bird figurine",
+    "stuffed toy bird",
+    "grass field"
+  ],
+  "partridge": [
+    "quail",
+    "grouse",
+    "pheasant",
+    "guinea fowl",
+    "bird figurine",
+    "stuffed toy bird",
+    "hedgerow"
+  ],
+  "african grey parrot": [
+    "cockatoo",
+    "macaw",
+    "amazon parrot",
+    "pigeon",
+    "parrot figurine",
+    "stuffed toy parrot",
+    "bird cage"
+  ],
+  "macaw": [
+    "african grey parrot",
+    "lorikeet",
+    "cockatoo",
+    "toucan",
+    "parrot figurine",
+    "stuffed toy macaw",
+    "rainforest branch"
+  ],
+  "sulphur-crested cockatoo": [
+    "african grey parrot",
+    "macaw",
+    "white cockatoo",
+    "parakeet",
+    "cockatoo figurine",
+    "stuffed toy cockatoo",
+    "pet perch"
+  ],
+  "lorikeet": [
+    "macaw",
+    "parakeet",
+    "lovebird",
+    "hummingbird",
+    "bird figurine",
+    "stuffed toy bird",
+    "flowering tree"
+  ],
+  "coucal": [
+    "cuckoo",
+    "crow",
+    "roadrunner",
+    "pheasant",
+    "bird figurine",
+    "stuffed toy bird",
+    "tall grass"
+  ],
+  "bee eater": [
+    "kingfisher",
+    "swallow",
+    "roller bird",
+    "hummingbird",
+    "bird figurine",
+    "stuffed toy bird",
+    "river bank"
+  ],
+  "hornbill": [
+    "toucan",
+    "parrot",
+    "crow",
+    "ibis",
+    "hornbill figurine",
+    "stuffed toy hornbill",
+    "rainforest canopy"
+  ],
+  "hummingbird": [
+    "sunbird",
+    "bee eater",
+    "moth",
+    "butterfly",
+    "hummingbird figurine",
+    "stuffed toy hummingbird",
+    "flower blossom"
+  ],
+  "jacamar": [
+    "kingfisher",
+    "bee eater",
+    "woodpecker",
+    "hummingbird",
+    "bird figurine",
+    "stuffed toy bird",
+    "rainforest branch"
+  ],
+  "toucan": [
+    "hornbill",
+    "macaw",
+    "parrot",
+    "woodpecker",
+    "toucan figurine",
+    "stuffed toy toucan",
+    "jungle foliage"
+  ],
+  "duck": [
+    "goose",
+    "swan",
+    "red-breasted merganser",
+    "coot",
+    "rubber toy duck",
+    "duck decoy",
+    "pond water"
+  ],
+  "red-breasted merganser": [
+    "duck",
+    "loon",
+    "cormorant",
+    "goose",
+    "bird figurine",
+    "stuffed toy bird",
+    "coastal water"
+  ],
+  "goose": [
+    "duck",
+    "swan",
+    "gull",
+    "pelican",
+    "plastic toy goose",
+    "bird decoy",
+    "pond shore"
+  ],
+  "black swan": [
+    "white swan",
+    "black goose",
+    "Canada goose",
+    "black duck",
+    "swan decoy",
+    "swan statue",
+    "swan-shaped paddle boat"
+  ],
+  "tusker": [
+    "African elephant",
+    "Asian elephant",
+    "warthog",
+    "wild boar",
+    "elephant statue",
+    "mechanical elephant",
+    "elephant at a safari vehicle"
+  ],
+  "echidna": [
+    "porcupine",
+    "hedgehog",
+    "armadillo",
+    "anteater",
+    "stuffed echidna toy",
+    "echidna figurine",
+    "spiny mammal in leaf litter"
+  ],
+  "platypus": [
+    "beaver",
+    "otter",
+    "duck",
+    "muskrat",
+    "platypus plush toy",
+    "platypus figurine",
+    "aquatic mammal in a creek"
+  ],
+  "wallaby": [
+    "kangaroo",
+    "pademelon",
+    "hare",
+    "small deer",
+    "wallaby statue",
+    "wallaby plush toy",
+    "marsupial in a grassy field"
+  ],
+  "koala": [
+    "sloth",
+    "teddy bear",
+    "wombat",
+    "tree kangaroo",
+    "koala plush toy",
+    "koala statue",
+    "arboreal animal in a eucalyptus tree"
+  ],
+  "wombat": [
+    "badger",
+    "groundhog",
+    "capybara",
+    "koala",
+    "wombat plush toy",
+    "wombat figurine",
+    "burrowing animal near a dirt mound"
+  ],
+  "jellyfish": [
+    "sea anemone",
+    "comb jelly",
+    "plastic bag in water",
+    "octopus",
+    "glass jellyfish sculpture",
+    "jellyfish illustration",
+    "underwater diver near tentacles"
+  ],
+  "sea anemone": [
+    "jellyfish",
+    "soft coral",
+    "sea urchin",
+    "hydroid colony",
+    "artificial aquarium anemone",
+    "anemone figurine",
+    "clownfish in a coral reef"
+  ],
+  "brain coral": [
+    "boulder coral",
+    "cauliflower coral",
+    "sponge",
+    "rock covered in algae",
+    "coral aquarium ornament",
+    "coral sculpture",
+    "reef rock on a seabed"
+  ],
+  "flatworm": [
+    "leech",
+    "sea slug",
+    "slug",
+    "ribbon worm",
+    "flatworm illustration",
+    "plastic worm lure",
+    "worm on aquarium glass"
+  ],
+  "nematode": [
+    "earthworm",
+    "maggot",
+    "flatworm",
+    "hairworm",
+    "nematode microscope image",
+    "model organism figurine",
+    "worm in soil debris"
+  ],
+  "conch": [
+    "whelk shell",
+    "nautilus shell",
+    "cowrie shell",
+    "large snail shell",
+    "conch shell souvenir",
+    "conch shell sculpture",
+    "seashell on a beach"
+  ],
+  "snail": [
+    "sea snail",
+    "slug",
+    "hermit crab",
+    "garden slug",
+    "toy snail",
+    "snail cartoon drawing",
+    "snail on a garden plant"
+  ],
+  "slug": [
+    "snail",
+    "flatworm",
+    "leech",
+    "caterpillar",
+    "toy slug",
+    "slug illustration",
+    "slug on wet pavement"
+  ],
+  "sea slug": [
+    "flatworm",
+    "nudibranch look-alike",
+    "sea cucumber",
+    "anemone",
+    "sea slug aquarium ornament",
+    "sea slug illustration",
+    "bright invertebrate on coral"
+  ],
+  "chiton": [
+    "limpet",
+    "abalone",
+    "sea snail",
+    "barnacle",
+    "chiton shell model",
+    "chiton illustration",
+    "rocky shore mollusk"
+  ],
+  "chambered nautilus": [
+    "ammonite fossil",
+    "spiral seashell",
+    "conch shell",
+    "octopus",
+    "nautilus shell decoration",
+    "nautilus drawing",
+    "shell in an aquarium display"
+  ],
+  "Dungeness crab": [
+    "blue crab",
+    "rock crab",
+    "snow crab",
+    "spider crab",
+    "crab toy",
+    "crab illustration",
+    "crab in a seafood market"
+  ],
+  "rock crab": [
+    "Dungeness crab",
+    "green crab",
+    "blue crab",
+    "stone crab",
+    "crab figurine",
+    "crab plush toy",
+    "crab on a rocky tidepool"
+  ],
+  "fiddler crab": [
+    "ghost crab",
+    "shore crab",
+    "small lobster",
+    "hermit crab",
+    "toy fiddler crab",
+    "fiddler crab illustration",
+    "crab on a sandy beach"
+  ],
+  "red king crab": [
+    "snow crab",
+    "spider crab",
+    "Japanese spider crab",
+    "spiny lobster",
+    "king crab replica",
+    "king crab restaurant sign",
+    "crab in a seafood tank"
+  ],
+  "American lobster": [
+    "spiny lobster",
+    "crayfish",
+    "mantis shrimp",
+    "red king crab",
+    "plastic lobster",
+    "lobster illustration",
+    "lobster on a plate"
+  ],
+  "spiny lobster": [
+    "American lobster",
+    "crayfish",
+    "mantis shrimp",
+    "red king crab",
+    "toy lobster",
+    "lobster sculpture",
+    "lobster in a seafood market"
+  ],
+  "crayfish": [
+    "small lobster",
+    "shrimp",
+    "prawn",
+    "crab",
+    "crayfish toy",
+    "crayfish illustration",
+    "crayfish in a stream"
+  ],
+  "hermit crab": [
+    "snail",
+    "shore crab",
+    "fiddler crab",
+    "small crab",
+    "hermit crab toy",
+    "hermit crab in a pet tank",
+    "seashell on sand"
+  ],
+  "isopod": [
+    "pill bug",
+    "woodlouse",
+    "centipede",
+    "cockroach",
+    "isopod toy",
+    "isopod illustration",
+    "small crustacean under a rock"
+  ],
+  "white stork": [
+    "grey heron",
+    "great egret",
+    "crane bird",
+    "ibis",
+    "stork statue",
+    "stork illustration",
+    "large bird in a wetland"
+  ],
+  "black stork": [
+    "white stork",
+    "glossy ibis",
+    "black heron",
+    "cormorant",
+    "stork sculpture",
+    "stork illustration",
+    "wading bird near a river"
+  ],
+  "spoonbill": [
+    "ibis",
+    "egret",
+    "heron",
+    "flamingo",
+    "spoonbill statue",
+    "spoonbill illustration",
+    "wading bird in shallow water"
+  ],
+  "flamingo": [
+    "spoonbill",
+    "roseate ibis",
+    "crane bird",
+    "egret",
+    "plastic lawn flamingo",
+    "flamingo statue",
+    "pink bird in a salt lagoon"
+  ],
+  "little blue heron": [
+    "great egret",
+    "snowy egret",
+    "tricolored heron",
+    "grey heron",
+    "heron decoy",
+    "heron illustration",
+    "wading bird in a marsh"
+  ],
+  "great egret": [
+    "snowy egret",
+    "little blue heron",
+    "white stork",
+    "whooping crane",
+    "egret decoy",
+    "egret statue",
+    "white bird in a wetland"
+  ],
+  "bittern bird": [
+    "heron",
+    "rail bird",
+    "crane bird",
+    "limpkin",
+    "bittern decoy",
+    "bittern illustration",
+    "marsh bird in tall reeds"
+  ],
+  "crane bird": [
+    "heron",
+    "stork",
+    "whooping crane",
+    "flamingo",
+    "crane statue",
+    "origami crane",
+    "large bird in a grassland"
+  ],
+  "limpkin": [
+    "bittern bird",
+    "rail bird",
+    "heron",
+    "ibis",
+    "limpkin illustration",
+    "bird decoy",
+    "wading bird near a swamp"
+  ],
+  "common gallinule": [
+    "American coot",
+    "moorhen",
+    "rail bird",
+    "duck",
+    "waterfowl decoy",
+    "bird illustration",
+    "marsh bird among lily pads"
+  ],
+  "American coot": [
+    "common gallinule",
+    "duck",
+    "grebe",
+    "rail bird",
+    "coot decoy",
+    "coot illustration",
+    "black waterbird on a pond"
+  ],
+  "bustard": [
+    "turkey",
+    "grouse",
+    "crane bird",
+    "pheasant",
+    "bustard illustration",
+    "bird statue",
+    "large ground bird in grassland"
+  ],
+  "ruddy turnstone": [
+    "sandpiper",
+    "dunlin",
+    "sanderling",
+    "plover",
+    "shorebird decoy",
+    "shorebird illustration",
+    "shorebird on a rocky beach"
+  ],
+  "dunlin": [
+    "sandpiper",
+    "sanderling",
+    "ruddy turnstone",
+    "common redshank",
+    "shorebird decoy",
+    "shorebird illustration",
+    "small wader on mudflats"
+  ],
+  "common redshank": [
+    "dunlin",
+    "dowitcher",
+    "sandpiper",
+    "greater yellowlegs",
+    "shorebird decoy",
+    "shorebird illustration",
+    "wader in shallow water"
+  ],
+  "dowitcher": [
+    "common redshank",
+    "snipe",
+    "sandpiper",
+    "godwit",
+    "shorebird decoy",
+    "shorebird illustration",
+    "wader probing mud"
+  ],
+  "oystercatcher": [
+    "gull",
+    "tern",
+    "plover",
+    "ruddy turnstone",
+    "oystercatcher decoy",
+    "oystercatcher illustration",
+    "shorebird near oyster beds"
+  ],
+  "pelican": [
+    "cormorant",
+    "gannet",
+    "heron",
+    "albatross",
+    "pelican statue",
+    "pelican illustration",
+    "seabird at a fishing pier"
+  ],
+  "king penguin": [
+    "emperor penguin",
+    "gentoo penguin",
+    "auk",
+    "puffin",
+    "penguin plush toy",
+    "penguin statue",
+    "penguin in a zoo exhibit"
+  ],
+  "albatross": [
+    "seagull",
+    "gannet",
+    "pelican",
+    "frigatebird",
+    "albatross model",
+    "albatross illustration",
+    "seabird flying over the ocean"
+  ],
+  "grey whale": [
+    "humpback whale",
+    "right whale",
+    "orca",
+    "dolphin",
+    "whale sculpture",
+    "whale illustration",
+    "whale near a tour boat"
+  ],
+  "killer whale": [
+    "pilot whale",
+    "dolphin",
+    "grey whale",
+    "beluga whale",
+    "orca plush toy",
+    "orca statue",
+    "orca at a marine park"
+  ],
+  "dugong": [
+    "manatee",
+    "sea lion",
+    "seal",
+    "otter",
+    "dugong sculpture",
+    "dugong illustration",
+    "marine mammal near seagrass"
+  ],
+  "sea lion": [
+    "seal",
+    "walrus",
+    "dugong",
+    "otter",
+    "sea lion statue",
+    "sea lion plush toy",
+    "sea lion on a dock"
+  ],
+  "Chihuahua": [
+    "toy fox terrier",
+    "Miniature Pinscher",
+    "Italian Greyhound",
+    "Papillon",
+    "Chihuahua plush toy",
+    "Chihuahua figurine",
+    "small dog in a handbag"
+  ],
+  "Japanese Chin": [
+    "Pekingese",
+    "Shih Tzu",
+    "Papillon",
+    "King Charles Spaniel",
+    "Japanese Chin plush toy",
+    "dog show grooming pose",
+    "small dog on a sofa"
+  ],
+  "Maltese": [
+    "Bichon Frise",
+    "Shih Tzu",
+    "Havanese",
+    "toy poodle",
+    "Maltese plush toy",
+    "Maltese statue",
+    "small white dog on a bed"
+  ],
+  "Pekingese": [
+    "Japanese Chin",
+    "Shih Tzu",
+    "Lhasa Apso",
+    "Pomeranian",
+    "Pekingese plush toy",
+    "Pekingese figurine",
+    "small dog with a lion cut"
+  ],
+  "Shih Tzu": [
+    "Lhasa Apso",
+    "Pekingese",
+    "Japanese Chin",
+    "Maltese",
+    "Shih Tzu plush toy",
+    "Shih Tzu grooming poster",
+    "small long-haired dog on a couch"
+  ],
+  "King Charles Spaniel": [
+    "Cavalier King Charles Spaniel",
+    "Papillon",
+    "Japanese Chin",
+    "Cocker Spaniel",
+    "spaniel plush toy",
+    "spaniel portrait painting",
+    "small dog in a living room"
+  ],
+  "Papillon": [
+    "Chihuahua",
+    "Japanese Chin",
+    "long-haired Chihuahua",
+    "toy terrier",
+    "Papillon plush toy",
+    "Papillon figurine",
+    "small dog on a lap"
+  ],
+  "toy terrier": [
+    "Miniature Pinscher",
+    "Chihuahua",
+    "Italian Greyhound",
+    "Manchester Terrier",
+    "toy terrier plush toy",
+    "toy terrier figurine",
+    "small dog in a dog carrier"
+  ],
+  "Rhodesian Ridgeback": [
+    "Vizsla",
+    "Redbone Coonhound",
+    "Weimaraner",
+    "Doberman Pinscher",
+    "Rhodesian Ridgeback statue",
+    "dog show lineup",
+    "large dog on a savanna trail"
+  ],
+  "Afghan Hound": [
+    "Saluki",
+    "borzoi",
+    "Irish Wolfhound",
+    "poodle",
+    "Afghan Hound plush toy",
+    "Afghan Hound show grooming",
+    "long-haired dog in a studio"
+  ],
+  "Basset Hound": [
+    "Beagle",
+    "Bloodhound",
+    "Dachshund",
+    "Coonhound",
+    "Basset Hound plush toy",
+    "hound statue",
+    "hound in a grassy yard"
+  ],
+  "Beagle": [
+    "Basset Hound",
+    "English foxhound",
+    "Harrier",
+    "Jack Russell Terrier",
+    "Beagle plush toy",
+    "Beagle illustration",
+    "small hound in a suburban yard"
+  ],
+  "Bloodhound": [
+    "Basset Hound",
+    "Black and Tan Coonhound",
+    "Bluetick Coonhound",
+    "Redbone Coonhound",
+    "Bloodhound plush toy",
+    "hound statue",
+    "tracking dog with a leash"
+  ],
+  "Bluetick Coonhound": [
+    "Black and Tan Coonhound",
+    "Treeing Walker Coonhound",
+    "English foxhound",
+    "Bloodhound",
+    "coonhound plush toy",
+    "hound illustration",
+    "hunting dog in a forest"
+  ],
+  "Black and Tan Coonhound": [
+    "Bluetick Coonhound",
+    "Redbone Coonhound",
+    "Bloodhound",
+    "Doberman Pinscher",
+    "coonhound plush toy",
+    "hound statue",
+    "hound near a hunting cabin"
+  ],
+  "Treeing Walker Coonhound": [
+    "English foxhound",
+    "Bluetick Coonhound",
+    "Redbone Coonhound",
+    "Beagle",
+    "coonhound plush toy",
+    "hound illustration",
+    "hound in wooded terrain"
+  ],
+  "English foxhound": [
+    "Beagle",
+    "Treeing Walker Coonhound",
+    "American Foxhound",
+    "Harrier",
+    "foxhound plush toy",
+    "hunting scene painting",
+    "pack hound in a field"
+  ],
+  "Redbone Coonhound": [
+    "Rhodesian Ridgeback",
+    "Black and Tan Coonhound",
+    "Treeing Walker Coonhound",
+    "Bloodhound",
+    "coonhound plush toy",
+    "hound statue",
+    "red hound in a woodland"
+  ],
+  "borzoi": [
+    "Afghan Hound",
+    "Saluki",
+    "Whippet",
+    "greyhound",
+    "borzoi plush toy",
+    "borzoi illustration",
+    "sighthound at a dog show"
+  ],
+  "Irish Wolfhound": [
+    "Scottish Deerhound",
+    "borzoi",
+    "Great Dane",
+    "Afghan Hound",
+    "Irish Wolfhound statue",
+    "Irish Wolfhound plush toy",
+    "large dog on a grassy estate"
+  ],
+  "Italian Greyhound": [
+    "Whippet",
+    "greyhound",
+    "Chihuahua",
+    "toy terrier",
+    "Italian Greyhound plush toy",
+    "dog sweater catalog photo",
+    "small sighthound on a couch"
+  ],
+  "Whippet": [
+    "Italian Greyhound",
+    "greyhound",
+    "Ibizan Hound",
+    "borzoi",
+    "Whippet plush toy",
+    "dog racing scene",
+    "sighthound in a park"
+  ],
+  "Ibizan Hound": [
+    "Pharaoh Hound",
+    "Whippet",
+    "greyhound",
+    "Basenji",
+    "Ibizan Hound statue",
+    "Ibizan Hound illustration",
+    "sighthound in a desert landscape"
+  ],
+  "Norwegian Elkhound": [
+    "Siberian Husky",
+    "Alaskan Malamute",
+    "Keeshond",
+    "German Shepherd Dog",
+    "Elkhound plush toy",
+    "Elkhound statue",
+    "spitz dog in snowy woods"
+  ],
+  "Otterhound": [
+    "Bloodhound",
+    "Irish Wolfhound",
+    "wirehaired pointing griffon",
+    "golden retriever",
+    "Otterhound plush toy",
+    "Otterhound illustration",
+    "shaggy dog near a river"
+  ],
+  "Saluki": [
+    "borzoi",
+    "Afghan Hound",
+    "Whippet",
+    "greyhound",
+    "Saluki plush toy",
+    "Saluki statue",
+    "sighthound on a sandy plain"
+  ],
+  "Scottish Deerhound": [
+    "Irish Wolfhound",
+    "borzoi",
+    "Afghan Hound",
+    "greyhound",
+    "Deerhound plush toy",
+    "Deerhound illustration",
+    "wirehaired sighthound in heather"
+  ],
+  "Weimaraner": [
+    "Vizsla",
+    "German Shorthaired Pointer",
+    "Rhodesian Ridgeback",
+    "Doberman Pinscher",
+    "Weimaraner plush toy",
+    "Weimaraner portrait painting",
+    "sporting dog in tall grass"
+  ],
+  "Staffordshire Bull Terrier": [
+    "American Staffordshire Terrier",
+    "pit bull",
+    "Boston Terrier",
+    "Boxer",
+    "Staffordshire Bull Terrier plush toy",
+    "dog shelter photo scene",
+    "muscular dog on a leash"
+  ],
+  "American Staffordshire Terrier": [
+    "Staffordshire Bull Terrier",
+    "pit bull",
+    "American Bulldog",
+    "Boxer",
+    "American Staffordshire Terrier plush toy",
+    "dog training field scene",
+    "muscular dog in a backyard"
+  ],
+  "Bedlington Terrier": [
+    "poodle",
+    "soft-coated wheaten terrier",
+    "Kerry Blue Terrier",
+    "Dandie Dinmont Terrier",
+    "Bedlington Terrier plush toy",
+    "dog grooming competition",
+    "curly-coated dog in a studio"
+  ],
+  "Border Terrier": [
+    "Norfolk Terrier",
+    "Norwich Terrier",
+    "Cairn Terrier",
+    "Lakeland Terrier",
+    "Border Terrier plush toy",
+    "terrier illustration",
+    "small dog on a hiking trail"
+  ],
+  "Kerry Blue Terrier": [
+    "Bedlington Terrier",
+    "Irish Terrier",
+    "Soft Coated Wheaten Terrier",
+    "Giant Schnauzer",
+    "Kerry Blue Terrier plush toy",
+    "dog grooming scene",
+    "blue-gray terrier in a yard"
+  ],
+  "Irish Terrier": [
+    "Airedale Terrier",
+    "Kerry Blue Terrier",
+    "Border Terrier",
+    "Welsh Terrier",
+    "Irish Terrier plush toy",
+    "terrier illustration",
+    "red terrier in a garden"
+  ],
+  "Norfolk Terrier": [
+    "Norwich Terrier",
+    "Border Terrier",
+    "Cairn Terrier",
+    "Yorkshire Terrier",
+    "Norfolk Terrier plush toy",
+    "dog show ring scene",
+    "small terrier on a couch"
+  ],
+  "Norwich Terrier": [
+    "Norfolk Terrier",
+    "Border Terrier",
+    "Cairn Terrier",
+    "Australian Terrier",
+    "Norwich Terrier plush toy",
+    "terrier illustration",
+    "small terrier in a living room"
+  ],
+  "Yorkshire Terrier": [
+    "Silky Terrier",
+    "Norfolk Terrier",
+    "Cairn Terrier",
+    "Maltese",
+    "Yorkshire Terrier plush toy",
+    "Yorkshire Terrier grooming bow",
+    "small dog in a handbag"
+  ],
+  "Wire Fox Terrier": [
+    "Lakeland Terrier",
+    "Airedale Terrier",
+    "Sealyham Terrier",
+    "Border Terrier",
+    "Wire Fox Terrier plush toy",
+    "terrier illustration",
+    "wirehaired terrier in a yard"
+  ],
+  "Lakeland Terrier": [
+    "Wire Fox Terrier",
+    "Airedale Terrier",
+    "Welsh Terrier",
+    "Border Terrier",
+    "Lakeland Terrier plush toy",
+    "dog grooming table scene",
+    "small terrier in a field"
+  ],
+  "Sealyham Terrier": [
+    "West Highland White Terrier",
+    "Wire Fox Terrier",
+    "Cairn Terrier",
+    "Scottish Terrier",
+    "Sealyham Terrier plush toy",
+    "Sealyham Terrier illustration",
+    "white terrier in a garden"
+  ],
+  "Airedale Terrier": [
+    "Welsh Terrier",
+    "Irish Terrier",
+    "Lakeland Terrier",
+    "Giant Schnauzer",
+    "Airedale Terrier plush toy",
+    "terrier statue",
+    "large terrier on a sidewalk"
+  ],
+  "Cairn Terrier": [
+    "Norwich Terrier",
+    "Border Terrier",
+    "Scottish Terrier",
+    "West Highland White Terrier",
+    "Cairn Terrier plush toy",
+    "terrier illustration",
+    "small terrier on a rocky path"
+  ],
+  "Australian Terrier": [
+    "Yorkshire Terrier",
+    "Norwich Terrier",
+    "Cairn Terrier",
+    "Scottish Terrier",
+    "Australian Terrier plush toy",
+    "terrier illustration",
+    "small terrier in a backyard"
+  ],
+  "Dandie Dinmont Terrier": [
+    "Bedlington Terrier",
+    "Scottish Terrier",
+    "Skye Terrier",
+    "Cairn Terrier",
+    "Dandie Dinmont Terrier plush toy",
+    "Dandie Dinmont Terrier illustration",
+    "long-bodied terrier on a rug"
+  ],
+  "Boston Terrier": [
+    "French Bulldog",
+    "Staffordshire Bull Terrier",
+    "Boxer",
+    "pug",
+    "Boston Terrier plush toy",
+    "Boston Terrier figurine",
+    "small dog in an apartment"
+  ],
+  "Miniature Schnauzer": [
+    "Standard Schnauzer",
+    "Scottish Terrier",
+    "Wire Fox Terrier",
+    "Miniature Pinscher",
+    "Miniature Schnauzer plush toy",
+    "Miniature Schnauzer grooming cut",
+    "small bearded dog on a leash"
+  ],
+  "Giant Schnauzer": [
+    "Standard Schnauzer",
+    "Airedale Terrier",
+    "Doberman Pinscher",
+    "German Shepherd Dog",
+    "Giant Schnauzer plush toy",
+    "police dog training scene",
+    "large bearded dog in a yard"
+  ],
+  "Standard Schnauzer": [
+    "Giant Schnauzer",
+    "Miniature Schnauzer",
+    "Airedale Terrier",
+    "Scottish Terrier",
+    "Standard Schnauzer plush toy",
+    "dog show ring scene",
+    "bearded dog on a city street"
+  ],
+  "Scottish Terrier": [
+    "Cairn Terrier",
+    "Sealyham Terrier",
+    "West Highland White Terrier",
+    "Miniature Schnauzer",
+    "Scottish Terrier plush toy",
+    "Scottish Terrier statue",
+    "small black terrier on a lawn"
+  ],
+  "Tibetan Terrier": [
+    "Lhasa apso",
+    "Havanese",
+    "shaggy mixed breed dog",
+    "stuffed toy terrier",
+    "dog grooming show ring"
+  ],
+  "Australian Silky Terrier": [
+    "Yorkshire terrier",
+    "toy poodle",
+    "long haired Chihuahua",
+    "stuffed toy terrier",
+    "dog grooming table"
+  ],
+  "Soft-coated Wheaten Terrier": [
+    "Irish terrier",
+    "golden doodle",
+    "wirehaired pointing griffon",
+    "stuffed toy terrier",
+    "dog grooming salon"
+  ],
+  "West Highland White Terrier": [
+    "Cairn terrier",
+    "Sealyham terrier",
+    "Maltese dog",
+    "stuffed toy dog",
+    "pet grooming bathtub"
+  ],
+  "Lhasa Apso": [
+    "Shih tzu",
+    "Tibetan terrier",
+    "Pekingese",
+    "stuffed toy lapdog",
+    "pet sofa"
+  ],
+  "Flat-Coated Retriever": [
+    "golden retriever",
+    "Labrador retriever",
+    "curly coated retriever",
+    "stuffed toy retriever",
+    "dog park pond"
+  ],
+  "Curly-coated Retriever": [
+    "poodle mix dog",
+    "flat coated retriever",
+    "Irish water spaniel",
+    "stuffed toy retriever",
+    "hunting marsh"
+  ],
+  "Golden Retriever": [
+    "Labrador retriever",
+    "flat coated retriever",
+    "Nova Scotia duck tolling retriever",
+    "stuffed toy retriever",
+    "dog with tennis ball"
+  ],
+  "Labrador Retriever": [
+    "golden retriever",
+    "Chesapeake Bay retriever",
+    "flat coated retriever",
+    "stuffed toy Labrador",
+    "duck hunting blind"
+  ],
+  "Chesapeake Bay Retriever": [
+    "Labrador retriever",
+    "curly coated retriever",
+    "flat coated retriever",
+    "stuffed toy retriever",
+    "waterfowl hunting marsh"
+  ],
+  "German Shorthaired Pointer": [
+    "English pointer",
+    "Weimaraner",
+    "Vizsla",
+    "stuffed toy pointer",
+    "pheasant hunting field"
+  ],
+  "Vizsla": [
+    "Weimaraner",
+    "German shorthaired pointer",
+    "Rhodesian ridgeback",
+    "stuffed toy hunting dog",
+    "upland hunting grassland"
+  ],
+  "English Setter": [
+    "Irish setter",
+    "Gordon setter",
+    "Brittany dog",
+    "stuffed toy setter",
+    "pheasant hunting moor"
+  ],
+  "Irish Setter": [
+    "English setter",
+    "Gordon setter",
+    "red golden retriever",
+    "stuffed toy setter",
+    "dog in autumn forest"
+  ],
+  "Gordon Setter": [
+    "English setter",
+    "Irish setter",
+    "Bernese mountain dog",
+    "stuffed toy setter",
+    "upland hunting hillside"
+  ],
+  "Brittany dog": [
+    "English springer spaniel",
+    "English setter",
+    "German shorthaired pointer",
+    "stuffed toy spaniel",
+    "bird hunting field"
+  ],
+  "Clumber Spaniel": [
+    "Sussex spaniel",
+    "cocker spaniel",
+    "English springer spaniel",
+    "stuffed toy spaniel",
+    "dog in brushy woodland"
+  ],
+  "English Springer Spaniel": [
+    "Welsh springer spaniel",
+    "cocker spaniel",
+    "Brittany dog",
+    "stuffed toy spaniel",
+    "duck hunting marsh"
+  ],
+  "Welsh Springer Spaniel": [
+    "English springer spaniel",
+    "cocker spaniel",
+    "Brittany dog",
+    "stuffed toy spaniel",
+    "dog agility course"
+  ],
+  "Cocker Spaniel": [
+    "English springer spaniel",
+    "Sussex spaniel",
+    "Clumber spaniel",
+    "stuffed toy spaniel",
+    "dog grooming salon"
+  ],
+  "Sussex Spaniel": [
+    "Clumber spaniel",
+    "cocker spaniel",
+    "English springer spaniel",
+    "stuffed toy spaniel",
+    "woodland hunting cover"
+  ],
+  "Irish Water Spaniel": [
+    "curly coated retriever",
+    "poodle mix dog",
+    "Portuguese water dog",
+    "stuffed toy water dog",
+    "lakeside dock"
+  ],
+  "Kuvasz": [
+    "Great Pyrenees dog",
+    "Samoyed",
+    "Maremma sheepdog",
+    "stuffed toy livestock guardian",
+    "sheep pasture"
+  ],
+  "Schipperke": [
+    "Pomeranian",
+    "Belgian shepherd dog",
+    "small black spitz dog",
+    "stuffed toy spitz",
+    "canal boat deck"
+  ],
+  "Groenendael dog": [
+    "Malinois",
+    "German shepherd dog",
+    "Belgian tervuren",
+    "stuffed toy shepherd",
+    "police training field"
+  ],
+  "Malinois": [
+    "German shepherd dog",
+    "Groenendael dog",
+    "Dutch shepherd",
+    "stuffed toy working dog",
+    "police K9 training area"
+  ],
+  "Briard": [
+    "Bearded collie",
+    "Old English sheepdog",
+    "Bouvier des Flandres dog",
+    "stuffed toy sheepdog",
+    "sheep herding field"
+  ],
+  "Australian Kelpie": [
+    "Border collie",
+    "Australian cattle dog",
+    "German shepherd dog",
+    "stuffed toy herding dog",
+    "sheep yard"
+  ],
+  "Komondor": [
+    "puli",
+    "Old English sheepdog",
+    "Bergamasco shepherd",
+    "stuffed toy dreadlocked dog",
+    "livestock pasture"
+  ],
+  "Old English Sheepdog": [
+    "Bearded collie",
+    "Briard",
+    "Komondor",
+    "stuffed toy sheepdog",
+    "sheep herding pasture"
+  ],
+  "Shetland Sheepdog": [
+    "collie",
+    "Border collie",
+    "rough collie puppy",
+    "stuffed toy herding dog",
+    "dog agility tunnel"
+  ],
+  "collie": [
+    "Shetland sheepdog",
+    "border collie",
+    "rough collie statue",
+    "stuffed toy collie",
+    "farm pasture"
+  ],
+  "Border Collie": [
+    "Shetland sheepdog",
+    "Australian kelpie",
+    "collie",
+    "stuffed toy border collie",
+    "sheep herding field"
+  ],
+  "Bouvier des Flandres dog": [
+    "Giant schnauzer",
+    "Briard",
+    "Old English sheepdog",
+    "stuffed toy farm dog",
+    "barnyard"
+  ],
+  "Rottweiler": [
+    "Dobermann",
+    "German shepherd dog",
+    "bullmastiff",
+    "stuffed toy guard dog",
+    "security fence"
+  ],
+  "German Shepherd Dog": [
+    "Malinois",
+    "Belgian tervuren",
+    "Dutch shepherd",
+    "stuffed toy German shepherd",
+    "police patrol car"
+  ],
+  "Dobermann": [
+    "miniature pinscher",
+    "Rottweiler",
+    "Great Dane",
+    "stuffed toy Dobermann",
+    "guard dog yard"
+  ],
+  "Miniature Pinscher": [
+    "Dobermann",
+    "toy fox terrier",
+    "Chihuahua",
+    "stuffed toy small dog",
+    "dog carrier bag"
+  ],
+  "Greater Swiss Mountain Dog": [
+    "Bernese mountain dog",
+    "Rottweiler",
+    "Entlebucher Sennenhund",
+    "stuffed toy mountain dog",
+    "alpine farmyard"
+  ],
+  "Bernese Mountain Dog": [
+    "Greater Swiss Mountain Dog",
+    "Appenzeller Sennenhund",
+    "Saint Bernard",
+    "stuffed toy Bernese",
+    "snowy mountain cabin"
+  ],
+  "Appenzeller Sennenhund": [
+    "Entlebucher Sennenhund",
+    "Bernese mountain dog",
+    "Greater Swiss Mountain Dog",
+    "stuffed toy Swiss dog",
+    "alpine meadow"
+  ],
+  "Entlebucher Sennenhund": [
+    "Appenzeller Sennenhund",
+    "Greater Swiss Mountain Dog",
+    "Rottweiler",
+    "stuffed toy cattle dog",
+    "farm driveway"
+  ],
+  "Boxer": [
+    "bullmastiff",
+    "American bulldog",
+    "pit bull type dog",
+    "stuffed toy boxer dog",
+    "dog obedience class"
+  ],
+  "Bullmastiff": [
+    "boxer",
+    "English mastiff",
+    "Rottweiler",
+    "stuffed toy mastiff",
+    "front porch"
+  ],
+  "Tibetan Mastiff": [
+    "Newfoundland dog",
+    "Leonberger",
+    "Caucasian shepherd dog",
+    "stuffed toy giant dog",
+    "mountain village street"
+  ],
+  "French Bulldog": [
+    "Boston terrier",
+    "pug",
+    "English bulldog",
+    "stuffed toy French bulldog",
+    "city sidewalk cafe"
+  ],
+  "Great Dane": [
+    "Dobermann",
+    "mastiff type dog",
+    "greyhound",
+    "stuffed toy Great Dane",
+    "living room couch"
+  ],
+  "St. Bernard": [
+    "Newfoundland dog",
+    "Bernese mountain dog",
+    "Leonberger",
+    "stuffed toy Saint Bernard",
+    "snow rescue scene"
+  ],
+  "husky": [
+    "Alaskan malamute",
+    "Siberian husky",
+    "Samoyed",
+    "stuffed toy husky",
+    "snowy sled trail"
+  ],
+  "Alaskan Malamute": [
+    "Siberian husky",
+    "Samoyed",
+    "wolf dog",
+    "stuffed toy malamute",
+    "sled dog team"
+  ],
+  "Siberian Husky": [
+    "Alaskan malamute",
+    "Alaskan tundra wolf",
+    "Samoyed",
+    "stuffed toy Siberian husky",
+    "snowy forest trail"
+  ],
+  "Dalmatian": [
+    "English pointer",
+    "Great Dane harlequin",
+    "spotted hound dog",
+    "stuffed toy Dalmatian",
+    "fire station driveway"
+  ],
+  "Affenpinscher": [
+    "brussels griffon",
+    "miniature schnauzer",
+    "toy poodle",
+    "stuffed toy affenpinscher",
+    "dog grooming table"
+  ],
+  "Basenji": [
+    "Shiba inu",
+    "dingo",
+    "pharaoh hound",
+    "stuffed toy basenji",
+    "dog show ring"
+  ],
+  "pug": [
+    "French bulldog",
+    "Boston terrier",
+    "English bulldog",
+    "stuffed toy pug",
+    "pet stroller"
+  ],
+  "Leonberger": [
+    "Newfoundland dog",
+    "Saint Bernard",
+    "Great Pyrenees dog",
+    "stuffed toy giant dog",
+    "lakeside beach"
+  ],
+  "Newfoundland dog": [
+    "Saint Bernard",
+    "Leonberger",
+    "Tibetan mastiff",
+    "stuffed toy Newfoundland",
+    "dock by a lake"
+  ],
+  "Great Pyrenees dog": [
+    "Kuvasz",
+    "Samoyed",
+    "Maremma sheepdog",
+    "stuffed toy livestock guardian",
+    "sheep pasture"
+  ],
+  "Samoyed": [
+    "American Eskimo dog",
+    "Great Pyrenees dog",
+    "Siberian husky",
+    "stuffed toy Samoyed",
+    "snowy backyard"
+  ],
+  "Pomeranian": [
+    "Keeshond",
+    "Schipperke",
+    "Chow chow puppy",
+    "stuffed toy Pomeranian",
+    "pet grooming salon"
+  ],
+  "Chow Chow": [
+    "Akita",
+    "Samoyed",
+    "Eurasier",
+    "stuffed toy Chow chow",
+    "city park path"
+  ],
+  "Keeshond": [
+    "Pomeranian",
+    "Samoyed",
+    "Norwegian elkhound",
+    "stuffed toy spitz dog",
+    "family living room"
+  ],
+  "brussels griffon": [
+    "affenpinscher",
+    "pug",
+    "toy poodle",
+    "stuffed toy brussels griffon",
+    "dog carrier bag"
+  ],
+  "Pembroke Welsh Corgi": [
+    "Cardigan Welsh Corgi",
+    "dachshund",
+    "Shiba inu",
+    "stuffed toy corgi",
+    "dog agility course"
+  ],
+  "Cardigan Welsh Corgi": [
+    "Pembroke Welsh Corgi",
+    "dachshund",
+    "Australian cattle dog puppy",
+    "stuffed toy corgi",
+    "farmyard grass"
+  ],
+  "Toy Poodle": [
+    "miniature poodle",
+    "bichon frise",
+    "Maltese dog",
+    "stuffed toy poodle",
+    "dog grooming salon"
+  ],
+  "Miniature Poodle": [
+    "toy poodle",
+    "standard poodle",
+    "Portuguese water dog",
+    "stuffed toy poodle",
+    "dog show ring"
+  ],
+  "Standard Poodle": [
+    "miniature poodle",
+    "Irish water spaniel",
+    "curly coated retriever",
+    "stuffed toy poodle",
+    "dog grooming table"
+  ],
+  "Mexican hairless dog (xoloitzcuintli)": [
+    "Peruvian hairless dog",
+    "basenji",
+    "Italian greyhound",
+    "xoloitzcuintli statue",
+    "dog sweater"
+  ],
+  "grey wolf": [
+    "Alaskan tundra wolf",
+    "coyote",
+    "Siberian husky",
+    "wolf statue",
+    "snowy forest"
+  ],
+  "Alaskan tundra wolf": [
+    "grey wolf",
+    "Siberian husky",
+    "Alaskan malamute",
+    "wolf figurine",
+    "arctic snowfield"
+  ],
+  "red wolf or maned wolf": [
+    "coyote",
+    "red fox",
+    "dingo",
+    "maned wolf statue",
+    "savanna grassland"
+  ],
+  "coyote": [
+    "grey wolf",
+    "red wolf",
+    "German shepherd dog",
+    "coyote taxidermy mount",
+    "desert scrub"
+  ],
+  "dingo": [
+    "coyote",
+    "red fox",
+    "basenji",
+    "dingo figurine",
+    "outback dirt road"
+  ],
+  "dhole": [
+    "red fox",
+    "coyote",
+    "African wild dog",
+    "dhole illustration",
+    "forest trail"
+  ],
+  "African wild dog": [
+    "hyena",
+    "dhole",
+    "German shepherd dog",
+    "African wild dog statue",
+    "savanna landscape"
+  ],
+  "hyena": [
+    "African wild dog",
+    "coyote",
+    "aardwolf",
+    "hyena statue",
+    "savanna carcass scene"
+  ],
+  "red fox": [
+    "kit fox",
+    "grey fox",
+    "coyote",
+    "stuffed toy fox",
+    "snowy field"
+  ],
+  "kit fox": [
+    "fennec fox",
+    "red fox",
+    "coyote",
+    "fox figurine",
+    "desert sand dune"
+  ],
+  "Arctic fox": [
+    "red fox in winter coat",
+    "Samoyed",
+    "white cat",
+    "stuffed toy Arctic fox",
+    "tundra snow"
+  ],
+  "grey fox": [
+    "red fox",
+    "kit fox",
+    "coyote",
+    "stuffed toy fox",
+    "woodland brush"
+  ],
+  "tabby cat": [
+    "tiger cat",
+    "Egyptian Mau",
+    "Bengal cat",
+    "stuffed toy tabby cat",
+    "cat scratching post"
+  ],
+  "tiger cat": [
+    "tabby cat",
+    "Egyptian Mau",
+    "Bengal cat",
+    "stuffed toy cat",
+    "cat tree"
+  ],
+  "Persian cat": [
+    "Himalayan cat",
+    "British longhair cat",
+    "ragdoll cat",
+    "stuffed toy Persian cat",
+    "pet grooming brush"
+  ],
+  "Siamese cat": [
+    "Balinese cat",
+    "tonkinese cat",
+    "Oriental shorthair cat",
+    "stuffed toy Siamese cat",
+    "cat bed"
+  ],
+  "Egyptian Mau": [
+    "Bengal cat",
+    "tabby cat",
+    "ocicat",
+    "cat figurine",
+    "window perch"
+  ],
+  "cougar": [
+    "lioness",
+    "cheetah",
+    "bobcat",
+    "cougar statue",
+    "rocky canyon"
+  ],
+  "lynx": [
+    "bobcat",
+    "caracal",
+    "cougar",
+    "lynx plush toy",
+    "snowy forest"
+  ],
+  "leopard": [
+    "jaguar",
+    "cheetah",
+    "snow leopard",
+    "leopard statue",
+    "savanna tree"
+  ],
+  "snow leopard": [
+    "leopard",
+    "cheetah",
+    "lynx",
+    "snow leopard illustration",
+    "rocky mountain cliff"
+  ],
+  "jaguar": [
+    "leopard",
+    "cheetah",
+    "black panther statue",
+    "jungle foliage",
+    "riverbank"
+  ],
+  "lion": [
+    "tiger",
+    "cougar",
+    "leopard",
+    "lion statue",
+    "savanna grassland"
+  ],
+  "tiger": [
+    "lion",
+    "leopard",
+    "cheetah",
+    "tiger statue",
+    "zoo enclosure"
+  ],
+  "cheetah": [
+    "leopard",
+    "jaguar",
+    "cougar",
+    "cheetah statue",
+    "savanna plain"
+  ],
+  "brown bear": [
+    "American black bear",
+    "polar bear",
+    "sloth bear",
+    "bear statue",
+    "forest river"
+  ],
+  "American black bear": [
+    "brown bear",
+    "sloth bear",
+    "bear cub",
+    "bear figurine",
+    "campground"
+  ],
+  "polar bear": [
+    "brown bear",
+    "American black bear",
+    "Arctic fox",
+    "polar bear statue",
+    "sea ice"
+  ],
+  "sloth bear": [
+    "American black bear",
+    "brown bear",
+    "sun bear",
+    "sloth bear illustration",
+    "jungle clearing"
+  ],
+  "mongoose": [
+    "meerkat",
+    "ferret",
+    "otter",
+    "mongoose figurine",
+    "savanna termite mound"
+  ],
+  "meerkat": [
+    "mongoose",
+    "prairie dog",
+    "ground squirrel",
+    "meerkat plush toy",
+    "desert burrow"
+  ],
+  "tiger beetle": [
+    "ground beetle",
+    "leaf beetle",
+    "rhinoceros beetle",
+    "metallic green fly",
+    "toy beetle",
+    "pinned insect specimen",
+    "beetle illustration"
+  ],
+  "ladybug": [
+    "tortoise beetle",
+    "red beetle",
+    "red admiral butterfly",
+    "plastic toy ladybug",
+    "ladybug sticker",
+    "ladybug costume",
+    "leaf with aphids"
+  ],
+  "ground beetle": [
+    "tiger beetle",
+    "darkling beetle",
+    "click beetle",
+    "cockroach",
+    "toy beetle",
+    "pinned insect specimen",
+    "forest floor leaf litter"
+  ],
+  "longhorn beetle": [
+    "weevil",
+    "stag beetle",
+    "leaf beetle",
+    "stick insect",
+    "toy beetle",
+    "mounted beetle specimen",
+    "tree bark with lichen"
+  ],
+  "leaf beetle": [
+    "ladybug",
+    "tiger beetle",
+    "weevil",
+    "shield bug",
+    "toy beetle",
+    "beetle drawing",
+    "leaf with chew holes"
+  ],
+  "dung beetle": [
+    "rhinoceros beetle",
+    "ground beetle",
+    "darkling beetle",
+    "scarab beetle",
+    "toy beetle",
+    "museum beetle display",
+    "cow dung pat"
+  ],
+  "rhinoceros beetle": [
+    "stag beetle",
+    "dung beetle",
+    "longhorn beetle",
+    "scorpion",
+    "robot beetle",
+    "toy beetle",
+    "pinned insect specimen"
+  ],
+  "weevil": [
+    "longhorn beetle",
+    "leaf beetle",
+    "ground beetle",
+    "assassin bug",
+    "toy beetle",
+    "weevil illustration",
+    "grain sack"
+  ],
+  "fly": [
+    "horsefly",
+    "mosquito",
+    "bee",
+    "wasp",
+    "robot fly",
+    "toy insect",
+    "garbage can"
+  ],
+  "bee": [
+    "wasp",
+    "hoverfly",
+    "bumblebee",
+    "honeybee drawing",
+    "toy bee",
+    "beekeeper glove",
+    "flower blossom"
+  ],
+  "ant": [
+    "termite",
+    "earwig",
+    "small beetle",
+    "toy ant",
+    "ant sticker",
+    "anthill",
+    "picnic food"
+  ],
+  "grasshopper": [
+    "cricket insect",
+    "katydid",
+    "praying mantis",
+    "stick insect",
+    "toy grasshopper",
+    "grasshopper drawing",
+    "tall grass"
+  ],
+  "cricket insect": [
+    "grasshopper",
+    "katydid",
+    "cockroach",
+    "brown beetle",
+    "toy cricket",
+    "cricket illustration",
+    "night porch light"
+  ],
+  "stick insect": [
+    "praying mantis",
+    "walking stick toy",
+    "twig",
+    "vine stem",
+    "toy stick insect",
+    "insect specimen in a frame",
+    "forest branch"
+  ],
+  "cockroach": [
+    "ground beetle",
+    "cricket insect",
+    "earwig",
+    "darkling beetle",
+    "toy cockroach",
+    "cockroach costume prop",
+    "kitchen floor"
+  ],
+  "praying mantis": [
+    "stick insect",
+    "grasshopper",
+    "assassin bug",
+    "leaf insect",
+    "toy praying mantis",
+    "mantis sculpture",
+    "garden foliage"
+  ],
+  "cicada": [
+    "leafhopper",
+    "dragonfly",
+    "grasshopper",
+    "large fly",
+    "toy cicada",
+    "cicada illustration",
+    "tree trunk"
+  ],
+  "leafhopper": [
+    "cicada",
+    "lacewing",
+    "small moth",
+    "aphid",
+    "toy leafhopper",
+    "insect macro photo print",
+    "leaf underside"
+  ],
+  "lacewing": [
+    "damselfly",
+    "mayfly",
+    "leafhopper",
+    "small moth",
+    "toy lacewing",
+    "lacewing drawing",
+    "houseplant leaf"
+  ],
+  "dragonfly": [
+    "damselfly",
+    "lacewing",
+    "mayfly",
+    "cicada",
+    "toy dragonfly",
+    "dragonfly ornament",
+    "pond surface"
+  ],
+  "damselfly": [
+    "dragonfly",
+    "lacewing",
+    "mayfly",
+    "small butterfly",
+    "toy damselfly",
+    "damselfly illustration",
+    "reeds by a pond"
+  ],
+  "red admiral butterfly": [
+    "monarch butterfly",
+    "ringlet butterfly",
+    "small white butterfly",
+    "painted lady butterfly",
+    "toy butterfly",
+    "butterfly artwork",
+    "flower garden"
+  ],
+  "ringlet butterfly": [
+    "small white butterfly",
+    "sulphur butterfly",
+    "gossamer-winged butterfly",
+    "meadow brown butterfly",
+    "toy butterfly",
+    "butterfly illustration",
+    "grassy meadow"
+  ],
+  "monarch butterfly": [
+    "viceroy butterfly",
+    "red admiral butterfly",
+    "sulphur butterfly",
+    "painted lady butterfly",
+    "toy monarch butterfly",
+    "butterfly poster",
+    "milkweed plant"
+  ],
+  "small white butterfly": [
+    "sulphur butterfly",
+    "ringlet butterfly",
+    "gossamer-winged butterfly",
+    "cabbage white butterfly",
+    "toy white butterfly",
+    "butterfly drawing",
+    "cabbage leaf"
+  ],
+  "sulphur butterfly": [
+    "small white butterfly",
+    "ringlet butterfly",
+    "monarch butterfly",
+    "gossamer-winged butterfly",
+    "toy yellow butterfly",
+    "butterfly illustration",
+    "wildflower meadow"
+  ],
+  "gossamer-winged butterfly": [
+    "ringlet butterfly",
+    "small white butterfly",
+    "sulphur butterfly",
+    "blue damselfly",
+    "toy blue butterfly",
+    "butterfly sticker",
+    "flowering shrub"
+  ],
+  "starfish": [
+    "sea urchin",
+    "sea cucumber",
+    "sand dollar",
+    "coral",
+    "toy starfish",
+    "starfish decoration",
+    "tide pool rock"
+  ],
+  "sea urchin": [
+    "starfish",
+    "sea cucumber",
+    "spiny seashell",
+    "pufferfish",
+    "toy sea urchin",
+    "sea urchin sculpture",
+    "coral reef"
+  ],
+  "sea cucumber": [
+    "sea urchin",
+    "starfish",
+    "slug",
+    "sea anemone",
+    "toy sea cucumber",
+    "sea creature figurine",
+    "sandy seabed"
+  ],
+  "cottontail rabbit": [
+    "hare",
+    "Angora rabbit",
+    "guinea pig",
+    "hamster",
+    "toy rabbit",
+    "rabbit plush",
+    "garden lawn"
+  ],
+  "hare": [
+    "cottontail rabbit",
+    "jackrabbit",
+    "fox",
+    "deer fawn",
+    "toy hare",
+    "hare illustration",
+    "open field"
+  ],
+  "Angora rabbit": [
+    "cottontail rabbit",
+    "hare",
+    "guinea pig",
+    "small dog",
+    "stuffed rabbit",
+    "toy rabbit",
+    "pet grooming table"
+  ],
+  "hamster": [
+    "guinea pig",
+    "mouse",
+    "gerbil",
+    "small rabbit",
+    "toy hamster",
+    "hamster plush",
+    "hamster cage"
+  ],
+  "porcupine": [
+    "hedgehog",
+    "beaver",
+    "marmot",
+    "armadillo",
+    "toy porcupine",
+    "porcupine statue",
+    "forest log"
+  ],
+  "fox squirrel": [
+    "chipmunk",
+    "common squirrel monkey",
+    "marmot",
+    "weasel",
+    "toy squirrel",
+    "squirrel ornament",
+    "tree trunk"
+  ],
+  "marmot": [
+    "groundhog",
+    "beaver",
+    "otter",
+    "porcupine",
+    "toy marmot",
+    "marmot illustration",
+    "rocky hillside"
+  ],
+  "beaver": [
+    "otter",
+    "marmot",
+    "capybara",
+    "muskrat",
+    "toy beaver",
+    "beaver sculpture",
+    "wooden dam"
+  ],
+  "guinea pig": [
+    "hamster",
+    "rabbit",
+    "marmot",
+    "rat",
+    "toy guinea pig",
+    "guinea pig plush",
+    "pet bedding"
+  ],
+  "common sorrel horse": [
+    "zebra",
+    "ox",
+    "donkey",
+    "mule",
+    "toy horse",
+    "horse statue",
+    "barn stall"
+  ],
+  "zebra": [
+    "horse",
+    "okapi",
+    "water buffalo",
+    "gazelle",
+    "toy zebra",
+    "zebra costume",
+    "savanna grass"
+  ],
+  "pig": [
+    "wild boar",
+    "warthog",
+    "hippopotamus",
+    "ox",
+    "toy pig",
+    "pig statue",
+    "farm pen"
+  ],
+  "wild boar": [
+    "pig",
+    "warthog",
+    "peccary",
+    "bear cub",
+    "toy boar",
+    "boar sculpture",
+    "forest underbrush"
+  ],
+  "warthog": [
+    "wild boar",
+    "pig",
+    "hippopotamus",
+    "tapir",
+    "toy warthog",
+    "warthog figurine",
+    "savanna dirt"
+  ],
+  "hippopotamus": [
+    "rhinoceros",
+    "water buffalo",
+    "warthog",
+    "elephant",
+    "toy hippopotamus",
+    "hippopotamus statue",
+    "riverbank mud"
+  ],
+  "ox": [
+    "water buffalo",
+    "bison",
+    "cow",
+    "ram",
+    "toy ox",
+    "ox figurine",
+    "farm pasture"
+  ],
+  "water buffalo": [
+    "ox",
+    "bison",
+    "wildebeest",
+    "hippopotamus",
+    "toy buffalo",
+    "buffalo statue",
+    "marshy field"
+  ],
+  "bison": [
+    "water buffalo",
+    "ox",
+    "yak",
+    "wildebeest",
+    "toy bison",
+    "bison sculpture",
+    "prairie grass"
+  ],
+  "ram (adult male sheep)": [
+    "bighorn sheep",
+    "Alpine ibex",
+    "goat",
+    "ox",
+    "toy ram",
+    "ram statue",
+    "mountain pasture"
+  ],
+  "bighorn sheep": [
+    "ram",
+    "Alpine ibex",
+    "mountain goat",
+    "deer",
+    "toy bighorn sheep",
+    "bighorn sheep sculpture",
+    "rocky cliff"
+  ],
+  "Alpine ibex": [
+    "bighorn sheep",
+    "mountain goat",
+    "ram",
+    "chamois",
+    "toy ibex",
+    "ibex statue",
+    "alpine rock ledge"
+  ],
+  "hartebeest": [
+    "impala",
+    "gazelle",
+    "wildebeest",
+    "deer",
+    "toy antelope",
+    "antelope figurine",
+    "savanna plain"
+  ],
+  "impala (antelope)": [
+    "gazelle",
+    "hartebeest",
+    "deer",
+    "goat",
+    "toy impala",
+    "antelope statue",
+    "savanna grass"
+  ],
+  "gazelle": [
+    "impala",
+    "hartebeest",
+    "deer",
+    "goat",
+    "toy gazelle",
+    "gazelle figurine",
+    "savanna shrub"
+  ],
+  "arabian camel": [
+    "llama",
+    "alpaca",
+    "dromedary camel",
+    "horse",
+    "toy camel",
+    "camel statue",
+    "desert dune"
+  ],
+  "llama": [
+    "alpaca",
+    "arabian camel",
+    "goat",
+    "sheep",
+    "toy llama",
+    "llama plush",
+    "mountain pasture"
+  ],
+  "weasel": [
+    "mink",
+    "European polecat",
+    "black-footed ferret",
+    "otter",
+    "toy weasel",
+    "weasel illustration",
+    "stone wall"
+  ],
+  "mink": [
+    "weasel",
+    "otter",
+    "European polecat",
+    "black-footed ferret",
+    "fur stole",
+    "toy mink",
+    "riverbank grass"
+  ],
+  "European polecat": [
+    "weasel",
+    "black-footed ferret",
+    "mink",
+    "skunk",
+    "toy ferret",
+    "polecat illustration",
+    "farmyard edge"
+  ],
+  "black-footed ferret": [
+    "European polecat",
+    "weasel",
+    "mink",
+    "otter",
+    "toy ferret",
+    "ferret plush",
+    "prairie burrow"
+  ],
+  "otter": [
+    "beaver",
+    "mink",
+    "weasel",
+    "seal",
+    "toy otter",
+    "otter statue",
+    "rocky river"
+  ],
+  "skunk": [
+    "badger",
+    "European polecat",
+    "raccoon",
+    "cat",
+    "toy skunk",
+    "skunk costume",
+    "roadside ditch"
+  ],
+  "badger": [
+    "skunk",
+    "wolverine",
+    "marmot",
+    "raccoon",
+    "toy badger",
+    "badger figurine",
+    "woodland burrow"
+  ],
+  "armadillo": [
+    "pangolin",
+    "porcupine",
+    "hedgehog",
+    "turtle",
+    "toy armadillo",
+    "armadillo statue",
+    "dry grassland"
+  ],
+  "three-toed sloth": [
+    "orangutan",
+    "howler monkey",
+    "chimpanzee",
+    "koala",
+    "toy sloth",
+    "sloth plush",
+    "tree canopy"
+  ],
+  "orangutan": [
+    "gorilla",
+    "chimpanzee",
+    "gibbon",
+    "howler monkey",
+    "toy orangutan",
+    "orangutan statue",
+    "jungle foliage"
+  ],
+  "gorilla": [
+    "chimpanzee",
+    "orangutan",
+    "baboon",
+    "black-and-white colobus",
+    "toy gorilla",
+    "gorilla sculpture",
+    "zoo enclosure"
+  ],
+  "chimpanzee": [
+    "gorilla",
+    "orangutan",
+    "baboon",
+    "macaque",
+    "toy chimpanzee",
+    "chimpanzee statue",
+    "tropical forest"
+  ],
+  "gibbon": [
+    "siamang",
+    "macaque",
+    "langur",
+    "howler monkey",
+    "toy gibbon",
+    "gibbon illustration",
+    "rainforest canopy"
+  ],
+  "siamang": [
+    "gibbon",
+    "howler monkey",
+    "chimpanzee",
+    "langur",
+    "toy siamang",
+    "siamang statue",
+    "zoo climbing rope"
+  ],
+  "guenon": [
+    "macaque",
+    "langur",
+    "patas monkey",
+    "titi monkey",
+    "toy monkey",
+    "monkey figurine",
+    "forest branch"
+  ],
+  "patas monkey": [
+    "baboon",
+    "guenon",
+    "macaque",
+    "langur",
+    "toy monkey",
+    "monkey statue",
+    "savanna scrub"
+  ],
+  "baboon": [
+    "macaque",
+    "patas monkey",
+    "guenon",
+    "chimpanzee",
+    "toy baboon",
+    "baboon sculpture",
+    "rocky outcrop"
+  ],
+  "macaque": [
+    "baboon",
+    "guenon",
+    "langur",
+    "capuchin monkey",
+    "toy macaque",
+    "monkey plush",
+    "temple courtyard"
+  ],
+  "langur": [
+    "black-and-white colobus",
+    "guenon",
+    "macaque",
+    "howler monkey",
+    "toy langur",
+    "langur illustration",
+    "forest canopy"
+  ],
+  "black-and-white colobus": [
+    "langur",
+    "guenon",
+    "howler monkey",
+    "gibbon",
+    "toy monkey",
+    "monkey statue",
+    "tree branch"
+  ],
+  "proboscis monkey": [
+    "baboon",
+    "langur",
+    "guenon",
+    "howler monkey",
+    "toy proboscis monkey",
+    "monkey figurine",
+    "mangrove swamp"
+  ],
+  "marmoset": [
+    "titi monkey",
+    "capuchin monkey",
+    "squirrel",
+    "guenon",
+    "toy marmoset",
+    "monkey plush",
+    "rainforest vine"
+  ],
+  "white-headed capuchin": [
+    "marmoset",
+    "titi monkey",
+    "macaque",
+    "guenon",
+    "toy capuchin",
+    "capuchin statue",
+    "jungle branch"
+  ],
+  "howler monkey": [
+    "langur",
+    "black-and-white colobus",
+    "proboscis monkey",
+    "orangutan",
+    "toy howler monkey",
+    "monkey figurine",
+    "rainforest canopy"
+  ],
+  "titi monkey": [
+    "marmoset",
+    "guenon",
+    "white-headed capuchin",
+    "squirrel monkey",
+    "toy titi monkey",
+    "monkey plush",
+    "forest understory"
+  ],
+  "Geoffroy's spider monkey": [
+    "howler monkey",
+    "gibbon",
+    "capuchin monkey",
+    "orangutan",
+    "toy spider monkey",
+    "monkey statue",
+    "zoo rope bridge"
+  ],
+  "common squirrel monkey": [
+    "marmoset",
+    "titi monkey",
+    "guenon",
+    "capuchin monkey",
+    "toy squirrel monkey",
+    "monkey plush",
+    "tropical forest"
+  ],
+  "ring-tailed lemur": [
+    "indri",
+    "marmoset",
+    "raccoon",
+    "cat",
+    "toy lemur",
+    "lemur statue",
+    "zoo island enclosure"
+  ],
+  "indri": [
+    "ring-tailed lemur",
+    "howler monkey",
+    "gibbon",
+    "langur",
+    "toy indri",
+    "lemur figurine",
+    "Madagascar forest"
+  ],
+  "Asian elephant": [
+    "African bush elephant",
+    "hippopotamus",
+    "rhinoceros",
+    "water buffalo",
+    "toy elephant",
+    "elephant statue",
+    "zoo habitat"
+  ],
+  "African bush elephant": [
+    "Asian elephant",
+    "hippopotamus",
+    "rhinoceros",
+    "water buffalo",
+    "toy elephant",
+    "elephant sculpture",
+    "savanna dust"
+  ],
+  "red panda": [
+    "giant panda",
+    "raccoon",
+    "fox",
+    "cat",
+    "toy red panda",
+    "red panda plush",
+    "bamboo thicket"
+  ],
+  "giant panda": [
+    "red panda",
+    "polar bear",
+    "black bear",
+    "raccoon",
+    "toy panda",
+    "panda plush",
+    "bamboo grove"
+  ],
+  "snoek fish": [
+    "eel",
+    "silver salmon",
+    "sturgeon",
+    "gar fish",
+    "toy fish",
+    "fish illustration",
+    "fish market counter"
+  ],
+  "eel": [
+    "snoek fish",
+    "gar fish",
+    "sea snake",
+    "sturgeon",
+    "toy eel",
+    "eel sculpture",
+    "rocky reef crevice"
+  ],
+  "silver salmon": [
+    "trout",
+    "snoek fish",
+    "sturgeon",
+    "mackerel",
+    "toy salmon",
+    "fish poster",
+    "river fishing scene"
+  ],
+  "rock beauty fish": [
+    "clownfish",
+    "lionfish",
+    "angelfish",
+    "butterflyfish",
+    "toy reef fish",
+    "fish aquarium ornament",
+    "coral reef"
+  ],
+  "clownfish": [
+    "rock beauty fish",
+    "damselfish",
+    "goldfish",
+    "lionfish",
+    "toy clownfish",
+    "clownfish illustration",
+    "sea anemone"
+  ],
+  "sturgeon": [
+    "gar fish",
+    "eel",
+    "silver salmon",
+    "catfish",
+    "toy sturgeon",
+    "fish sculpture",
+    "river dock"
+  ],
+  "gar fish": [
+    "sturgeon",
+    "eel",
+    "snoek fish",
+    "pike",
+    "toy gar",
+    "fish model",
+    "murky river"
+  ],
+  "lionfish": [
+    "rock beauty fish",
+    "pufferfish",
+    "scorpionfish",
+    "clownfish",
+    "toy lionfish",
+    "lionfish illustration",
+    "coral reef"
+  ],
+  "pufferfish": [
+    "lionfish",
+    "porcupinefish",
+    "sea urchin",
+    "blobfish",
+    "toy pufferfish",
+    "pufferfish ornament",
+    "aquarium tank"
+  ],
+  "abacus": [
+    "calculator",
+    "cash register",
+    "counting beads toy",
+    "math textbook",
+    "toy abacus",
+    "abacus illustration",
+    "classroom desk"
+  ],
+  "abaya": [
+    "hijab",
+    "kaftan",
+    "cloak",
+    "bathrobe",
+    "doll dress",
+    "abaya illustration",
+    "clothing rack"
+  ],
+  "academic gown": [
+    "judge robe",
+    "choir robe",
+    "graduation cap and gown figurine",
+    "doll wearing a gown",
+    "university stole",
+    "lecture hall seat",
+    "mortarboard cap"
+  ],
+  "accordion": [
+    "concertina",
+    "harmonica",
+    "bandoneon",
+    "accordion toy",
+    "accordion illustration",
+    "piano keyboard",
+    "suitcase"
+  ],
+  "acoustic guitar": [
+    "classical guitar",
+    "electric guitar",
+    "ukulele",
+    "guitar-shaped toy",
+    "guitar poster",
+    "guitar case",
+    "banjo"
+  ],
+  "aircraft carrier": [
+    "battleship",
+    "naval destroyer",
+    "container ship",
+    "model aircraft carrier",
+    "aircraft carrier painting",
+    "naval dock",
+    "fighter jet"
+  ],
+  "airliner": [
+    "private jet",
+    "cargo plane",
+    "commercial airliner model",
+    "airliner poster",
+    "airport terminal",
+    "runway sign",
+    "passenger boarding bridge"
+  ],
+  "airship": [
+    "blimp",
+    "hot air balloon",
+    "zeppelin model",
+    "airship illustration",
+    "airport hangar",
+    "weather balloon",
+    "parachute canopy"
+  ],
+  "altar": [
+    "pulpit",
+    "lectern",
+    "shrine",
+    "altar model",
+    "altar painting",
+    "church pew",
+    "candelabrum"
+  ],
+  "ambulance": [
+    "fire truck",
+    "police van",
+    "hospital transport van",
+    "toy ambulance",
+    "ambulance decal",
+    "hospital entrance",
+    "stretcher"
+  ],
+  "amphibious vehicle": [
+    "military jeep",
+    "landing craft",
+    "hovercraft",
+    "amphibious vehicle toy",
+    "amphibious vehicle illustration",
+    "boat ramp",
+    "inflatable boat"
+  ],
+  "analog clock": [
+    "digital clock",
+    "wristwatch",
+    "clock face poster",
+    "toy clock",
+    "stopwatch",
+    "wall calendar",
+    "hourglass"
+  ],
+  "apiary": [
+    "beehive",
+    "birdhouse",
+    "garden shed",
+    "model beehive",
+    "beekeeping illustration",
+    "flower garden",
+    "honey jar"
+  ],
+  "apron": [
+    "chef jacket",
+    "kitchen towel",
+    "bib",
+    "apron costume",
+    "apron drawing",
+    "kitchen counter",
+    "oven mitt"
+  ],
+  "trash can": [
+    "recycling bin",
+    "mailbox",
+    "storage barrel",
+    "trash can toy",
+    "trash can illustration",
+    "kitchen cabinet",
+    "dumpster"
+  ],
+  "assault rifle": [
+    "hunting rifle",
+    "submachine gun",
+    "paintball gun",
+    "toy rifle",
+    "rifle poster",
+    "gun case",
+    "military helmet"
+  ],
+  "backpack": [
+    "duffel bag",
+    "messenger bag",
+    "school satchel",
+    "backpack toy",
+    "backpack drawing",
+    "locker",
+    "hiking boot"
+  ],
+  "bakery": [
+    "pastry shop",
+    "coffee shop",
+    "grocery store aisle",
+    "bakery diorama",
+    "bakery illustration",
+    "bread shelf",
+    "display case"
+  ],
+  "balance beam": [
+    "gymnastics vault",
+    "parallel bar",
+    "wooden plank",
+    "balance beam toy",
+    "balance beam illustration",
+    "gymnasium mat",
+    "gymnastics ring"
+  ],
+  "balloon": [
+    "beach ball",
+    "hot air balloon",
+    "balloon animal",
+    "balloon toy",
+    "balloon drawing",
+    "party streamer",
+    "confetti"
+  ],
+  "ballpoint pen": [
+    "fountain pen",
+    "mechanical pencil",
+    "marker pen",
+    "pen-shaped toy",
+    "pen illustration",
+    "notebook",
+    "pencil case"
+  ],
+  "Band-Aid": [
+    "gauze pad",
+    "medical tape",
+    "adhesive sticker",
+    "Band-Aid box",
+    "Band-Aid illustration",
+    "first aid kit",
+    "cotton swab"
+  ],
+  "banjo": [
+    "mandolin",
+    "acoustic guitar",
+    "ukulele",
+    "banjo toy",
+    "banjo drawing",
+    "instrument case",
+    "drum"
+  ],
+  "baluster / handrail": [
+    "stair railing",
+    "newel post",
+    "fence picket",
+    "baluster miniature",
+    "baluster illustration",
+    "staircase",
+    "banister cap"
+  ],
+  "barbell": [
+    "dumbbell",
+    "kettlebell",
+    "curl bar",
+    "toy barbell",
+    "barbell illustration",
+    "weight rack",
+    "gym bench"
+  ],
+  "barber chair": [
+    "salon chair",
+    "dentist chair",
+    "recliner",
+    "barber chair miniature",
+    "barber chair illustration",
+    "barbershop mirror",
+    "hair dryer"
+  ],
+  "barbershop": [
+    "hair salon",
+    "tattoo parlor",
+    "beauty spa",
+    "barbershop diorama",
+    "barbershop illustration",
+    "barber pole",
+    "waiting room chair"
+  ],
+  "barn": [
+    "farmhouse",
+    "storage shed",
+    "stable",
+    "barn miniature",
+    "barn painting",
+    "hay bale",
+    "silo"
+  ],
+  "barometer": [
+    "thermometer",
+    "altimeter",
+    "pressure gauge",
+    "barometer toy",
+    "barometer illustration",
+    "weather station",
+    "compass"
+  ],
+  "barrel": [
+    "wooden crate",
+    "trash can",
+    "metal drum",
+    "barrel toy",
+    "barrel illustration",
+    "wine cellar",
+    "pallet"
+  ],
+  "wheelbarrow": [
+    "garden cart",
+    "hand truck",
+    "pushchair",
+    "wheelbarrow toy",
+    "wheelbarrow illustration",
+    "garden shovel",
+    "compost bin"
+  ],
+  "baseball": [
+    "softball",
+    "tennis ball",
+    "cricket ball",
+    "baseball toy",
+    "baseball illustration",
+    "baseball glove",
+    "baseball bat"
+  ],
+  "basketball": [
+    "soccer ball",
+    "volleyball",
+    "medicine ball",
+    "basketball toy",
+    "basketball illustration",
+    "basketball hoop",
+    "sports jersey"
+  ],
+  "bassinet": [
+    "crib",
+    "baby stroller",
+    "Moses basket",
+    "bassinet toy",
+    "bassinet illustration",
+    "nursery changing table",
+    "baby blanket"
+  ],
+  "bassoon": [
+    "oboe",
+    "clarinet",
+    "saxophone",
+    "bassoon toy",
+    "bassoon illustration",
+    "music stand",
+    "woodwind case"
+  ],
+  "swimming cap": [
+    "shower cap",
+    "ski helmet",
+    "wetsuit hood",
+    "swimming cap toy",
+    "swimming cap illustration",
+    "swimming goggle",
+    "pool lane rope"
+  ],
+  "bath towel": [
+    "hand towel",
+    "bathrobe",
+    "bed sheet",
+    "towel illustration",
+    "towel plush toy",
+    "bathroom rack",
+    "shower curtain"
+  ],
+  "bathtub": [
+    "shower stall",
+    "hot tub",
+    "sink basin",
+    "bathtub toy",
+    "bathtub illustration",
+    "bathroom tile wall",
+    "bath mat"
+  ],
+  "station wagon": [
+    "minivan",
+    "SUV",
+    "hatchback car",
+    "station wagon toy",
+    "station wagon illustration",
+    "parking lot",
+    "roof rack"
+  ],
+  "lighthouse": [
+    "water tower",
+    "church steeple",
+    "watchtower",
+    "lighthouse miniature",
+    "lighthouse painting",
+    "rocky shoreline",
+    "harbor beacon"
+  ],
+  "beaker": [
+    "measuring cup",
+    "graduated cylinder",
+    "glass jar",
+    "beaker toy",
+    "beaker illustration",
+    "laboratory bench",
+    "test tube"
+  ],
+  "military hat (bearskin or shako)": [
+    "police cap",
+    "marching band hat",
+    "fur hat",
+    "toy military hat",
+    "military hat illustration",
+    "military uniform",
+    "ceremonial plume"
+  ],
+  "beer bottle": [
+    "wine bottle",
+    "soda bottle",
+    "olive oil bottle",
+    "beer bottle toy",
+    "beer bottle illustration",
+    "bar counter",
+    "bottle opener"
+  ],
+  "beer glass": [
+    "wine glass",
+    "pint glass",
+    "mason jar",
+    "beer glass toy",
+    "beer glass illustration",
+    "bar coaster",
+    "tap handle"
+  ],
+  "bell tower": [
+    "church steeple",
+    "clock tower",
+    "watchtower",
+    "bell tower miniature",
+    "bell tower illustration",
+    "cathedral facade",
+    "carillon bell"
+  ],
+  "baby bib": [
+    "apron",
+    "burp cloth",
+    "bandana",
+    "baby bib toy",
+    "baby bib illustration",
+    "high chair",
+    "baby bottle"
+  ],
+  "tandem bicycle": [
+    "road bicycle",
+    "mountain bike",
+    "tandem bicycle toy",
+    "tandem bicycle illustration",
+    "bicycle rack",
+    "cycling helmet",
+    "motorcycle"
+  ],
+  "bikini": [
+    "one-piece swimsuit",
+    "sports bra",
+    "lingerie set",
+    "bikini doll outfit",
+    "bikini illustration",
+    "beach umbrella",
+    "swim trunk"
+  ],
+  "ring binder": [
+    "spiral notebook",
+    "file folder",
+    "clipboard",
+    "ring binder toy",
+    "ring binder illustration",
+    "office shelf",
+    "paper stack"
+  ],
+  "binoculars": [
+    "telescope",
+    "camera lens",
+    "rangefinder",
+    "binocular toy",
+    "binocular illustration",
+    "birdwatching hat",
+    "tripod"
+  ],
+  "birdhouse": [
+    "mailbox",
+    "bat box",
+    "nesting box",
+    "birdhouse miniature",
+    "birdhouse illustration",
+    "tree branch",
+    "bird feeder"
+  ],
+  "boathouse": [
+    "dock shed",
+    "lakeside cabin",
+    "marina building",
+    "boathouse miniature",
+    "boathouse illustration",
+    "rowboat",
+    "pier"
+  ],
+  "bobsleigh": [
+    "sled",
+    "luge",
+    "snowmobile",
+    "bobsleigh toy",
+    "bobsleigh illustration",
+    "ice track",
+    "ski helmet"
+  ],
+  "bolo tie": [
+    "necktie",
+    "bow tie",
+    "necklace pendant",
+    "bolo tie toy",
+    "bolo tie illustration",
+    "cowboy hat",
+    "western shirt"
+  ],
+  "poke bonnet": [
+    "sun bonnet",
+    "wide-brim hat",
+    "hooded cloak",
+    "poke bonnet doll accessory",
+    "poke bonnet illustration",
+    "Victorian dress",
+    "hair ribbon"
+  ],
+  "bookcase": [
+    "wardrobe",
+    "display cabinet",
+    "shelving unit",
+    "bookcase miniature",
+    "bookcase illustration",
+    "stack of books",
+    "reading lamp"
+  ],
+  "bookstore": [
+    "library",
+    "newsstand",
+    "gift shop",
+    "bookstore diorama",
+    "bookstore illustration",
+    "bookshelf aisle",
+    "checkout counter"
+  ],
+  "bottle cap": [
+    "jar lid",
+    "crown cork",
+    "metal washer",
+    "bottle cap toy",
+    "bottle cap illustration",
+    "bottle opener",
+    "beer bottle"
+  ],
+  "hunting bow": [
+    "recurve bow",
+    "crossbow",
+    "toy bow",
+    "bow illustration",
+    "archery target",
+    "arrow quiver",
+    "fishing rod"
+  ],
+  "bow tie": [
+    "necktie",
+    "bolo tie",
+    "ribbon bow",
+    "bow tie toy",
+    "bow tie illustration",
+    "suit jacket",
+    "collar shirt"
+  ],
+  "brass memorial plaque": [
+    "engraved nameplate",
+    "bronze plaque",
+    "trophy plate",
+    "plaque replica",
+    "plaque illustration",
+    "stone monument",
+    "museum wall label"
+  ],
+  "bra": [
+    "bikini top",
+    "sports bra",
+    "corset",
+    "bra mannequin display",
+    "bra illustration",
+    "lingerie drawer",
+    "clothing hanger"
+  ],
+  "breakwater": [
+    "sea wall",
+    "jetty",
+    "rocky pier",
+    "breakwater model",
+    "breakwater illustration",
+    "harbor",
+    "lighthouse"
+  ],
+  "breastplate": [
+    "chest armor",
+    "chain mail shirt",
+    "bulletproof vest",
+    "breastplate replica",
+    "breastplate illustration",
+    "castle armory",
+    "knight helmet"
+  ],
+  "broom": [
+    "mop",
+    "squeegee",
+    "brush",
+    "toy broom",
+    "broom illustration",
+    "dustpan",
+    "janitor closet"
+  ],
+  "bucket": [
+    "trash can",
+    "watering can",
+    "paint can",
+    "bucket toy",
+    "bucket illustration",
+    "garden hose",
+    "sand shovel"
+  ],
+  "buckle": [
+    "belt clasp",
+    "carabiner",
+    "shoe buckle",
+    "buckle toy",
+    "buckle illustration",
+    "leather belt",
+    "backpack strap"
+  ],
+  "bulletproof vest": [
+    "tactical vest",
+    "life jacket",
+    "chest plate carrier",
+    "bulletproof vest replica",
+    "bulletproof vest illustration",
+    "police uniform",
+    "ammo pouch"
+  ],
+  "high-speed train": [
+    "commuter train",
+    "subway train",
+    "tram",
+    "high-speed train toy",
+    "high-speed train illustration",
+    "train platform",
+    "railway track"
+  ],
+  "butcher shop": [
+    "deli counter",
+    "fish market",
+    "grocery meat aisle",
+    "butcher shop diorama",
+    "butcher shop illustration",
+    "meat display case",
+    "cutting board"
+  ],
+  "taxicab": [
+    "police car",
+    "rideshare car",
+    "city bus",
+    "taxicab toy",
+    "taxicab illustration",
+    "city street",
+    "taxi sign"
+  ],
+  "cauldron": [
+    "cooking pot",
+    "kettle",
+    "stockpot",
+    "cauldron toy",
+    "cauldron illustration",
+    "campfire ring",
+    "witch costume prop"
+  ],
+  "candle": [
+    "incense stick",
+    "oil lamp",
+    "candlestick",
+    "candle toy",
+    "candle illustration",
+    "birthday cake",
+    "candle holder"
+  ],
+  "cannon": [
+    "howitzer",
+    "tank turret",
+    "cannon toy",
+    "cannon illustration",
+    "fort parapet",
+    "cannonball",
+    "ship deck gun"
+  ],
+  "canoe": [
+    "kayak",
+    "rowboat",
+    "inflatable raft",
+    "canoe toy",
+    "canoe illustration",
+    "paddle",
+    "dock"
+  ],
+  "can opener": [
+    "bottle opener",
+    "corkscrew",
+    "kitchen shears",
+    "can opener toy",
+    "can opener illustration",
+    "kitchen drawer",
+    "tin can"
+  ],
+  "cardigan": [
+    "sweater",
+    "hoodie",
+    "blazer",
+    "cardigan doll outfit",
+    "cardigan illustration",
+    "clothes hanger",
+    "knit scarf"
+  ],
+  "car mirror": [
+    "side mirror",
+    "rearview mirror",
+    "vanity mirror",
+    "car mirror toy",
+    "car mirror illustration",
+    "car door",
+    "windshield"
+  ],
+  "carousel": [
+    "merry-go-round",
+    "ferris wheel",
+    "carousel toy",
+    "carousel illustration",
+    "amusement park ride",
+    "ticket booth",
+    "circus tent"
+  ],
+  "tool kit": [
+    "first aid kit",
+    "tackle box",
+    "toolbox",
+    "tool kit toy",
+    "tool kit illustration",
+    "workbench",
+    "power drill"
+  ],
+  "cardboard box / carton": [
+    "plastic storage bin",
+    "shipping crate",
+    "paper bag",
+    "cardboard box toy",
+    "cardboard box illustration",
+    "packing tape",
+    "warehouse shelf"
+  ],
+  "car wheel": [
+    "tire",
+    "hubcap",
+    "bicycle wheel",
+    "car wheel toy",
+    "car wheel illustration",
+    "lug wrench",
+    "garage floor jack"
+  ],
+  "automated teller machine": [
+    "vending machine",
+    "ticket kiosk",
+    "parking meter",
+    "ATM toy",
+    "ATM illustration",
+    "bank lobby",
+    "credit card reader"
+  ],
+  "cassette": [
+    "VHS tape",
+    "CD case",
+    "cassette toy",
+    "cassette illustration",
+    "cassette player",
+    "music shelf",
+    "reel-to-reel tape"
+  ],
+  "cassette player": [
+    "CD player",
+    "portable radio",
+    "MP3 player",
+    "cassette player toy",
+    "cassette player illustration",
+    "cassette tape",
+    "headphone"
+  ],
+  "castle": [
+    "palace",
+    "fortress",
+    "cathedral",
+    "castle miniature",
+    "castle illustration",
+    "stone wall",
+    "drawbridge"
+  ],
+  "catamaran": [
+    "sailboat",
+    "trimaran",
+    "motor yacht",
+    "catamaran toy",
+    "catamaran illustration",
+    "marina dock",
+    "lifebuoy"
+  ],
+  "CD player": [
+    "cassette player",
+    "DVD player",
+    "portable radio",
+    "CD player toy",
+    "CD player illustration",
+    "compact disc",
+    "speaker"
+  ],
+  "cello": [
+    "double bass",
+    "viola",
+    "acoustic guitar",
+    "cello toy",
+    "cello illustration",
+    "music stand",
+    "bow case"
+  ],
+  "mobile phone": [
+    "cordless phone",
+    "tablet device",
+    "remote control",
+    "mobile phone toy",
+    "mobile phone illustration",
+    "phone case",
+    "charging cable"
+  ],
+  "chain": [
+    "rope",
+    "cable",
+    "necklace",
+    "chain toy",
+    "chain illustration",
+    "padlock",
+    "chain-link fence"
+  ],
+  "chain-link fence": [
+    "wire mesh",
+    "picket fence",
+    "metal railing",
+    "fence miniature",
+    "fence illustration",
+    "sports field",
+    "barbed wire"
+  ],
+  "chain mail": [
+    "scale armor",
+    "knit sweater",
+    "breastplate",
+    "chain mail replica",
+    "chain mail illustration",
+    "medieval helmet",
+    "castle armory"
+  ],
+  "chainsaw": [
+    "circular saw",
+    "hedge trimmer",
+    "power drill",
+    "chainsaw toy",
+    "chainsaw illustration",
+    "log pile",
+    "safety helmet"
+  ],
+  "storage chest": [
+    "suitcase",
+    "wooden trunk",
+    "toolbox",
+    "storage chest miniature",
+    "storage chest illustration",
+    "attic",
+    "padlock"
+  ],
+  "chiffonier": [
+    "dresser",
+    "wardrobe",
+    "chest of drawers",
+    "chiffonier miniature",
+    "chiffonier illustration",
+    "bedroom nightstand",
+    "mirror"
+  ],
+  "bell or wind chime": [
+    "doorbell",
+    "handbell",
+    "wind chime toy",
+    "wind chime illustration",
+    "porch eave",
+    "garden lantern",
+    "hanging ornament"
+  ],
+  "china cabinet": [
+    "bookcase",
+    "display case",
+    "kitchen cupboard",
+    "china cabinet miniature",
+    "china cabinet illustration",
+    "dining room table",
+    "porcelain vase"
+  ],
+  "Christmas stocking": [
+    "sock",
+    "gift bag",
+    "Christmas stocking toy",
+    "Christmas stocking illustration",
+    "fireplace mantel",
+    "Christmas tree ornament",
+    "holiday wreath"
+  ],
+  "church": [
+    "cathedral",
+    "chapel",
+    "temple",
+    "church miniature",
+    "church illustration",
+    "stained glass window",
+    "church pew"
+  ],
+  "movie theater": [
+    "playhouse theater",
+    "concert hall",
+    "shopping mall corridor",
+    "movie theater miniature",
+    "movie theater illustration",
+    "popcorn machine",
+    "cinema ticket booth"
+  ],
+  "cleaver": [
+    "chef knife",
+    "meat axe",
+    "hatchet",
+    "cleaver toy",
+    "cleaver illustration",
+    "cutting board",
+    "butcher block"
+  ],
+  "cliff dwelling": [
+    "cave entrance",
+    "stone hut",
+    "rocky alcove",
+    "ancient ruin",
+    "miniature diorama village",
+    "sandstone cliff face",
+    "mountain cabin"
+  ],
+  "cloak": [
+    "cape",
+    "hooded robe",
+    "poncho",
+    "costume cloak",
+    "bathrobe",
+    "black curtain",
+    "dress coat"
+  ],
+  "clogs": [
+    "wooden sandal",
+    "rubber garden shoe",
+    "slipper",
+    "platform shoe",
+    "traditional costume shoe",
+    "toy shoe",
+    "work boot"
+  ],
+  "cocktail shaker": [
+    "thermos bottle",
+    "stainless steel tumbler",
+    "protein shaker bottle",
+    "pepper grinder",
+    "metal water bottle",
+    "bar utensil set",
+    "toy cocktail shaker"
+  ],
+  "coffee mug": [
+    "tea cup",
+    "travel tumbler",
+    "beer stein",
+    "ceramic bowl",
+    "plastic cup",
+    "mug-shaped candle",
+    "novelty mug figurine"
+  ],
+  "coffeemaker": [
+    "electric kettle",
+    "espresso machine",
+    "tea brewer",
+    "blender",
+    "water dispenser",
+    "toy kitchen appliance",
+    "microwave oven"
+  ],
+  "spiral or coil": [
+    "spring",
+    "spiral notebook binding",
+    "coiled rope",
+    "coiled cable",
+    "slinky toy",
+    "rolled hose",
+    "spiral staircase model"
+  ],
+  "combination lock": [
+    "padlock",
+    "luggage lock",
+    "bike lock",
+    "keyed lock cylinder",
+    "safe dial",
+    "toy padlock",
+    "door knob lock"
+  ],
+  "computer keyboard": [
+    "laptop keyboard",
+    "typewriter keyboard",
+    "cash register keypad",
+    "computer mouse",
+    "remote control",
+    "toy keyboard",
+    "piano keyboard"
+  ],
+  "candy store": [
+    "bakery shop",
+    "ice cream parlor",
+    "convenience store",
+    "toy store",
+    "grocery aisle",
+    "candy display rack",
+    "gift shop"
+  ],
+  "container ship": [
+    "cargo ship",
+    "oil tanker",
+    "car ferry",
+    "naval destroyer",
+    "harbor crane",
+    "container ship model",
+    "stacked shipping container"
+  ],
+  "convertible": [
+    "sports car",
+    "roadster",
+    "coupe",
+    "jeep with soft top",
+    "toy convertible",
+    "car with sunroof",
+    "car in a showroom"
+  ],
+  "corkscrew": [
+    "bottle opener",
+    "can opener",
+    "wine stopper",
+    "bar tool",
+    "spiral drill bit",
+    "toy corkscrew",
+    "screwdriver"
+  ],
+  "cornet": [
+    "trumpet",
+    "flugelhorn",
+    "French horn",
+    "trombone",
+    "toy trumpet",
+    "brass instrument statue",
+    "instrument case"
+  ],
+  "cowboy boot": [
+    "riding boot",
+    "work boot",
+    "ankle boot",
+    "rubber rain boot",
+    "cowboy boot toy",
+    "western costume boot",
+    "boot-shaped vase"
+  ],
+  "cowboy hat": [
+    "fedora",
+    "wide-brim sun hat",
+    "straw hat",
+    "outback hat",
+    "cowboy hat costume",
+    "cowboy hat figurine",
+    "ranch saddle"
+  ],
+  "cradle": [
+    "infant bed",
+    "bassinet",
+    "crib",
+    "rocking chair",
+    "hammock",
+    "toy cradle",
+    "baby stroller"
+  ],
+  "construction crane": [
+    "tower crane",
+    "forklift",
+    "excavator",
+    "gantry crane",
+    "wrecking ball rig",
+    "crane truck",
+    "toy crane"
+  ],
+  "crash helmet": [
+    "motorcycle helmet",
+    "football helmet",
+    "bicycle helmet",
+    "hard hat",
+    "ski helmet",
+    "helmet-shaped toy",
+    "face shield"
+  ],
+  "crate": [
+    "wooden box",
+    "shipping pallet",
+    "plastic storage bin",
+    "cardboard box",
+    "fruit basket",
+    "crate-shaped toy",
+    "warehouse shelf"
+  ],
+  "infant bed": [
+    "crib",
+    "bassinet",
+    "cradle",
+    "playpen",
+    "toddler bed",
+    "toy crib",
+    "baby changing table"
+  ],
+  "Crock Pot": [
+    "Dutch oven",
+    "pressure cooker",
+    "rice cooker",
+    "stock pot",
+    "electric steamer",
+    "slow cooker toy",
+    "kitchen countertop appliance"
+  ],
+  "croquet ball": [
+    "golf ball",
+    "billiard ball",
+    "bowling ball",
+    "lacrosse ball",
+    "colored plastic ball",
+    "croquet set toy",
+    "garden lawn"
+  ],
+  "crutch": [
+    "walking cane",
+    "walker frame",
+    "ski pole",
+    "trombone stand",
+    "umbrella",
+    "toy crutch",
+    "hospital corridor"
+  ],
+  "cuirass": [
+    "body armor vest",
+    "breastplate costume",
+    "medieval helmet",
+    "metal torso statue",
+    "protective sports chest guard",
+    "armor mannequin",
+    "chainmail shirt"
+  ],
+  "dam": [
+    "bridge",
+    "spillway",
+    "hydroelectric plant",
+    "levee",
+    "waterfall",
+    "reservoir shoreline",
+    "concrete wall"
+  ],
+  "desk": [
+    "dining table",
+    "office table",
+    "workbench",
+    "student chair",
+    "filing cabinet",
+    "toy desk",
+    "computer workstation"
+  ],
+  "desktop computer": [
+    "computer monitor",
+    "laptop computer",
+    "computer tower",
+    "television screen",
+    "all-in-one computer",
+    "toy computer",
+    "office desk setup"
+  ],
+  "rotary dial telephone": [
+    "push-button telephone",
+    "desk phone handset",
+    "telephone receiver",
+    "intercom handset",
+    "toy telephone",
+    "antique radio",
+    "phone cord"
+  ],
+  "diaper": [
+    "baby underwear",
+    "swim diaper",
+    "adult incontinence brief",
+    "baby blanket",
+    "cloth diaper cover",
+    "diaper cake decoration",
+    "baby changing station"
+  ],
+  "digital clock": [
+    "alarm clock",
+    "digital watch",
+    "LED wall display",
+    "microwave clock display",
+    "smart speaker display",
+    "toy clock",
+    "analog clock"
+  ],
+  "digital watch": [
+    "sports watch",
+    "smartwatch",
+    "analog wristwatch",
+    "fitness tracker",
+    "watch-shaped toy",
+    "wristband",
+    "clock face display"
+  ],
+  "dining table": [
+    "desk",
+    "kitchen island",
+    "coffee table",
+    "picnic table",
+    "banquet table",
+    "toy dining table",
+    "dining chair"
+  ],
+  "dishcloth": [
+    "hand towel",
+    "kitchen sponge",
+    "paper towel",
+    "rag",
+    "bath washcloth",
+    "dish towel",
+    "cleaning cloth toy"
+  ],
+  "dishwasher": [
+    "washing machine",
+    "kitchen cabinet",
+    "oven",
+    "refrigerator",
+    "sink basin",
+    "dishwasher toy",
+    "kitchen appliance showroom"
+  ],
+  "disc brake": [
+    "drum brake",
+    "bicycle brake rotor",
+    "car wheel rim",
+    "saw blade",
+    "circular metal plate",
+    "disc brake model",
+    "motorcycle wheel"
+  ],
+  "dock": [
+    "pier",
+    "boardwalk",
+    "boat ramp",
+    "marina slip",
+    "floating pontoon",
+    "harbor quay",
+    "dock in a diorama"
+  ],
+  "dog sled": [
+    "sled",
+    "snowmobile",
+    "horse-drawn sleigh",
+    "ski pulk",
+    "dog harness",
+    "dog sled toy",
+    "snowy trail"
+  ],
+  "dome": [
+    "cupola",
+    "igloo",
+    "planetarium building",
+    "round roof",
+    "mosque roof",
+    "dome-shaped tent",
+    "snow globe"
+  ],
+  "doormat": [
+    "floor mat",
+    "rug",
+    "welcome sign",
+    "bath mat",
+    "yoga mat",
+    "doormat toy",
+    "front door threshold"
+  ],
+  "drilling rig": [
+    "oil derrick",
+    "construction crane",
+    "mining headframe",
+    "offshore platform",
+    "water tower",
+    "drill press",
+    "drilling rig model"
+  ],
+  "drum": [
+    "bongo drum",
+    "snare drum",
+    "tom-tom drum",
+    "barrel",
+    "paint bucket",
+    "toy drum",
+    "drum case"
+  ],
+  "drumstick": [
+    "mallet",
+    "wooden dowel",
+    "chopstick",
+    "conductor baton",
+    "chicken drumstick",
+    "toy drumstick",
+    "percussion brush"
+  ],
+  "dumbbell": [
+    "kettlebell",
+    "barbell",
+    "weight plate",
+    "exercise handle",
+    "toy dumbbell",
+    "water bottle",
+    "gym equipment rack"
+  ],
+  "Dutch oven": [
+    "Crock Pot",
+    "stock pot",
+    "cast iron skillet",
+    "pressure cooker",
+    "casserole dish",
+    "toy cooking pot",
+    "campfire pot"
+  ],
+  "electric fan": [
+    "air conditioner vent",
+    "space heater",
+    "ceiling fan",
+    "hair dryer",
+    "vacuum cleaner",
+    "toy fan",
+    "computer cooling fan"
+  ],
+  "electric guitar": [
+    "acoustic guitar",
+    "bass guitar",
+    "guitar-shaped toy",
+    "electric guitar statue",
+    "ukulele",
+    "guitar amplifier",
+    "rock concert stage"
+  ],
+  "electric locomotive": [
+    "diesel locomotive",
+    "train engine",
+    "streetcar",
+    "subway train",
+    "freight car",
+    "electric locomotive model",
+    "railway platform"
+  ],
+  "entertainment center": [
+    "television stand",
+    "bookshelf",
+    "display cabinet",
+    "home theater rack",
+    "media console",
+    "toy furniture set",
+    "living room wall unit"
+  ],
+  "envelope": [
+    "paper sheet",
+    "greeting card",
+    "mailing pouch",
+    "file folder",
+    "wrapping paper",
+    "envelope drawing",
+    "mailbox"
+  ],
+  "espresso machine": [
+    "coffeemaker",
+    "coffee grinder",
+    "milk frother",
+    "electric kettle",
+    "soda fountain",
+    "espresso machine toy",
+    "cafe counter"
+  ],
+  "face powder": [
+    "makeup compact",
+    "foundation bottle",
+    "talcum powder",
+    "blush palette",
+    "cosmetic sponge",
+    "face powder container",
+    "vanity table"
+  ],
+  "feather boa": [
+    "fur stole",
+    "tinsel garland",
+    "scarf",
+    "costume accessory",
+    "feather duster",
+    "feather boa toy",
+    "stage costume rack"
+  ],
+  "filing cabinet": [
+    "dresser",
+    "storage cabinet",
+    "tool chest",
+    "bookcase",
+    "safe",
+    "filing cabinet toy",
+    "office desk"
+  ],
+  "fireboat": [
+    "tugboat",
+    "coast guard boat",
+    "fire truck",
+    "patrol boat",
+    "motorboat",
+    "fireboat model",
+    "harbor water spray"
+  ],
+  "fire truck": [
+    "garbage truck",
+    "ambulance",
+    "tow truck",
+    "fire engine toy",
+    "construction truck",
+    "fire station building",
+    "ladder truck"
+  ],
+  "fire screen": [
+    "fireplace grate",
+    "space heater guard",
+    "folding room divider",
+    "metal mesh panel",
+    "decorative screen",
+    "fire screen toy",
+    "fireplace tools"
+  ],
+  "flagpole": [
+    "streetlight pole",
+    "utility pole",
+    "antenna mast",
+    "signpost",
+    "sailboat mast",
+    "flagpole model",
+    "building entrance"
+  ],
+  "flute": [
+    "recorder",
+    "clarinet",
+    "piccolo",
+    "tin whistle",
+    "flute toy",
+    "flute case",
+    "microphone stand"
+  ],
+  "folding chair": [
+    "camp chair",
+    "director chair",
+    "stacking chair",
+    "beach chair",
+    "stool",
+    "folding chair toy",
+    "banquet hall seating"
+  ],
+  "football helmet": [
+    "crash helmet",
+    "hockey helmet",
+    "baseball batting helmet",
+    "motorcycle helmet",
+    "toy football helmet",
+    "shoulder pad",
+    "sports locker room"
+  ],
+  "forklift": [
+    "construction crane",
+    "pallet jack",
+    "front loader",
+    "warehouse cart",
+    "tow tractor",
+    "forklift toy",
+    "shipping pallet"
+  ],
+  "fountain": [
+    "waterfall",
+    "birdbath",
+    "sprinkler",
+    "stone statue",
+    "pond",
+    "fountain model",
+    "city plaza"
+  ],
+  "fountain pen": [
+    "ballpoint pen",
+    "marker",
+    "calligraphy pen",
+    "stylus",
+    "fountain pen toy",
+    "pen case",
+    "ink bottle"
+  ],
+  "four-poster bed": [
+    "canopy bed",
+    "crib",
+    "bunk bed",
+    "bed frame",
+    "poster bed toy",
+    "bedroom dresser",
+    "mosquito net bed"
+  ],
+  "freight car": [
+    "boxcar",
+    "passenger car",
+    "tank car",
+    "flatbed railcar",
+    "electric locomotive",
+    "freight car model",
+    "railroad track"
+  ],
+  "French horn": [
+    "cornet",
+    "trumpet",
+    "tuba",
+    "euphonium",
+    "French horn toy",
+    "brass instrument statue",
+    "orchestra music stand"
+  ],
+  "frying pan": [
+    "cast iron skillet",
+    "saucepan",
+    "wok",
+    "baking tray",
+    "toy frying pan",
+    "pot lid",
+    "stovetop burner"
+  ],
+  "fur coat": [
+    "feather boa",
+    "wool coat",
+    "faux fur jacket",
+    "leather coat",
+    "fur coat costume",
+    "fur coat on a mannequin",
+    "clothing rack"
+  ],
+  "garbage truck": [
+    "dump truck",
+    "fire truck",
+    "street sweeper",
+    "recycling truck",
+    "garbage truck toy",
+    "construction truck",
+    "trash bin"
+  ],
+  "gas mask or respirator": [
+    "scuba mask",
+    "paintball mask",
+    "dust mask",
+    "welding helmet",
+    "oxygen mask",
+    "gas mask toy",
+    "hazmat suit"
+  ],
+  "gas pump": [
+    "air pump station",
+    "parking meter",
+    "electric vehicle charger",
+    "vending machine",
+    "fuel can",
+    "gas pump toy",
+    "service station canopy"
+  ],
+  "goblet": [
+    "wine glass",
+    "chalice",
+    "champagne flute",
+    "plastic cup",
+    "goblet-shaped candle",
+    "trophy cup",
+    "dining table setting"
+  ],
+  "go-kart": [
+    "golf cart",
+    "ATV",
+    "dune buggy",
+    "small race car",
+    "go-kart toy",
+    "bumper car",
+    "karting track"
+  ],
+  "golf ball": [
+    "croquet ball",
+    "ping pong ball",
+    "baseball",
+    "tennis ball",
+    "white practice ball",
+    "golf ball toy",
+    "golf tee"
+  ],
+  "golf cart": [
+    "go-kart",
+    "utility cart",
+    "ATV",
+    "small electric vehicle",
+    "golf cart toy",
+    "clubhouse parking area",
+    "lawn mower"
+  ],
+  "gondola": [
+    "canoe",
+    "rowboat",
+    "kayak",
+    "water taxi",
+    "gondola model",
+    "bridge over a canal",
+    "mooring post"
+  ],
+  "gong": [
+    "cymbal",
+    "metal disc",
+    "bell",
+    "tam-tam",
+    "gong toy",
+    "percussion stand",
+    "stage curtain"
+  ],
+  "gown": [
+    "wedding dress",
+    "evening dress",
+    "robe",
+    "nightgown",
+    "gown costume",
+    "dress on a mannequin",
+    "clothing boutique"
+  ],
+  "grand piano": [
+    "upright piano",
+    "keyboard instrument",
+    "harpsichord",
+    "piano-shaped toy",
+    "piano bench",
+    "stage curtain",
+    "concert hall"
+  ],
+  "greenhouse": [
+    "garden shed",
+    "glass conservatory",
+    "polytunnel",
+    "sunroom",
+    "mini greenhouse",
+    "greenhouse model",
+    "plant nursery"
+  ],
+  "radiator grille": [
+    "car bumper",
+    "headlight",
+    "air vent",
+    "speaker grille",
+    "engine air intake",
+    "radiator grille model",
+    "car showroom"
+  ],
+  "grocery store": [
+    "candy store",
+    "convenience store",
+    "supermarket aisle",
+    "farmers market stall",
+    "warehouse club store",
+    "shopping cart",
+    "store checkout counter"
+  ],
+  "guillotine": [
+    "paper cutter",
+    "execution device replica",
+    "wooden frame",
+    "industrial press",
+    "guillotine model",
+    "theater prop",
+    "museum exhibit"
+  ],
+  "hair clip": [
+    "barrette",
+    "bobby pin",
+    "hair tie",
+    "clothespin",
+    "hair clip toy",
+    "earring",
+    "vanity countertop"
+  ],
+  "hair spray": [
+    "spray deodorant",
+    "perfume bottle",
+    "aerosol can",
+    "cleaning spray bottle",
+    "hair spray toy",
+    "cosmetic shelf",
+    "hair mousse bottle"
+  ],
+  "half-track": [
+    "tank",
+    "armored personnel carrier",
+    "tracked bulldozer",
+    "military truck",
+    "half-track model",
+    "war museum display",
+    "tracked excavator"
+  ],
+  "hammer": [
+    "mallet",
+    "sledgehammer",
+    "hatchet",
+    "hand axe",
+    "toy hammer",
+    "toolbox",
+    "construction site"
+  ],
+  "hamper": [
+    "laundry basket",
+    "storage bin",
+    "wicker basket",
+    "trash can",
+    "toy hamper",
+    "closet shelf",
+    "linen bag"
+  ],
+  "hair dryer": [
+    "electric fan",
+    "heat gun",
+    "vacuum cleaner hose",
+    "handheld steamer",
+    "hair dryer toy",
+    "bathroom sink",
+    "curling iron"
+  ],
+  "hand-held computer": [
+    "smartphone",
+    "tablet device",
+    "digital camera",
+    "portable game console",
+    "handheld radio",
+    "hand-held computer toy",
+    "computer keyboard"
+  ],
+  "handkerchief": [
+    "bandana",
+    "napkin",
+    "tissue",
+    "small towel",
+    "handkerchief in a pocket",
+    "handkerchief toy",
+    "dress shirt"
+  ],
+  "hard disk drive": [
+    "solid state drive",
+    "computer power supply",
+    "external hard drive",
+    "CD drive",
+    "metal computer component",
+    "hard disk drive model",
+    "server rack"
+  ],
+  "harmonica": [
+    "mouth organ toy",
+    "kazoo",
+    "flute",
+    "whistle",
+    "harmonica case",
+    "accordion",
+    "microphone"
+  ],
+  "harp": [
+    "lyre",
+    "grand piano",
+    "cello",
+    "harp toy",
+    "harp statue",
+    "orchestra stage",
+    "music stand"
+  ],
+  "combine harvester": [
+    "tractor",
+    "grain truck",
+    "forage harvester",
+    "baler",
+    "combine harvester toy",
+    "farm field",
+    "construction excavator"
+  ],
+  "hatchet": [
+    "axe",
+    "hammer",
+    "cleaver",
+    "machete",
+    "hatchet toy",
+    "camping tool",
+    "wood chopping block"
+  ],
+  "holster": [
+    "gun case",
+    "tool belt pouch",
+    "phone belt clip",
+    "shoulder strap",
+    "holster costume",
+    "toy holster",
+    "cowboy boot"
+  ],
+  "home theater": [
+    "entertainment center",
+    "television room",
+    "projector screen",
+    "sound system speaker",
+    "movie theater seating",
+    "home theater toy",
+    "living room sofa"
+  ],
+  "honeycomb": [
+    "bee hive frame",
+    "waffle",
+    "hexagonal tile pattern",
+    "bubble wrap",
+    "honeycomb cereal",
+    "honeycomb model",
+    "beehive box"
+  ],
+  "hook": [
+    "clothes hanger hook",
+    "fishing hook",
+    "grappling hook",
+    "curtain tieback hook",
+    "crochet hook",
+    "pirate hook hand",
+    "coat rack hook"
+  ],
+  "hoop skirt": [
+    "crinoline petticoat",
+    "ball gown dress",
+    "tulle bridal gown",
+    "costume princess dress",
+    "doll dress",
+    "dress mannequin",
+    "wedding dress train"
+  ],
+  "gymnastic horizontal bar": [
+    "pull up bar",
+    "playground monkey bar",
+    "parallel bar",
+    "metal handrail",
+    "clothesline pole",
+    "exercise dip bar",
+    "gymnastic uneven bar"
+  ],
+  "horse-drawn vehicle": [
+    "stagecoach",
+    "horse cart",
+    "buggy carriage",
+    "wagon",
+    "chariot",
+    "horse harness",
+    "carriage statue"
+  ],
+  "hourglass": [
+    "sand timer",
+    "water timer",
+    "hourglass tattoo",
+    "glass perfume bottle",
+    "snow globe",
+    "hourglass figurine",
+    "vase with narrow waist"
+  ],
+  "iPod": [
+    "MP3 player",
+    "smartphone",
+    "portable media player",
+    "iPod replica toy",
+    "music player screen",
+    "portable radio",
+    "handheld game console"
+  ],
+  "clothes iron": [
+    "steam iron",
+    "travel iron",
+    "iron toy",
+    "clothes steamer",
+    "hair straightener",
+    "electric kettle",
+    "ironing board"
+  ],
+  "carved pumpkin": [
+    "jack o lantern decoration",
+    "plastic jack o lantern",
+    "carved melon",
+    "pumpkin pie",
+    "pumpkin candle holder",
+    "Halloween mask",
+    "gourd carving"
+  ],
+  "jeans": [
+    "denim shorts",
+    "denim jacket",
+    "blue chinos",
+    "leggings",
+    "jean skirt",
+    "folded denim fabric",
+    "pants mannequin"
+  ],
+  "jeep": [
+    "military truck",
+    "SUV",
+    "off road buggy",
+    "pickup truck",
+    "toy jeep",
+    "dune buggy",
+    "utility vehicle"
+  ],
+  "T-shirt": [
+    "polo shirt",
+    "sweatshirt",
+    "tank top",
+    "graphic tee poster",
+    "shirt on hanger",
+    "jersey",
+    "hoodie"
+  ],
+  "jigsaw puzzle": [
+    "puzzle piece",
+    "crossword puzzle",
+    "board game",
+    "wooden puzzle toy",
+    "puzzle box",
+    "mosaic tile pattern",
+    "map with grid"
+  ],
+  "rickshaw": [
+    "tuk tuk",
+    "handcart",
+    "bicycle taxi",
+    "horse carriage",
+    "pedicab",
+    "street vendor cart",
+    "rickshaw model"
+  ],
+  "joystick": [
+    "game controller",
+    "flight simulator yoke",
+    "arcade control stick",
+    "remote control",
+    "gear shift lever",
+    "throttle control",
+    "toy joystick"
+  ],
+  "kimono": [
+    "yukata robe",
+    "bathrobe",
+    "sari",
+    "hanbok dress",
+    "kimono costume",
+    "silk robe",
+    "traditional robe painting"
+  ],
+  "knee pad": [
+    "elbow pad",
+    "shin guard",
+    "sports brace",
+    "knee sleeve",
+    "rollerblade pad",
+    "work kneeler",
+    "football pad"
+  ],
+  "knot": [
+    "bow tie",
+    "rope coil",
+    "shoelace bow",
+    "macrame hanger",
+    "nautical cleat hitch",
+    "knotted net",
+    "knot sculpture"
+  ],
+  "lab coat": [
+    "doctor coat",
+    "chef coat",
+    "white blazer",
+    "medical scrubs",
+    "protective coverall",
+    "lab coat costume",
+    "hospital gown"
+  ],
+  "ladle": [
+    "serving spoon",
+    "soup spoon",
+    "measuring scoop",
+    "gravy boat",
+    "spatula",
+    "metal scoop",
+    "ladle toy"
+  ],
+  "lampshade": [
+    "lamp base",
+    "paper lantern",
+    "ceiling light cover",
+    "fabric shade drum",
+    "light fixture globe",
+    "lampshade pattern",
+    "lamp finial"
+  ],
+  "laptop computer": [
+    "tablet computer",
+    "desktop monitor",
+    "keyboard",
+    "laptop toy",
+    "notebook",
+    "briefcase",
+    "computer screen poster"
+  ],
+  "lawn mower": [
+    "leaf blower",
+    "string trimmer",
+    "garden tractor",
+    "push cart",
+    "robot mower",
+    "wheelbarrow",
+    "hedge trimmer"
+  ],
+  "lens cap": [
+    "camera lens",
+    "filter ring",
+    "bottle cap",
+    "rear lens cap",
+    "camera body cap",
+    "protective cover",
+    "camera bag"
+  ],
+  "letter opener": [
+    "knife",
+    "paper cutter",
+    "metal ruler",
+    "box cutter",
+    "pen",
+    "sword replica",
+    "desk scissors"
+  ],
+  "library": [
+    "bookstore",
+    "study room",
+    "bookshelf",
+    "archive room",
+    "university hallway",
+    "reading lounge",
+    "office filing room"
+  ],
+  "lifeboat": [
+    "dinghy",
+    "rescue boat",
+    "inflatable raft",
+    "rowboat",
+    "life raft canister",
+    "coast guard boat",
+    "ship deck"
+  ],
+  "lighter": [
+    "matchbook",
+    "cigarette",
+    "butane torch",
+    "gas stove knob",
+    "lighter toy",
+    "candle snuffer",
+    "zippo case"
+  ],
+  "limousine": [
+    "stretch SUV",
+    "luxury sedan",
+    "black taxi",
+    "wedding car",
+    "limousine toy",
+    "chauffeur car",
+    "prom vehicle"
+  ],
+  "ocean liner": [
+    "cruise ship",
+    "cargo ship",
+    "ferry",
+    "battleship",
+    "yacht",
+    "ship model",
+    "harbor terminal"
+  ],
+  "lipstick": [
+    "lip gloss tube",
+    "mascara",
+    "marker pen",
+    "makeup brush",
+    "lipstick toy",
+    "lip balm stick",
+    "cosmetic compact"
+  ],
+  "slip-on shoe": [
+    "loafer",
+    "sneaker",
+    "slipper",
+    "moccasin",
+    "clog",
+    "shoe display mannequin",
+    "canvas deck shoe"
+  ],
+  "lotion": [
+    "shampoo bottle",
+    "hand soap dispenser",
+    "sunscreen tube",
+    "conditioner bottle",
+    "lotion pump bottle",
+    "cosmetic cream jar",
+    "body wash"
+  ],
+  "music speaker": [
+    "headphone",
+    "microphone",
+    "subwoofer",
+    "soundbar",
+    "portable radio",
+    "bluetooth speaker toy",
+    "amplifier"
+  ],
+  "loupe magnifying glass": [
+    "magnifying glass",
+    "microscope eyepiece",
+    "camera lens",
+    "jeweler loupe replica",
+    "binocular",
+    "reading glasses",
+    "watchmaker tool"
+  ],
+  "sawmill": [
+    "lumber yard",
+    "wood workshop",
+    "industrial factory",
+    "log splitter",
+    "circular saw",
+    "timber conveyor",
+    "wood chipper"
+  ],
+  "magnetic compass": [
+    "GPS device",
+    "map",
+    "speedometer",
+    "dial gauge",
+    "compass app screen",
+    "toy compass",
+    "ship wheel"
+  ],
+  "messenger bag": [
+    "backpack",
+    "briefcase",
+    "shoulder bag",
+    "camera bag",
+    "laptop sleeve",
+    "tote bag",
+    "mail carrier satchel"
+  ],
+  "mailbox": [
+    "post box",
+    "parcel locker",
+    "newspaper box",
+    "door slot",
+    "mailbox toy",
+    "house number sign",
+    "fence post"
+  ],
+  "tights": [
+    "leggings",
+    "stocking",
+    "pantyhose",
+    "yoga pants",
+    "compression sleeve",
+    "dance costume",
+    "sock"
+  ],
+  "one-piece bathing suit": [
+    "bikini",
+    "leotard",
+    "wetsuit",
+    "bodysuit",
+    "swim dress",
+    "mannequin torso",
+    "beach towel"
+  ],
+  "manhole cover": [
+    "drain grate",
+    "sewer grate",
+    "utility access cover",
+    "storm drain",
+    "manhole cover replica",
+    "circular metal plate",
+    "street pothole patch"
+  ],
+  "maraca": [
+    "rattle",
+    "castanet",
+    "tambourine",
+    "handbell",
+    "maraca toy",
+    "microphone",
+    "percussion shaker egg"
+  ],
+  "marimba": [
+    "xylophone",
+    "vibraphone",
+    "glockenspiel",
+    "piano",
+    "marimba toy",
+    "wooden percussion bars",
+    "orchestra stage"
+  ],
+  "mask": [
+    "gas mask",
+    "ski mask",
+    "medical face mask",
+    "Halloween mask",
+    "mask sculpture",
+    "superhero mask",
+    "face shield"
+  ],
+  "matchstick": [
+    "toothpick",
+    "incense stick",
+    "candle wick",
+    "matchbook",
+    "wooden skewer",
+    "matchstick model",
+    "thin twig"
+  ],
+  "maypole": [
+    "flagpole",
+    "totem pole",
+    "striped pole",
+    "festival banner pole",
+    "pole dance pole",
+    "tree trunk",
+    "carnival decoration"
+  ],
+  "maze": [
+    "labyrinth",
+    "hedge garden",
+    "puzzle book",
+    "maze game board",
+    "corn field path",
+    "map of corridors",
+    "maze drawing"
+  ],
+  "measuring cup": [
+    "beaker",
+    "mixing bowl",
+    "graduated cylinder",
+    "coffee mug",
+    "scoop",
+    "measuring spoon",
+    "measuring cup toy"
+  ],
+  "medicine cabinet": [
+    "bathroom mirror",
+    "kitchen cabinet",
+    "first aid kit",
+    "storage cupboard",
+    "wall shelf",
+    "vanity cabinet",
+    "pharmacy shelf"
+  ],
+  "megalith": [
+    "stone monolith",
+    "obelisk monument",
+    "standing stone statue",
+    "rock formation",
+    "stone pillar",
+    "ancient ruin column",
+    "stonehenge replica"
+  ],
+  "microphone": [
+    "handheld radio",
+    "megaphone",
+    "camera lens",
+    "microphone toy",
+    "audio recorder",
+    "studio pop filter",
+    "karaoke stand"
+  ],
+  "microwave oven": [
+    "toaster oven",
+    "convection oven",
+    "air fryer",
+    "microwave toy",
+    "kitchen cabinet",
+    "coffee maker",
+    "stove range hood"
+  ],
+  "military uniform": [
+    "police uniform",
+    "camouflage jacket",
+    "pilot uniform",
+    "tactical vest",
+    "military costume",
+    "ceremonial suit",
+    "army helmet"
+  ],
+  "milk can": [
+    "metal bucket",
+    "watering can",
+    "oil can",
+    "thermos",
+    "milk can replica",
+    "beer keg",
+    "storage canister"
+  ],
+  "minibus": [
+    "van",
+    "shuttle bus",
+    "school bus",
+    "RV",
+    "minibus toy",
+    "city bus",
+    "airport shuttle"
+  ],
+  "miniskirt": [
+    "shorts",
+    "pleated skirt",
+    "tennis skirt",
+    "skort",
+    "mini dress",
+    "skirt mannequin",
+    "tutu skirt"
+  ],
+  "minivan": [
+    "SUV",
+    "station wagon",
+    "cargo van",
+    "pickup truck",
+    "minivan toy",
+    "taxi van",
+    "family car"
+  ],
+  "missile": [
+    "rocket",
+    "torpedo",
+    "artillery shell",
+    "airplane fuel tank pod",
+    "missile model",
+    "firework rocket",
+    "submarine"
+  ],
+  "mitten": [
+    "glove",
+    "oven mitt",
+    "boxing glove",
+    "sock",
+    "mitten toy",
+    "winter hat",
+    "hand puppet"
+  ],
+  "mixing bowl": [
+    "salad bowl",
+    "pot",
+    "measuring cup",
+    "basin",
+    "colander",
+    "mixing bowl set",
+    "stand mixer"
+  ],
+  "mobile home": [
+    "camper trailer",
+    "RV",
+    "tiny house",
+    "prefab cabin",
+    "construction site trailer",
+    "mobile home model",
+    "suburban house"
+  ],
+  "ford model t": [
+    "antique car",
+    "vintage truck",
+    "old fashioned taxi",
+    "carriage",
+    "ford model t toy",
+    "steam car",
+    "classic coupe"
+  ],
+  "modem": [
+    "router",
+    "network switch",
+    "external hard drive",
+    "set top box",
+    "modem toy",
+    "power adapter",
+    "computer tower"
+  ],
+  "monastery": [
+    "church",
+    "cathedral",
+    "temple",
+    "convent",
+    "abbey",
+    "castle",
+    "cloister courtyard"
+  ],
+  "monitor": [
+    "television",
+    "laptop screen",
+    "tablet screen",
+    "computer monitor toy",
+    "digital picture frame",
+    "projector screen",
+    "cash register display"
+  ],
+  "moped": [
+    "scooter",
+    "motorcycle",
+    "bicycle",
+    "electric scooter",
+    "moped toy",
+    "delivery bike",
+    "street parking motorcycle"
+  ],
+  "mortar and pestle": [
+    "spice grinder",
+    "mixing bowl",
+    "stone cup",
+    "coffee grinder",
+    "mortar and pestle toy",
+    "ceramic bowl with spoon",
+    "pharmacy counter"
+  ],
+  "graduation cap": [
+    "mortarboard hat",
+    "academic gown",
+    "tassel",
+    "flat cap",
+    "graduation cap decoration",
+    "diploma scroll",
+    "party hat"
+  ],
+  "mosque": [
+    "church",
+    "temple",
+    "synagogue",
+    "palace",
+    "minaret tower",
+    "Islamic shrine",
+    "mosque model"
+  ],
+  "mosquito net": [
+    "bed canopy",
+    "window screen",
+    "fishing net",
+    "mesh curtain",
+    "tent mesh",
+    "mosquito netting roll",
+    "hammock bug net"
+  ],
+  "vespa": [
+    "scooter",
+    "moped",
+    "motorcycle",
+    "electric scooter",
+    "vespa toy",
+    "delivery scooter",
+    "bicycle"
+  ],
+  "mountain bike": [
+    "road bike",
+    "BMX bike",
+    "hybrid bike",
+    "motorcycle",
+    "mountain bike toy",
+    "bike frame",
+    "cycling helmet"
+  ],
+  "tent": [
+    "camping tarp",
+    "canopy shelter",
+    "sleeping bag",
+    "tent toy",
+    "backpacking backpack",
+    "cabin",
+    "beach umbrella"
+  ],
+  "computer mouse": [
+    "trackball",
+    "remote control",
+    "touchpad",
+    "computer mouse toy",
+    "joystick",
+    "USB flash drive",
+    "wired controller"
+  ],
+  "mousetrap": [
+    "rat trap",
+    "snare trap",
+    "insect trap",
+    "mouse cage",
+    "mousetrap toy",
+    "spring clamp",
+    "bait station"
+  ],
+  "moving van": [
+    "cargo truck",
+    "box truck",
+    "delivery van",
+    "pickup truck",
+    "moving van toy",
+    "semi trailer",
+    "loading dock"
+  ],
+  "muzzle": [
+    "dog collar",
+    "horse bridle",
+    "gas mask",
+    "animal snout",
+    "muzzle toy",
+    "pet harness",
+    "leash clip"
+  ],
+  "metal nail": [
+    "screw",
+    "bolt",
+    "tack",
+    "pin",
+    "metal spike",
+    "nail gun",
+    "carpentry hammer"
+  ],
+  "neck brace": [
+    "medical collar",
+    "neck pillow",
+    "scarf",
+    "shoulder brace",
+    "orthopedic brace",
+    "neck brace costume",
+    "hospital bed"
+  ],
+  "necklace": [
+    "chain",
+    "bracelet",
+    "pendant",
+    "beaded lanyard",
+    "necklace toy",
+    "earring",
+    "garland"
+  ],
+  "baby pacifier": [
+    "baby bottle nipple",
+    "teething ring",
+    "rubber stopper",
+    "pacifier toy",
+    "baby rattle",
+    "infant bib",
+    "sippy cup spout"
+  ],
+  "notebook computer": [
+    "laptop computer",
+    "tablet computer",
+    "desktop keyboard",
+    "notebook",
+    "notebook computer toy",
+    "briefcase",
+    "portable DVD player"
+  ],
+  "obelisk": [
+    "stone monolith",
+    "column",
+    "church spire",
+    "skyscraper",
+    "obelisk model",
+    "pyramid monument",
+    "grave marker"
+  ],
+  "oboe": [
+    "clarinet",
+    "recorder",
+    "flute",
+    "bassoon",
+    "oboe case",
+    "oboe toy",
+    "woodwind mouthpiece"
+  ],
+  "ocarina": [
+    "whistle",
+    "small flute",
+    "harmonica",
+    "ocarina toy",
+    "ceramic pendant",
+    "kazoo",
+    "handheld instrument case"
+  ],
+  "odometer": [
+    "speedometer",
+    "altimeter",
+    "tachometer",
+    "digital clock",
+    "car dashboard",
+    "trip meter",
+    "fuel gauge"
+  ],
+  "oil filter": [
+    "air filter",
+    "fuel filter",
+    "water filter cartridge",
+    "oil can",
+    "filter wrench",
+    "engine part",
+    "oil filter box"
+  ],
+  "pipe organ": [
+    "piano",
+    "church organ",
+    "accordion",
+    "synthesizer keyboard",
+    "organ pipe",
+    "pipe organ model",
+    "church altar"
+  ],
+  "oscilloscope": [
+    "multimeter",
+    "signal generator",
+    "computer monitor",
+    "oscilloscope toy",
+    "laboratory power supply",
+    "medical monitor",
+    "test bench"
+  ],
+  "overskirt": [
+    "hoop skirt",
+    "apron",
+    "dress train",
+    "petticoat",
+    "ball gown",
+    "costume skirt",
+    "skirt mannequin"
+  ],
+  "bullock cart": [
+    "ox cart",
+    "horse cart",
+    "wooden wagon",
+    "handcart",
+    "farm trailer",
+    "bullock cart model",
+    "hay wagon"
+  ],
+  "oxygen mask": [
+    "gas mask",
+    "CPAP mask",
+    "surgical mask",
+    "snorkel mask",
+    "oxygen mask toy",
+    "breathing tube",
+    "hospital ventilator"
+  ],
+  "product packet / packaging": [
+    "cardboard box",
+    "plastic pouch",
+    "foil wrapper",
+    "shipping envelope",
+    "food container",
+    "label sticker",
+    "retail blister pack"
+  ],
+  "paddle": [
+    "oar",
+    "kayak paddle",
+    "table tennis paddle",
+    "spatula",
+    "wooden bat",
+    "paddle toy",
+    "canoe seat"
+  ],
+  "paddle wheel": [
+    "water wheel",
+    "ship propeller",
+    "turbine fan",
+    "ferris wheel",
+    "paddle wheel model",
+    "steamboat",
+    "mill wheel"
+  ],
+  "padlock": [
+    "combination lock",
+    "door latch",
+    "key",
+    "chain",
+    "padlock toy",
+    "suitcase lock",
+    "bicycle lock"
+  ],
+  "paintbrush": [
+    "makeup brush",
+    "artist palette knife",
+    "marker",
+    "toothbrush",
+    "paint roller",
+    "paintbrush toy",
+    "easel"
+  ],
+  "pajamas": [
+    "bathrobe",
+    "nightgown",
+    "tracksuit",
+    "scrubs",
+    "pajamas costume",
+    "bed sheet",
+    "sleep mask"
+  ],
+  "palace": [
+    "castle",
+    "mansion",
+    "cathedral",
+    "government building",
+    "temple",
+    "palace model",
+    "monastery"
+  ],
+  "pan flute": [
+    "recorder",
+    "flute",
+    "harmonica",
+    "pipe organ",
+    "pan flute toy",
+    "wooden wind chime",
+    "bamboo instrument"
+  ],
+  "paper towel": [
+    "toilet paper roll",
+    "facial tissue",
+    "napkin",
+    "dish towel",
+    "paper towel roll holder",
+    "paper towel dispenser",
+    "paper towel pack"
+  ],
+  "parachute": [
+    "paraglider wing",
+    "hot air balloon canopy",
+    "umbrella",
+    "kite",
+    "sailcloth canopy",
+    "parachute backpack",
+    "parachute toy"
+  ],
+  "parallel bars": [
+    "gymnastics uneven bars",
+    "pull-up bar",
+    "dip station",
+    "handrail",
+    "monkey bar set",
+    "balance beam",
+    "gymnastics rings"
+  ],
+  "park bench": [
+    "picnic table bench",
+    "bus stop bench",
+    "garden bench",
+    "stadium bench seat",
+    "wooden pew",
+    "outdoor chair",
+    "bench sculpture"
+  ],
+  "parking meter": [
+    "bollard post",
+    "fire hydrant",
+    "ticket vending machine",
+    "payphone kiosk",
+    "parking sign post",
+    "bike rack post",
+    "utility meter box"
+  ],
+  "railroad car": [
+    "train locomotive",
+    "subway car",
+    "streetcar tram",
+    "shipping container",
+    "box truck trailer",
+    "freight wagon model",
+    "tank truck trailer"
+  ],
+  "patio": [
+    "deck",
+    "balcony",
+    "courtyard",
+    "outdoor terrace",
+    "garden walkway",
+    "poolside deck",
+    "outdoor caf\u00e9 seating area"
+  ],
+  "payphone": [
+    "public telephone booth",
+    "intercom panel",
+    "ticket machine",
+    "parking meter",
+    "vending machine",
+    "wall-mounted handset phone",
+    "toy telephone"
+  ],
+  "pedestal": [
+    "plinth",
+    "trophy base",
+    "column stand",
+    "display stand",
+    "flower pot stand",
+    "lectern",
+    "statue base"
+  ],
+  "pencil case": [
+    "cosmetic bag",
+    "zipper pouch",
+    "glasses case",
+    "pen holder",
+    "small handbag",
+    "tool pouch",
+    "lunch bag"
+  ],
+  "pencil sharpener": [
+    "manual can opener",
+    "stapler",
+    "hole punch",
+    "eraser",
+    "utility knife",
+    "desk pencil holder",
+    "toy pencil sharpener"
+  ],
+  "perfume": [
+    "cologne bottle",
+    "essential oil bottle",
+    "nail polish bottle",
+    "liquor decanter",
+    "cosmetic spray bottle",
+    "glass vase",
+    "perfume bottle figurine"
+  ],
+  "Petri dish": [
+    "glass watch glass",
+    "shallow bowl",
+    "culture plate stack",
+    "plastic container lid",
+    "soap dish",
+    "laboratory beaker",
+    "microscope slide box"
+  ],
+  "photocopier": [
+    "printer",
+    "scanner",
+    "fax machine",
+    "office shredder",
+    "desktop computer tower",
+    "paper tray cabinet",
+    "toy office copier"
+  ],
+  "plectrum": [
+    "guitar pick charm",
+    "small plastic wedge",
+    "coin",
+    "memory card",
+    "key fob",
+    "earplug",
+    "felt pick"
+  ],
+  "Pickelhaube": [
+    "military helmet",
+    "pith helmet",
+    "spiked costume helmet",
+    "motorcycle helmet",
+    "steel combat helmet",
+    "toy soldier helmet",
+    "helmet statue"
+  ],
+  "picket fence": [
+    "chain-link fence",
+    "wooden railing",
+    "garden trellis",
+    "white balustrade",
+    "farm gate",
+    "hedge border",
+    "fence miniature model"
+  ],
+  "pickup truck": [
+    "flatbed truck",
+    "utility van",
+    "SUV",
+    "tow truck",
+    "delivery truck",
+    "pickup truck toy",
+    "pickup truck model"
+  ],
+  "pier": [
+    "dock",
+    "jetty",
+    "boardwalk",
+    "marina slip",
+    "bridge walkway",
+    "seawall",
+    "fishing platform"
+  ],
+  "piggy bank": [
+    "coin jar",
+    "money box",
+    "ceramic pig figurine",
+    "toy pig",
+    "pig statue",
+    "savings vault",
+    "cash register"
+  ],
+  "pill bottle": [
+    "vitamin bottle",
+    "medicine jar",
+    "spice jar",
+    "travel shampoo bottle",
+    "dropper bottle",
+    "prescription bottle toy",
+    "plastic container"
+  ],
+  "pillow": [
+    "cushion",
+    "bolster pillow",
+    "stuffed toy",
+    "folded blanket",
+    "bed headboard",
+    "mattress topper",
+    "pillowcase package"
+  ],
+  "ping-pong ball": [
+    "golf ball",
+    "plastic practice ball",
+    "foam ball",
+    "marble",
+    "white bead",
+    "table tennis ball toy",
+    "billiard ball"
+  ],
+  "pinwheel": [
+    "windmill toy",
+    "paper fan",
+    "flower decoration",
+    "party propeller hat",
+    "weather vane",
+    "garden spinner",
+    "pinwheel drawing"
+  ],
+  "pirate ship": [
+    "sailing ship",
+    "galleon model",
+    "wooden ship toy",
+    "ship in a bottle",
+    "naval warship",
+    "tall ship replica",
+    "boat costume prop"
+  ],
+  "drink pitcher": [
+    "water jug",
+    "teapot",
+    "coffee carafe",
+    "blender jar",
+    "measuring cup",
+    "milk jug",
+    "pitcher toy"
+  ],
+  "block plane": [
+    "hand plane",
+    "wood rasp",
+    "chisel",
+    "bench plane",
+    "sanding block",
+    "wooden toy plane",
+    "carpenter tool box"
+  ],
+  "planetarium": [
+    "observatory dome",
+    "cinema theater",
+    "science museum exhibit",
+    "IMAX theater",
+    "astronomy classroom",
+    "museum dome building",
+    "telescope showroom"
+  ],
+  "plastic bag": [
+    "paper bag",
+    "trash bag",
+    "zipper storage bag",
+    "plastic wrap",
+    "shopping bag",
+    "bag dispenser",
+    "plastic bag drawing"
+  ],
+  "plate rack": [
+    "dish drying rack",
+    "dishwasher rack",
+    "shelf organizer",
+    "wine rack",
+    "pot lid holder",
+    "kitchen cabinet shelf",
+    "plate display stand"
+  ],
+  "farm plow": [
+    "cultivator",
+    "harrow",
+    "tractor attachment",
+    "garden hoe",
+    "rototiller",
+    "antique plow replica",
+    "plow sculpture"
+  ],
+  "plunger": [
+    "toilet brush",
+    "sink drain snake",
+    "rubber suction cup",
+    "mop",
+    "squeegee",
+    "plunger toy",
+    "bathroom bucket"
+  ],
+  "Polaroid camera": [
+    "instant film camera",
+    "film SLR camera",
+    "point-and-shoot camera",
+    "vintage camera toy",
+    "camera case",
+    "camcorder",
+    "smartphone camera"
+  ],
+  "pole": [
+    "flagpole",
+    "streetlight pole",
+    "utility pole",
+    "signpost",
+    "tent pole",
+    "fishing rod",
+    "pole sculpture"
+  ],
+  "police van": [
+    "ambulance van",
+    "delivery van",
+    "SWAT truck",
+    "minibus",
+    "armored vehicle",
+    "police van toy",
+    "prison transport van"
+  ],
+  "poncho": [
+    "raincoat",
+    "cape",
+    "shawl",
+    "hooded blanket",
+    "plastic rain poncho",
+    "poncho costume",
+    "towel wrap"
+  ],
+  "pool table": [
+    "snooker table",
+    "air hockey table",
+    "table tennis table",
+    "card table",
+    "foosball table",
+    "pool table toy",
+    "billiards room table"
+  ],
+  "soda bottle": [
+    "water bottle",
+    "beer bottle",
+    "wine bottle",
+    "sports drink bottle",
+    "shampoo bottle",
+    "glass soda bottle toy",
+    "plastic bottle"
+  ],
+  "plant pot": [
+    "flower vase",
+    "bucket",
+    "planter box",
+    "ceramic bowl",
+    "soil bag",
+    "plant pot saucer",
+    "plant pot toy"
+  ],
+  "potter's wheel": [
+    "turntable",
+    "spinning stool",
+    "wheelchair wheel",
+    "record player platter",
+    "grinding wheel",
+    "clay sculpting stand",
+    "toy pottery wheel"
+  ],
+  "power drill": [
+    "cordless screwdriver",
+    "electric impact driver",
+    "rotary tool",
+    "hair dryer",
+    "heat gun",
+    "power drill toy",
+    "tool case"
+  ],
+  "prayer rug": [
+    "small carpet",
+    "yoga mat",
+    "doormat",
+    "woven blanket",
+    "floor mat",
+    "tapestry",
+    "prayer rug illustration"
+  ],
+  "printer": [
+    "photocopier",
+    "scanner",
+    "fax machine",
+    "3D printer",
+    "paper shredder",
+    "ink cartridge pack",
+    "toy printer"
+  ],
+  "prison": [
+    "jail cell",
+    "courthouse",
+    "police station",
+    "barbed wire fence",
+    "detention center building",
+    "guard tower",
+    "prison set model"
+  ],
+  "projector": [
+    "slide projector",
+    "overhead projector",
+    "cinema projector",
+    "desk lamp",
+    "security camera",
+    "projector screen",
+    "toy projector"
+  ],
+  "hockey puck": [
+    "rubber coaster",
+    "curling stone",
+    "inline hockey puck",
+    "black plastic lid",
+    "soap bar",
+    "puck toy",
+    "frozen biscuit"
+  ],
+  "punching bag": [
+    "sandbag",
+    "heavy bag dummy",
+    "speed bag",
+    "gym pillar pad",
+    "boxing glove",
+    "hanging laundry bag",
+    "punching bag toy"
+  ],
+  "purse": [
+    "handbag",
+    "clutch bag",
+    "wallet",
+    "backpack",
+    "shopping tote",
+    "purse toy",
+    "makeup bag"
+  ],
+  "quill": [
+    "feather pen",
+    "fountain pen",
+    "calligraphy pen",
+    "bird feather",
+    "paintbrush",
+    "quill illustration",
+    "ink bottle"
+  ],
+  "quilt": [
+    "blanket",
+    "comforter",
+    "bedspread",
+    "patchwork rug",
+    "sleeping bag",
+    "quilted jacket",
+    "quilt pattern fabric"
+  ],
+  "race car": [
+    "sports car",
+    "go-kart",
+    "Formula car",
+    "rally car",
+    "race car toy",
+    "pit lane garage scene",
+    "track safety car"
+  ],
+  "racket": [
+    "tennis racket",
+    "badminton racket",
+    "squash racket",
+    "table tennis paddle",
+    "lacrosse stick",
+    "racket toy",
+    "sports equipment bag"
+  ],
+  "radiator": [
+    "space heater",
+    "air conditioner unit",
+    "car grille",
+    "metal fence panel",
+    "vent cover",
+    "radiator pipe",
+    "radiator model"
+  ],
+  "radio": [
+    "walkie-talkie",
+    "speaker",
+    "alarm clock",
+    "intercom",
+    "car stereo",
+    "radio toy",
+    "Bluetooth speaker"
+  ],
+  "radio telescope": [
+    "satellite dish",
+    "observatory dome",
+    "parabolic antenna",
+    "radar dish",
+    "communication tower",
+    "radio telescope model",
+    "solar panel array"
+  ],
+  "rain barrel": [
+    "trash can",
+    "water tank",
+    "plastic drum",
+    "compost bin",
+    "garden bucket",
+    "rainwater cistern",
+    "barrel planter"
+  ],
+  "recreational vehicle": [
+    "camper van",
+    "motorhome",
+    "travel trailer",
+    "box truck",
+    "minibus",
+    "recreational vehicle toy",
+    "mobile home"
+  ],
+  "fishing casting reel": [
+    "spinning reel",
+    "fishing rod handle",
+    "winch",
+    "cord spool",
+    "bicycle gear shifter",
+    "reel toy",
+    "tackle box"
+  ],
+  "reflex camera": [
+    "mirrorless camera",
+    "DSLR camera",
+    "rangefinder camera",
+    "video camera",
+    "camera lens",
+    "reflex camera toy",
+    "camera bag"
+  ],
+  "refrigerator": [
+    "freezer",
+    "wine cooler",
+    "kitchen cabinet",
+    "vending machine",
+    "metal locker",
+    "mini fridge",
+    "refrigerator toy"
+  ],
+  "remote control": [
+    "game controller",
+    "TV set-top box",
+    "wireless mouse",
+    "calculator",
+    "smartphone",
+    "remote control toy",
+    "air conditioner remote"
+  ],
+  "restaurant": [
+    "cafeteria",
+    "diner",
+    "food court",
+    "kitchen",
+    "bar",
+    "coffee shop",
+    "restaurant miniature model"
+  ],
+  "revolver": [
+    "pistol",
+    "toy gun",
+    "prop gun",
+    "airsoft revolver",
+    "flare gun",
+    "holster",
+    "revolver statue"
+  ],
+  "rifle": [
+    "shotgun",
+    "carbine",
+    "toy rifle",
+    "air rifle",
+    "paintball marker",
+    "rifle case",
+    "rifle display stand"
+  ],
+  "rocking chair": [
+    "armchair",
+    "glider chair",
+    "wooden chair",
+    "bench seat",
+    "rocking horse",
+    "rocking chair miniature",
+    "porch swing"
+  ],
+  "rotisserie": [
+    "barbecue grill",
+    "spit roast",
+    "toaster oven",
+    "microwave oven",
+    "conveyor oven",
+    "rotisserie chicken display case",
+    "rotisserie toy"
+  ],
+  "eraser": [
+    "soap bar",
+    "chalk",
+    "rubber block",
+    "sponge",
+    "sticky note pad",
+    "eraser toy",
+    "pencil sharpener"
+  ],
+  "rugby ball": [
+    "American football",
+    "soccer ball",
+    "handball",
+    "foam football",
+    "rugby ball toy",
+    "training cone",
+    "sports equipment bag"
+  ],
+  "ruler measuring stick": [
+    "yardstick",
+    "tape measure",
+    "straightedge",
+    "wooden slat",
+    "level tool",
+    "ruler toy",
+    "meter stick"
+  ],
+  "sneaker": [
+    "running shoe",
+    "canvas shoe",
+    "high-top shoe",
+    "skate shoe",
+    "slipper",
+    "sneaker toy",
+    "shoe box"
+  ],
+  "safe": [
+    "lockbox",
+    "metal locker",
+    "filing cabinet",
+    "vault door",
+    "cash register",
+    "safe toy",
+    "bank vault room"
+  ],
+  "safety pin": [
+    "paper clip",
+    "sewing needle",
+    "hairpin",
+    "key ring",
+    "brooch pin",
+    "safety pin charm",
+    "diaper pin"
+  ],
+  "salt shaker": [
+    "pepper shaker",
+    "spice jar",
+    "sugar dispenser",
+    "flour sifter",
+    "salt grinder",
+    "salt shaker toy",
+    "condiment set"
+  ],
+  "sandal": [
+    "flip-flop",
+    "slipper",
+    "clog shoe",
+    "barefoot shoe",
+    "sandal toy",
+    "beach shoe",
+    "shoe rack"
+  ],
+  "sarong": [
+    "wrap skirt",
+    "beach towel",
+    "shawl",
+    "scarf",
+    "dress",
+    "sarong costume",
+    "bathrobe"
+  ],
+  "saxophone": [
+    "clarinet",
+    "trumpet",
+    "trombone",
+    "oboe",
+    "saxophone toy",
+    "saxophone case",
+    "brass instrument sculpture"
+  ],
+  "scabbard": [
+    "sword sheath",
+    "knife sheath",
+    "holster",
+    "belt pouch",
+    "leather strap",
+    "scabbard replica",
+    "sword display stand"
+  ],
+  "weighing scale": [
+    "bathroom scale",
+    "kitchen scale",
+    "balance scale",
+    "luggage scale",
+    "cash register",
+    "scale toy",
+    "measuring cup"
+  ],
+  "school bus": [
+    "city bus",
+    "shuttle bus",
+    "coach bus",
+    "delivery truck",
+    "van",
+    "school bus toy",
+    "bus stop scene"
+  ],
+  "schooner": [
+    "sailboat",
+    "yacht",
+    "tall ship",
+    "fishing boat",
+    "schooner model",
+    "ship painting",
+    "marina dock scene"
+  ],
+  "scoreboard": [
+    "digital clock",
+    "stadium screen",
+    "signboard",
+    "whiteboard",
+    "billboard",
+    "scoreboard toy",
+    "sports field goalpost"
+  ],
+  "CRT monitor": [
+    "flat panel monitor",
+    "old television",
+    "oscilloscope screen",
+    "computer tower",
+    "arcade cabinet screen",
+    "CRT monitor toy",
+    "monitor cover"
+  ],
+  "screw": [
+    "bolt",
+    "nail",
+    "rivet",
+    "wood screw anchor",
+    "drill bit",
+    "screw toy",
+    "hardware bin"
+  ],
+  "screwdriver": [
+    "cordless drill",
+    "Allen wrench",
+    "chisel",
+    "paint scraper",
+    "screwdriver bit",
+    "screwdriver toy",
+    "toolbox"
+  ],
+  "seat belt": [
+    "shoulder strap",
+    "backpack strap",
+    "safety harness",
+    "tie-down strap",
+    "car interior seat",
+    "seat belt buckle",
+    "seat belt extender"
+  ],
+  "sewing machine": [
+    "serger machine",
+    "typewriter",
+    "printer",
+    "sewing machine toy",
+    "fabric iron",
+    "thread spool rack",
+    "craft table"
+  ],
+  "shield": [
+    "buckler",
+    "armor chest plate",
+    "riot shield",
+    "metal sign",
+    "shield emblem",
+    "shield toy",
+    "coat of arms plaque"
+  ],
+  "shoe store": [
+    "clothing store",
+    "department store aisle",
+    "sports shop",
+    "boutique",
+    "shopping mall corridor",
+    "shoe store display wall",
+    "shoe store miniature model"
+  ],
+  "shoji screen / room divider": [
+    "folding screen",
+    "room divider panel",
+    "sliding paper door",
+    "window blind",
+    "curtain",
+    "screen print artwork",
+    "shoji screen miniature"
+  ],
+  "shopping basket": [
+    "laundry basket",
+    "storage bin",
+    "plastic crate",
+    "handbag",
+    "shopping cart",
+    "shopping basket toy",
+    "grocery bag"
+  ],
+  "shopping cart": [
+    "stroller",
+    "wheelbarrow",
+    "luggage cart",
+    "shopping basket",
+    "utility trolley",
+    "shopping cart toy",
+    "supermarket aisle"
+  ],
+  "shovel": [
+    "spade",
+    "garden trowel",
+    "snow shovel",
+    "hoe",
+    "rake",
+    "shovel toy",
+    "construction site dirt pile"
+  ],
+  "shower cap": [
+    "hairnet",
+    "beanie hat",
+    "swim cap",
+    "plastic bag",
+    "bonnet",
+    "shower cap toy",
+    "bathroom towel"
+  ],
+  "shower curtain": [
+    "window curtain",
+    "bathroom liner",
+    "plastic sheet",
+    "room divider curtain",
+    "shower door",
+    "shower curtain hook",
+    "bathroom tile wall"
+  ],
+  "ski": [
+    "snowboard",
+    "water ski",
+    "ski pole",
+    "ice skate",
+    "sled",
+    "ski toy",
+    "ski rack"
+  ],
+  "balaclava ski mask": [
+    "beanie hat",
+    "hood",
+    "scarf",
+    "face mask",
+    "motorcycle helmet liner",
+    "balaclava costume",
+    "wool cap"
+  ],
+  "sleeping bag": [
+    "camping blanket",
+    "duffel bag",
+    "tent",
+    "bedroll",
+    "quilt",
+    "sleeping bag stuff sack",
+    "sleeping bag toy"
+  ],
+  "slide rule": [
+    "ruler measuring stick",
+    "calculator",
+    "protractor",
+    "measuring tape",
+    "wooden straightedge",
+    "slide rule replica",
+    "engineering compass"
+  ],
+  "sliding door": [
+    "glass patio door",
+    "pocket door",
+    "shoji screen panel",
+    "window",
+    "garage door",
+    "sliding closet door",
+    "door frame"
+  ],
+  "slot machine": [
+    "vending machine",
+    "arcade cabinet",
+    "casino poker machine",
+    "pinball machine",
+    "toy slot machine",
+    "slot machine poster",
+    "cash register"
+  ],
+  "snorkel": [
+    "scuba regulator",
+    "scuba mask",
+    "swim goggle strap",
+    "breathing tube toy",
+    "diving snorkel illustration",
+    "oxygen cannula",
+    "pool noodle"
+  ],
+  "snowmobile": [
+    "jet ski",
+    "all terrain vehicle",
+    "dirt bike",
+    "snowmobile toy",
+    "snowplow truck",
+    "ski lift chair",
+    "sled"
+  ],
+  "snowplow": [
+    "bulldozer",
+    "front end loader",
+    "dump truck",
+    "tow truck",
+    "snowplow toy",
+    "garbage truck",
+    "road grader"
+  ],
+  "soap dispenser": [
+    "hand sanitizer pump bottle",
+    "lotion pump bottle",
+    "spray bottle",
+    "shampoo bottle",
+    "toy soap dispenser",
+    "sink faucet",
+    "dish soap bottle"
+  ],
+  "soccer ball": [
+    "volleyball",
+    "basketball",
+    "handball",
+    "kickball",
+    "toy soccer ball",
+    "soccer ball illustration",
+    "balloon"
+  ],
+  "sock": [
+    "stocking",
+    "glove",
+    "leg warmer",
+    "shoe",
+    "sock puppet",
+    "knit fabric sleeve",
+    "pant leg"
+  ],
+  "solar thermal collector": [
+    "solar panel",
+    "satellite dish",
+    "skylight window",
+    "roof vent",
+    "solar water heater tank",
+    "solar collector model",
+    "greenhouse roof panel"
+  ],
+  "sombrero": [
+    "cowboy hat",
+    "wide brim sun hat",
+    "mariachi hat costume",
+    "sombrero illustration",
+    "straw hat",
+    "charro hat",
+    "hat rack"
+  ],
+  "soup bowl": [
+    "cereal bowl",
+    "salad bowl",
+    "ramekin",
+    "cup of soup",
+    "bowl of rice",
+    "toy bowl",
+    "bowl on a tray"
+  ],
+  "keyboard space bar": [
+    "computer keyboard keycap",
+    "typewriter space bar",
+    "keyboard enter key",
+    "remote control button",
+    "toy keyboard",
+    "piano key",
+    "calculator button"
+  ],
+  "space heater": [
+    "radiator",
+    "fan heater",
+    "air purifier",
+    "dehumidifier",
+    "portable air conditioner",
+    "electric fireplace",
+    "space heater toy"
+  ],
+  "space shuttle": [
+    "rocket",
+    "airplane",
+    "space shuttle model",
+    "space shuttle illustration",
+    "fighter jet",
+    "satellite",
+    "space capsule"
+  ],
+  "spatula": [
+    "turner",
+    "scraper tool",
+    "wooden spoon",
+    "trowel",
+    "cake server",
+    "spatula toy",
+    "kitchen ladle"
+  ],
+  "motorboat": [
+    "speedboat",
+    "jet ski",
+    "sailboat",
+    "inflatable boat",
+    "motorboat model",
+    "fishing boat",
+    "boat trailer"
+  ],
+  "spider web": [
+    "cobweb decoration",
+    "fishing net",
+    "lace fabric",
+    "cracked glass pattern",
+    "chain link fence",
+    "spider web illustration",
+    "wire mesh"
+  ],
+  "spindle": [
+    "wooden dowel",
+    "spool of thread",
+    "lathe tool",
+    "chair leg",
+    "spinning top",
+    "spindle ornament",
+    "bobbin"
+  ],
+  "sports car": [
+    "race car",
+    "coupe",
+    "convertible",
+    "sports car toy",
+    "sports car poster",
+    "sedan",
+    "car on a racetrack"
+  ],
+  "spotlight": [
+    "stage light",
+    "studio softbox",
+    "flashlight",
+    "searchlight",
+    "spotlight prop",
+    "projector",
+    "ceiling light fixture"
+  ],
+  "stage": [
+    "theater platform",
+    "concert podium",
+    "auditorium seating",
+    "stage curtain",
+    "wedding stage",
+    "film set",
+    "stage model"
+  ],
+  "steam locomotive": [
+    "diesel locomotive",
+    "train engine model",
+    "toy train",
+    "steam locomotive illustration",
+    "coal car",
+    "trolley car",
+    "railway station platform"
+  ],
+  "through arch bridge": [
+    "suspension bridge",
+    "truss bridge",
+    "stone arch bridge",
+    "viaduct",
+    "cable stayed bridge",
+    "bridge model",
+    "bridge underpass"
+  ],
+  "steel drum": [
+    "conga drum",
+    "snare drum",
+    "oil barrel",
+    "steel drum pan model",
+    "bongo drum",
+    "trash can",
+    "kettle drum"
+  ],
+  "stethoscope": [
+    "headphone",
+    "necklace",
+    "blood pressure cuff",
+    "otoscope",
+    "toy stethoscope",
+    "stethoscope illustration",
+    "medical lanyard"
+  ],
+  "scarf": [
+    "shawl",
+    "neck tie",
+    "bandana",
+    "winter muffler",
+    "scarf illustration",
+    "cloth wrap",
+    "sweater collar"
+  ],
+  "stone wall": [
+    "brick wall",
+    "concrete wall",
+    "stone fence",
+    "rock face",
+    "stone wall illustration",
+    "garden hedge",
+    "retaining wall"
+  ],
+  "stopwatch": [
+    "wristwatch",
+    "timer",
+    "digital clock",
+    "stopwatch app screen",
+    "toy stopwatch",
+    "kitchen timer",
+    "sports whistle"
+  ],
+  "stove": [
+    "oven",
+    "cooktop",
+    "microwave oven",
+    "toaster oven",
+    "electric hot plate",
+    "toy stove",
+    "kitchen countertop"
+  ],
+  "strainer": [
+    "colander",
+    "sieve",
+    "slotted spoon",
+    "tea infuser",
+    "funnel",
+    "strainer toy",
+    "dish rack"
+  ],
+  "tram": [
+    "trolleybus",
+    "streetcar",
+    "light rail train",
+    "subway train",
+    "tram model",
+    "bus",
+    "railway platform"
+  ],
+  "stretcher": [
+    "hospital bed",
+    "gurney",
+    "wheelchair",
+    "folding cot",
+    "stretcher toy",
+    "ambulance interior",
+    "spine board"
+  ],
+  "couch": [
+    "armchair",
+    "loveseat",
+    "futon",
+    "couch illustration",
+    "bed",
+    "sofa bed",
+    "living room chair"
+  ],
+  "stupa": [
+    "pagoda",
+    "temple dome",
+    "buddhist shrine",
+    "stupa model",
+    "stupa illustration",
+    "mosque dome",
+    "obelisk monument"
+  ],
+  "submarine": [
+    "ship",
+    "torpedo",
+    "submarine model",
+    "submarine illustration",
+    "military aircraft",
+    "underwater drone",
+    "submarine periscope"
+  ],
+  "suit": [
+    "tuxedo",
+    "blazer",
+    "business jacket",
+    "dress shirt",
+    "suit costume",
+    "suit illustration",
+    "trench coat"
+  ],
+  "sundial": [
+    "wall clock",
+    "compass",
+    "weather vane",
+    "garden statue",
+    "sundial model",
+    "sundial illustration",
+    "stone pedestal"
+  ],
+  "sunglasses": [
+    "eyeglasses",
+    "ski goggle",
+    "safety glasses",
+    "sunglasses case",
+    "toy sunglasses",
+    "sunglasses illustration",
+    "visor cap"
+  ],
+  "sunscreen": [
+    "lotion bottle",
+    "hand sanitizer bottle",
+    "after sun gel",
+    "spray sunscreen bottle",
+    "sunscreen illustration",
+    "beach towel",
+    "sunhat"
+  ],
+  "suspension bridge": [
+    "cable stayed bridge",
+    "through arch bridge",
+    "truss bridge",
+    "viaduct",
+    "suspension bridge model",
+    "bridge illustration",
+    "bridge tower"
+  ],
+  "mop": [
+    "broom",
+    "floor squeegee",
+    "swiffer duster",
+    "mop toy",
+    "vacuum cleaner",
+    "bucket and wringer",
+    "dustpan"
+  ],
+  "sweatshirt": [
+    "hoodie",
+    "sweater",
+    "jacket",
+    "pullover",
+    "sweatshirt illustration",
+    "athletic jersey",
+    "t shirt"
+  ],
+  "swim trunks / shorts": [
+    "boardshort",
+    "boxer short",
+    "gym short",
+    "bikini bottom",
+    "swim trunk illustration",
+    "wet suit shorty",
+    "beach towel"
+  ],
+  "swing": [
+    "hammock",
+    "playground slide",
+    "rocking chair",
+    "porch swing",
+    "swing illustration",
+    "swing set frame",
+    "trapeze"
+  ],
+  "electrical switch": [
+    "light switch plate",
+    "circuit breaker",
+    "power outlet",
+    "remote control button",
+    "toggle switch",
+    "switch toy",
+    "lamp pull chain"
+  ],
+  "syringe": [
+    "pipette",
+    "dropper",
+    "pen",
+    "thermometer",
+    "toy syringe",
+    "syringe illustration",
+    "medicine vial"
+  ],
+  "table lamp": [
+    "floor lamp",
+    "desk lamp",
+    "bedside lamp",
+    "lamp shade",
+    "table lamp model",
+    "light bulb",
+    "candle"
+  ],
+  "tank": [
+    "armored personnel carrier",
+    "bulldozer",
+    "military truck",
+    "tank model",
+    "tank illustration",
+    "tractor",
+    "battlefield scene"
+  ],
+  "tape player": [
+    "boombox",
+    "cd player",
+    "turntable",
+    "walkman",
+    "tape recorder toy",
+    "radio",
+    "cassette tape"
+  ],
+  "teapot": [
+    "kettle",
+    "coffee pot",
+    "teapot toy",
+    "teapot illustration",
+    "pitcher",
+    "sugar bowl",
+    "tea cup"
+  ],
+  "teddy bear": [
+    "stuffed dog",
+    "plush rabbit",
+    "toy bear",
+    "teddy bear illustration",
+    "doll",
+    "stuffed panda",
+    "nursery crib"
+  ],
+  "television": [
+    "computer monitor",
+    "projector screen",
+    "picture frame",
+    "microwave oven",
+    "toy television",
+    "television illustration",
+    "soundbar speaker"
+  ],
+  "tennis ball": [
+    "baseball",
+    "cricket ball",
+    "golf ball",
+    "racquetball",
+    "toy tennis ball",
+    "tennis ball illustration",
+    "ball launcher"
+  ],
+  "thatched roof": [
+    "tile roof",
+    "shingle roof",
+    "straw hut",
+    "haystack",
+    "thatched roof model",
+    "thatched roof illustration",
+    "wooden cabin roof"
+  ],
+  "front curtain": [
+    "stage curtain",
+    "window drape",
+    "shower curtain",
+    "theater backdrop",
+    "front curtain illustration",
+    "fabric tapestry",
+    "movie screen"
+  ],
+  "thimble": [
+    "ring",
+    "small cup",
+    "finger protector glove",
+    "metal cap",
+    "thimble toy",
+    "thimble illustration",
+    "sewing kit"
+  ],
+  "threshing machine": [
+    "combine harvester",
+    "tractor",
+    "baler",
+    "grain elevator",
+    "threshing machine model",
+    "threshing machine illustration",
+    "farm wagon"
+  ],
+  "throne": [
+    "armchair",
+    "king chair",
+    "ornate chair",
+    "throne illustration",
+    "throne model",
+    "altar chair",
+    "castle interior"
+  ],
+  "tile roof": [
+    "thatched roof",
+    "shingle roof",
+    "metal roof",
+    "roof slate",
+    "tile roof illustration",
+    "roof ridge",
+    "terracotta roof ornament"
+  ],
+  "toaster": [
+    "toaster oven",
+    "microwave oven",
+    "bread box",
+    "blender",
+    "toy toaster",
+    "toaster illustration",
+    "kitchen counter appliance"
+  ],
+  "tobacco shop": [
+    "convenience store",
+    "cigar box",
+    "smoke shop sign",
+    "liquor store",
+    "tobacco shop illustration",
+    "vape shop",
+    "street storefront"
+  ],
+  "toilet seat": [
+    "toilet lid",
+    "bathroom sink",
+    "bidet",
+    "toilet seat cover",
+    "toilet seat illustration",
+    "bathroom towel",
+    "bathtub"
+  ],
+  "torch": [
+    "flashlight",
+    "lantern",
+    "candle",
+    "welding torch",
+    "torch illustration",
+    "torch prop",
+    "campfire"
+  ],
+  "totem pole": [
+    "carved wooden statue",
+    "obelisk monument",
+    "wooden pillar",
+    "totem pole model",
+    "totem pole illustration",
+    "tree trunk",
+    "park signpost"
+  ],
+  "tow truck": [
+    "wrecker truck",
+    "flatbed truck",
+    "garbage truck",
+    "dump truck",
+    "tow truck toy",
+    "tow truck illustration",
+    "roadside scene"
+  ],
+  "toy store": [
+    "gift shop",
+    "department store aisle",
+    "toy store illustration",
+    "toy shelf display",
+    "candy store",
+    "bookstore",
+    "shopping mall corridor"
+  ],
+  "tractor": [
+    "combine harvester",
+    "bulldozer",
+    "farm truck",
+    "tractor toy",
+    "tractor illustration",
+    "front end loader",
+    "plow attachment"
+  ],
+  "semi-trailer truck": [
+    "box truck",
+    "dump truck",
+    "tow truck",
+    "tanker truck",
+    "semi trailer model",
+    "semi trailer illustration",
+    "freight container"
+  ],
+  "tray": [
+    "plate",
+    "serving platter",
+    "baking sheet",
+    "cafeteria tray",
+    "tray illustration",
+    "cookie sheet",
+    "tabletop"
+  ],
+  "trench coat": [
+    "overcoat",
+    "raincoat",
+    "pea coat",
+    "suit jacket",
+    "trench coat illustration",
+    "cloak",
+    "hooded jacket"
+  ],
+  "tricycle": [
+    "bicycle",
+    "unicycle",
+    "tricycle toy",
+    "tricycle illustration",
+    "scooter",
+    "balance bike",
+    "stroller"
+  ],
+  "trimaran": [
+    "catamaran",
+    "sailboat",
+    "motorboat",
+    "trimaran model",
+    "trimaran illustration",
+    "kayak",
+    "outrigger canoe"
+  ],
+  "tripod": [
+    "camera stand",
+    "microphone stand",
+    "easel",
+    "light stand",
+    "tripod illustration",
+    "tripod model",
+    "telescope mount"
+  ],
+  "triumphal arch": [
+    "through arch bridge",
+    "stone archway",
+    "gateway monument",
+    "triumphal arch model",
+    "triumphal arch illustration",
+    "colonnade",
+    "city plaza"
+  ],
+  "trolleybus": [
+    "tram",
+    "city bus",
+    "electric bus",
+    "streetcar",
+    "trolleybus model",
+    "trolleybus illustration",
+    "bus stop"
+  ],
+  "trombone": [
+    "trumpet",
+    "tuba",
+    "saxophone",
+    "slide whistle",
+    "trombone toy",
+    "trombone illustration",
+    "music stand"
+  ],
+  "hot tub": [
+    "bathtub",
+    "swimming pool",
+    "jacuzzi",
+    "spa tub model",
+    "hot tub illustration",
+    "sauna",
+    "pool deck"
+  ],
+  "turnstile": [
+    "ticket gate",
+    "security gate",
+    "revolving door",
+    "crowd control barrier",
+    "turnstile model",
+    "turnstile illustration",
+    "subway entrance"
+  ],
+  "typewriter keyboard": [
+    "computer keyboard",
+    "mechanical keyboard",
+    "typewriter model",
+    "typewriter illustration",
+    "cash register keypad",
+    "calculator keypad",
+    "piano keyboard"
+  ],
+  "umbrella": [
+    "parasol",
+    "raincoat hood",
+    "umbrella illustration",
+    "umbrella toy",
+    "beach tent",
+    "canopy",
+    "walking stick"
+  ],
+  "unicycle": [
+    "bicycle",
+    "tricycle",
+    "unicycle toy",
+    "unicycle illustration",
+    "circus performer",
+    "balance board",
+    "scooter"
+  ],
+  "upright piano": [
+    "grand piano",
+    "keyboard instrument",
+    "organ",
+    "upright piano model",
+    "upright piano illustration",
+    "piano bench",
+    "music stand"
+  ],
+  "vacuum cleaner": [
+    "carpet sweeper",
+    "floor polisher",
+    "mop",
+    "shop vac",
+    "vacuum cleaner toy",
+    "vacuum cleaner illustration",
+    "broom"
+  ],
+  "vase": [
+    "flower pot",
+    "urn",
+    "pitcher",
+    "vase illustration",
+    "vase model",
+    "glass jar",
+    "bottle"
+  ],
+  "vaulted or arched ceiling": [
+    "cathedral nave",
+    "arched doorway",
+    "barrel vault",
+    "dome ceiling",
+    "vaulted ceiling illustration",
+    "stone arch",
+    "hallway corridor"
+  ],
+  "velvet fabric": [
+    "velour fabric",
+    "satin fabric",
+    "suede leather",
+    "plush upholstery",
+    "velvet fabric illustration",
+    "curtain fabric",
+    "carpet fabric"
+  ],
+  "vending machine": [
+    "slot machine",
+    "arcade cabinet",
+    "soda cooler",
+    "ticket kiosk",
+    "vending machine toy",
+    "vending machine illustration",
+    "snack shelf"
+  ],
+  "vestment": [
+    "robe",
+    "cloak",
+    "graduation gown",
+    "cassock",
+    "vestment illustration",
+    "priest costume",
+    "church altar"
+  ],
+  "viaduct": [
+    "through arch bridge",
+    "truss bridge",
+    "aqueduct",
+    "elevated railway",
+    "viaduct model",
+    "viaduct illustration",
+    "highway overpass"
+  ],
+  "violin": [
+    "viola",
+    "cello",
+    "fiddle",
+    "violin toy",
+    "violin illustration",
+    "guitar",
+    "music case"
+  ],
+  "volleyball": [
+    "soccer ball",
+    "beach ball",
+    "basketball",
+    "handball",
+    "toy volleyball",
+    "volleyball illustration",
+    "volleyball net"
+  ],
+  "waffle iron": [
+    "panini press",
+    "sandwich toaster",
+    "grill",
+    "electric griddle",
+    "waffle iron toy",
+    "waffle iron illustration",
+    "kitchen counter appliance"
+  ],
+  "wall clock": [
+    "stopwatch",
+    "wristwatch",
+    "thermometer",
+    "barometer",
+    "wall clock illustration",
+    "clock face poster",
+    "microwave clock display"
+  ],
+  "wallet": [
+    "coin purse",
+    "card holder",
+    "phone case",
+    "passport cover",
+    "wallet illustration",
+    "wallet toy",
+    "handbag"
+  ],
+  "wardrobe": [
+    "closet door",
+    "cabinet",
+    "dresser",
+    "armoire",
+    "wardrobe illustration",
+    "wardrobe model",
+    "bedroom furniture set"
+  ],
+  "military aircraft": [
+    "fighter jet",
+    "bomber plane",
+    "helicopter",
+    "military aircraft model",
+    "military aircraft illustration",
+    "passenger airplane",
+    "aircraft carrier deck"
+  ],
+  "sink": [
+    "bathtub",
+    "toilet",
+    "washbasin",
+    "kitchen counter",
+    "sink illustration",
+    "sink model",
+    "faucet"
+  ],
+  "washing machine": [
+    "dryer",
+    "dishwasher",
+    "laundry hamper",
+    "washing machine illustration",
+    "washing machine model",
+    "utility sink",
+    "laundromat row"
+  ],
+  "water bottle": [
+    "thermos",
+    "sports shaker bottle",
+    "plastic jug",
+    "baby bottle",
+    "water bottle illustration",
+    "water bottle toy",
+    "drink can"
+  ],
+  "water jug": [
+    "milk jug",
+    "glass pitcher",
+    "gas can",
+    "water cooler bottle",
+    "water jug illustration",
+    "water jug toy",
+    "kettle"
+  ],
+  "water tower": [
+    "oil storage tank",
+    "grain silo",
+    "radio tower",
+    "cooling tower",
+    "lighthouse",
+    "toy water tower",
+    "water tower illustration"
+  ],
+  "whiskey jug": [
+    "wine decanter",
+    "ceramic vase",
+    "glass growler",
+    "moonshine jar",
+    "olive oil bottle",
+    "plastic toy jug",
+    "whiskey jug label illustration"
+  ],
+  "whistle": [
+    "kazoo",
+    "small flashlight",
+    "key fob",
+    "harmonica",
+    "dog clicker",
+    "toy whistle",
+    "whistle drawing"
+  ],
+  "hair wig": [
+    "hairpiece",
+    "toupee",
+    "fur hat",
+    "costume headpiece",
+    "doll wig",
+    "mannequin head with hair",
+    "wig on a stand"
+  ],
+  "window screen": [
+    "wire mesh",
+    "mosquito net",
+    "screen door",
+    "chain link fence",
+    "perforated metal panel",
+    "window screen frame",
+    "window screen drawing"
+  ],
+  "window shade": [
+    "roller blind",
+    "venetian blind",
+    "curtain panel",
+    "shower curtain",
+    "paper lantern",
+    "window shade fabric sample",
+    "window shade illustration"
+  ],
+  "Windsor tie": [
+    "bow tie",
+    "neck scarf",
+    "ascot tie",
+    "necktie knot closeup",
+    "suit lapel",
+    "toy necktie",
+    "tie illustration"
+  ],
+  "wine bottle": [
+    "champagne bottle",
+    "olive oil bottle",
+    "beer bottle",
+    "vinegar bottle",
+    "decanter",
+    "toy wine bottle",
+    "wine bottle painting"
+  ],
+  "airplane wing": [
+    "airplane tail fin",
+    "glider wing",
+    "bird wing",
+    "wind turbine blade",
+    "car spoiler",
+    "model airplane wing",
+    "airplane wing illustration"
+  ],
+  "wok": [
+    "frying pan",
+    "saucepan",
+    "stockpot",
+    "cast iron skillet",
+    "mixing bowl",
+    "toy wok",
+    "wok drawing"
+  ],
+  "wooden spoon": [
+    "wooden spatula",
+    "wooden ladle",
+    "plastic spoon",
+    "measuring spoon",
+    "serving spoon",
+    "toy spoon",
+    "wooden spoon illustration"
+  ],
+  "wool": [
+    "cotton fiber",
+    "alpaca fleece",
+    "yarn skein",
+    "felt fabric",
+    "sheepskin",
+    "plush toy fur",
+    "wool sweater"
+  ],
+  "split-rail fence": [
+    "picket fence",
+    "wooden corral fence",
+    "barbed wire fence",
+    "log barrier",
+    "wooden guardrail",
+    "model fence",
+    "fence in a pasture"
+  ],
+  "shipwreck": [
+    "sunken boat",
+    "rusty barge",
+    "broken pier",
+    "submarine wreck",
+    "coral covered hull",
+    "shipwreck diorama",
+    "shipwreck illustration"
+  ],
+  "sailboat": [
+    "yacht",
+    "catamaran",
+    "windsurfer",
+    "kayak",
+    "motorboat",
+    "toy sailboat",
+    "sailboat painting"
+  ],
+  "yurt": [
+    "teepee",
+    "dome tent",
+    "cabin",
+    "geodesic dome",
+    "round gazebo",
+    "model yurt",
+    "yurt illustration"
+  ],
+  "website": [
+    "mobile app screen",
+    "computer desktop",
+    "webpage screenshot",
+    "social media profile page",
+    "online advertisement banner",
+    "website wireframe",
+    "browser window"
+  ],
+  "comic book": [
+    "manga volume",
+    "graphic novel",
+    "storybook",
+    "magazine",
+    "comic strip print",
+    "comic book cover poster",
+    "comic book illustration"
+  ],
+  "crossword": [
+    "word search puzzle",
+    "sudoku grid",
+    "scrabble board",
+    "newspaper page",
+    "fill in puzzle",
+    "crossword app screen",
+    "crossword printout"
+  ],
+  "traffic or street sign": [
+    "stop sign",
+    "speed limit sign",
+    "roadwork sign",
+    "parking sign",
+    "directional signpost",
+    "toy street sign",
+    "street sign illustration"
+  ],
+  "traffic light": [
+    "pedestrian signal",
+    "railroad crossing signal",
+    "streetlamp",
+    "signal beacon",
+    "LED billboard",
+    "toy traffic light",
+    "traffic light icon"
+  ],
+  "dust jacket": [
+    "book cover",
+    "paper sleeve",
+    "magazine cover",
+    "paper wrapper",
+    "library book jacket",
+    "dust jacket illustration",
+    "dust jacket on a book"
+  ],
+  "menu": [
+    "recipe card",
+    "restaurant flyer",
+    "bill receipt",
+    "chalkboard sign",
+    "place mat",
+    "menu app screen",
+    "menu board"
+  ],
+  "plate": [
+    "bowl",
+    "saucer",
+    "platter",
+    "cutting board",
+    "tray",
+    "toy plate",
+    "plate illustration"
+  ],
+  "guacamole": [
+    "mashed avocado",
+    "green salsa",
+    "hummus",
+    "pesto sauce",
+    "spinach dip",
+    "guacamole in a bowl",
+    "guacamole illustration"
+  ],
+  "consomme": [
+    "broth bowl",
+    "miso soup",
+    "ramen broth",
+    "clear chicken soup",
+    "tea in a bowl",
+    "consomme in a cup",
+    "consomme illustration"
+  ],
+  "hot pot": [
+    "fondue pot",
+    "slow cooker",
+    "soup tureen",
+    "stockpot",
+    "electric skillet",
+    "toy cooking pot",
+    "hot pot restaurant table"
+  ],
+  "trifle": [
+    "parfait",
+    "layer cake",
+    "tiramisu",
+    "fruit salad bowl",
+    "pudding cup",
+    "toy dessert",
+    "trifle illustration"
+  ],
+  "ice cream": [
+    "frozen yogurt",
+    "gelato",
+    "whipped cream",
+    "mashed banana",
+    "snow cone",
+    "toy ice cream",
+    "ice cream illustration"
+  ],
+  "popsicle": [
+    "ice cream bar",
+    "lollipop",
+    "frozen fruit bar",
+    "soap bar on a stick",
+    "paint stirrer",
+    "toy popsicle",
+    "popsicle illustration"
+  ],
+  "baguette": [
+    "ciabatta loaf",
+    "breadstick",
+    "sub roll",
+    "french bread loaf",
+    "wooden rolling pin",
+    "toy baguette",
+    "baguette illustration"
+  ],
+  "bagel": [
+    "doughnut",
+    "pretzel bun",
+    "bread roll",
+    "lifesaver candy",
+    "onion ring",
+    "toy bagel",
+    "bagel illustration"
+  ],
+  "pretzel": [
+    "bagel",
+    "bread knot",
+    "twisted pastry",
+    "churro twist",
+    "rope knot",
+    "toy pretzel",
+    "pretzel illustration"
+  ],
+  "cheeseburger": [
+    "hamburger",
+    "chicken sandwich",
+    "sloppy joe",
+    "breakfast sandwich",
+    "burger slider",
+    "toy burger",
+    "burger advertisement poster"
+  ],
+  "hot dog": [
+    "sausage in a bun",
+    "bratwurst sandwich",
+    "corn dog",
+    "sub sandwich",
+    "taco",
+    "toy hot dog",
+    "hot dog illustration"
+  ],
+  "mashed potatoes": [
+    "cauliflower mash",
+    "gravy bowl",
+    "rice porridge",
+    "whipped cream",
+    "polenta",
+    "mashed potatoes on a plate",
+    "mashed potatoes illustration"
+  ],
+  "cabbage": [
+    "lettuce head",
+    "brussels sprout",
+    "bok choy",
+    "cauliflower",
+    "kale bunch",
+    "plastic toy cabbage",
+    "cabbage illustration"
+  ],
+  "broccoli": [
+    "cauliflower",
+    "broccolini",
+    "romanesco",
+    "green coral",
+    "leafy kale",
+    "toy broccoli",
+    "broccoli illustration"
+  ],
+  "cauliflower": [
+    "broccoli head",
+    "romanesco",
+    "cabbage",
+    "popcorn pile",
+    "white coral",
+    "toy cauliflower",
+    "cauliflower illustration"
+  ],
+  "zucchini": [
+    "cucumber",
+    "eggplant",
+    "green squash",
+    "jalapeno pepper",
+    "banana",
+    "toy zucchini",
+    "zucchini illustration"
+  ],
+  "spaghetti squash": [
+    "butternut squash",
+    "pumpkin",
+    "yellow melon",
+    "acorn squash",
+    "gourd decoration",
+    "toy squash",
+    "spaghetti squash illustration"
+  ],
+  "acorn squash": [
+    "butternut squash",
+    "spaghetti squash",
+    "pumpkin",
+    "green gourd",
+    "bell pepper",
+    "toy squash",
+    "acorn squash illustration"
+  ],
+  "butternut squash": [
+    "spaghetti squash",
+    "pumpkin",
+    "yellow gourd",
+    "papaya",
+    "acorn squash",
+    "toy squash",
+    "butternut squash illustration"
+  ],
+  "cucumber": [
+    "zucchini",
+    "pickle",
+    "green bean",
+    "jalapeno pepper",
+    "eggplant",
+    "toy cucumber",
+    "cucumber illustration"
+  ],
+  "artichoke": [
+    "pine cone",
+    "brussels sprout",
+    "thistle flower",
+    "cabbage",
+    "green bud",
+    "toy artichoke",
+    "artichoke illustration"
+  ],
+  "bell pepper": [
+    "tomato",
+    "apple",
+    "chili pepper",
+    "paprika pod",
+    "acorn squash",
+    "toy bell pepper",
+    "bell pepper illustration"
+  ],
+  "cardoon": [
+    "celery stalk",
+    "rhubarb stalk",
+    "leek",
+    "artichoke leaf",
+    "green onion",
+    "toy celery stalk",
+    "cardoon illustration"
+  ],
+  "mushroom": [
+    "toadstool",
+    "bolete",
+    "agaric",
+    "puffball",
+    "stinkhorn mushroom",
+    "toy mushroom",
+    "mushroom illustration"
+  ],
+  "Granny Smith apple": [
+    "green pear",
+    "green tomato",
+    "lime",
+    "green bell pepper",
+    "wax apple replica",
+    "toy apple",
+    "apple illustration"
+  ],
+  "strawberry": [
+    "raspberry",
+    "cherry tomato",
+    "red apple",
+    "heart shaped candy",
+    "plastic berry",
+    "toy strawberry",
+    "strawberry illustration"
+  ],
+  "orange": [
+    "tangerine",
+    "grapefruit",
+    "clementine",
+    "orange ball",
+    "pumpkin",
+    "toy orange",
+    "orange illustration"
+  ],
+  "lemon": [
+    "lime",
+    "yellow pear",
+    "grapefruit",
+    "yellow bell pepper",
+    "wax lemon replica",
+    "toy lemon",
+    "lemon illustration"
+  ],
+  "fig": [
+    "plum",
+    "date",
+    "passion fruit",
+    "purple tomato",
+    "toy fig",
+    "fig illustration",
+    "fig on a cutting board"
+  ],
+  "pineapple": [
+    "jackfruit",
+    "durian",
+    "artichoke",
+    "pine cone",
+    "crown of leaves",
+    "toy pineapple",
+    "pineapple illustration"
+  ],
+  "banana": [
+    "plantain",
+    "yellow squash",
+    "corn cob",
+    "crescent pastry",
+    "toy banana",
+    "banana illustration",
+    "banana bunch"
+  ],
+  "jackfruit": [
+    "durian",
+    "breadfruit",
+    "pineapple",
+    "cantaloupe",
+    "spiky melon",
+    "toy jackfruit",
+    "jackfruit illustration"
+  ],
+  "cherimoya (custard apple)": [
+    "soursop",
+    "guanabana fruit",
+    "avocado",
+    "pear",
+    "green apple",
+    "toy cherimoya",
+    "cherimoya illustration"
+  ],
+  "pomegranate": [
+    "red apple",
+    "blood orange",
+    "beet",
+    "fig",
+    "toy pomegranate",
+    "pomegranate illustration",
+    "pomegranate on a plate"
+  ],
+  "hay": [
+    "straw bale",
+    "dry grass pile",
+    "mulch pile",
+    "wheat sheaf",
+    "horse bedding",
+    "toy hay bale",
+    "hay field"
+  ],
+  "carbonara": [
+    "alfredo pasta",
+    "macaroni and cheese",
+    "spaghetti with cream sauce",
+    "ramen noodles",
+    "risotto",
+    "toy pasta",
+    "carbonara illustration"
+  ],
+  "chocolate syrup": [
+    "molasses",
+    "caramel sauce",
+    "soy sauce",
+    "balsamic glaze",
+    "motor oil",
+    "toy syrup bottle",
+    "chocolate syrup illustration"
+  ],
+  "dough": [
+    "mashed potatoes",
+    "clay lump",
+    "bread batter",
+    "pizza dough ball",
+    "mozzarella ball",
+    "toy modeling clay",
+    "dough illustration"
+  ],
+  "meatloaf": [
+    "roast beef",
+    "bread loaf",
+    "pate terrine",
+    "banana bread",
+    "meat pie",
+    "toy food loaf",
+    "meatloaf illustration"
+  ],
+  "pizza": [
+    "flatbread",
+    "quiche",
+    "cheese pie",
+    "focaccia",
+    "pepperoni sandwich",
+    "toy pizza",
+    "pizza illustration"
+  ],
+  "pot pie": [
+    "quiche",
+    "meat pie",
+    "shepherds pie",
+    "chicken casserole",
+    "tart",
+    "toy pie",
+    "pot pie illustration"
+  ],
+  "burrito": [
+    "wrap sandwich",
+    "chimichanga",
+    "taco",
+    "spring roll",
+    "shawarma wrap",
+    "toy burrito",
+    "burrito illustration"
+  ],
+  "red wine": [
+    "grape juice",
+    "cola drink",
+    "balsamic vinegar",
+    "tea in a glass",
+    "red cocktail",
+    "toy wine glass",
+    "red wine label illustration"
+  ],
+  "espresso": [
+    "black coffee",
+    "cappuccino",
+    "cola drink",
+    "soy sauce cup",
+    "hot chocolate",
+    "toy coffee cup",
+    "espresso illustration"
+  ],
+  "tea cup": [
+    "coffee mug",
+    "saucer set",
+    "small bowl",
+    "goblet",
+    "teacup ornament",
+    "toy tea set cup",
+    "tea cup illustration"
+  ],
+  "eggnog": [
+    "vanilla milkshake",
+    "custard drink",
+    "latte",
+    "cream soup",
+    "white hot chocolate",
+    "toy drink carton",
+    "eggnog illustration"
+  ],
+  "mountain": [
+    "volcano",
+    "hill",
+    "cliff",
+    "snowy ridge",
+    "rocky peak poster",
+    "mountain painting",
+    "mountain in the distance"
+  ],
+  "bubble": [
+    "water droplet",
+    "glass marble",
+    "soap foam",
+    "balloon",
+    "lens flare spot",
+    "bubble illustration",
+    "bubble wrap cell"
+  ],
+  "cliff": [
+    "rock wall",
+    "canyon edge",
+    "sea stack",
+    "mountain slope",
+    "quarry face",
+    "cliff painting",
+    "cliff overlooking the ocean"
+  ],
+  "coral reef": [
+    "sea anemone",
+    "kelp forest",
+    "rocky seabed",
+    "spongy coral",
+    "aquarium decoration",
+    "coral reef diorama",
+    "coral reef illustration"
+  ],
+  "geyser": [
+    "steam vent",
+    "hot spring",
+    "water fountain",
+    "fire hydrant spray",
+    "smoke plume",
+    "geyser illustration",
+    "geyser tourist viewpoint"
+  ],
+  "lakeshore": [
+    "riverbank",
+    "beach",
+    "marsh",
+    "pond edge",
+    "reservoir shoreline",
+    "lakeshore postcard",
+    "lakeshore with boats"
+  ],
+  "promontory": [
+    "cliff",
+    "headland",
+    "mountain ridge",
+    "rocky peninsula",
+    "sandstone outcrop",
+    "promontory painting",
+    "promontory viewpoint"
+  ],
+  "sandbar": [
+    "beach",
+    "mudflat",
+    "dune ridge",
+    "river island",
+    "shallow reef",
+    "sandbar aerial photo print",
+    "sandbar with boats"
+  ],
+  "beach": [
+    "sandbar",
+    "lakeshore",
+    "desert dune",
+    "rocky shoreline",
+    "poolside deck",
+    "beach poster",
+    "beach with umbrellas"
+  ],
+  "valley": [
+    "canyon",
+    "river basin",
+    "mountain pass",
+    "ravine",
+    "glacial trough",
+    "valley painting",
+    "valley farmland"
+  ],
+  "volcano": [
+    "mountain",
+    "cinder cone hill",
+    "smokestack plume",
+    "geyser steam",
+    "volcano model",
+    "volcano illustration",
+    "volcano crater"
+  ],
+  "baseball player": [
+    "softball player",
+    "cricket player",
+    "tennis player",
+    "baseball umpire",
+    "baseball coach",
+    "baseball action figure",
+    "baseball player illustration"
+  ],
+  "bridegroom": [
+    "groomsman",
+    "businessman in a suit",
+    "prom attendee",
+    "wedding officiant",
+    "best man",
+    "groom figurine",
+    "bridegroom portrait photo"
+  ],
+  "scuba diver": [
+    "snorkeler",
+    "swimmer with goggles",
+    "deep sea fisherman",
+    "wetsuit surfer",
+    "astronaut suit costume",
+    "scuba diver action figure",
+    "scuba diver illustration"
+  ],
+  "rapeseed": [
+    "mustard plant",
+    "canola flower",
+    "yellow wildflower",
+    "sunflower seed head",
+    "grain stalk",
+    "rapeseed illustration",
+    "rapeseed field"
+  ],
+  "daisy": [
+    "chamomile flower",
+    "oxeye daisy",
+    "sunflower",
+    "aster flower",
+    "white rose",
+    "artificial daisy",
+    "daisy illustration"
+  ],
+  "yellow lady's slipper": [
+    "orchid flower",
+    "tulip",
+    "daffodil",
+    "calla lily",
+    "yellow iris",
+    "artificial orchid",
+    "orchid illustration"
+  ],
+  "corn": [
+    "wheat stalk",
+    "sugarcane",
+    "sorghum stalk",
+    "grass seed head",
+    "corn plant model",
+    "corn illustration",
+    "cornfield"
+  ],
+  "acorn": [
+    "horse chestnut seed",
+    "hazelnut",
+    "walnut",
+    "small pine cone",
+    "oak gall",
+    "toy acorn",
+    "acorn illustration"
+  ],
+  "rose hip": [
+    "cherry tomato",
+    "cranberry",
+    "red berry",
+    "small apple",
+    "pomegranate seed cluster",
+    "artificial berry",
+    "rose hip illustration"
+  ],
+  "horse chestnut seed": [
+    "acorn",
+    "walnut",
+    "hazelnut",
+    "buckeye seed",
+    "chestnut",
+    "toy seed",
+    "horse chestnut seed illustration"
+  ],
+  "coral fungus": [
+    "sea coral",
+    "lichen cluster",
+    "cauliflower fungus",
+    "branching sponge",
+    "dead twig cluster",
+    "toy coral decoration",
+    "coral fungus illustration"
+  ],
+  "agaric": [
+    "mushroom",
+    "bolete",
+    "toadstool",
+    "stinkhorn mushroom",
+    "plastic mushroom decoration",
+    "toy mushroom",
+    "agaric illustration"
+  ],
+  "gyromitra": [
+    "morel mushroom",
+    "brain coral",
+    "wrinkled sponge",
+    "truffle",
+    "stinkhorn mushroom",
+    "toy fungus",
+    "gyromitra illustration"
+  ],
+  "stinkhorn mushroom": [
+    "morel mushroom",
+    "agaric",
+    "gyromitra",
+    "sea cucumber",
+    "plant shoot",
+    "toy mushroom",
+    "stinkhorn mushroom illustration"
+  ],
+  "earth star fungus": [
+    "sea star",
+    "sand dollar",
+    "puffball mushroom",
+    "dried flower",
+    "seed pod",
+    "toy star ornament",
+    "earth star fungus illustration"
+  ],
+  "hen of the woods mushroom": [
+    "oyster mushroom cluster",
+    "cauliflower fungus",
+    "bracket fungus",
+    "cabbage leaf pile",
+    "fried chicken pieces",
+    "toy mushroom",
+    "hen of the woods illustration"
+  ],
+  "bolete": [
+    "agaric",
+    "porcini mushroom",
+    "puffball mushroom",
+    "chanterelle",
+    "stinkhorn mushroom",
+    "toy mushroom",
+    "bolete illustration"
+  ],
+  "corn cob": [
+    "banana",
+    "yellow zucchini",
+    "bread loaf",
+    "pine cone",
+    "toy corn cob",
+    "corn cob illustration",
+    "corn on a plate"
+  ],
+  "toilet paper": [
+    "paper towel roll",
+    "facial tissue box",
+    "white ribbon spool",
+    "packing tape roll",
+    "gauze roll",
+    "toy toilet paper roll",
+    "toilet paper illustration"
+  ]
+}

@@ -3,13 +3,13 @@
 # Root directory for saving all outputs (logs, checkpoints, visualizations)
 # If not specified or empty, defaults to './my_caches'
 # Can also be set via command line: --cache_root /path/to/outputs
-cache_root: './my_caches'
+cache_root: '/data/my_caches'
 save_vis_interval: 5  # Save attention maps every N epochs
 
 # ------ root_path ------
-root_path: "/data/xinhua/Datasets"
-ood_dataset_path: "/data/xinhua/Datasets/ood-benchmark/imagenet"
-clip_model_path: "data/xinhua/.cache/clip/"
+root_path: "/data/ICML2026/clip/FA/my_dataset"
+ood_dataset_path: "/data/ICML2026/clip/FA/my_dataset"
+clip_model_path: "data/clip"
 
 # ------ id dataset------
 

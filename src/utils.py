@@ -13,15 +13,20 @@ from PIL import Image
 class Logger(object):
     def __init__(self, filename='default.log', stream=sys.stdout):
         self.terminal = stream
-        # print("filename:", filename)
         self.filename = filename
 
     def write(self, message):
+        """Write message to both terminal and file"""
         with open(self.filename, 'a+') as log:
             self.terminal.write(message)
             log.write(message)
 
+    def log(self, message):
+        """Log message to both terminal and file (alias for write)"""
+        self.write(message + '\n')
+
     def flush(self):
+        """Flush output"""
         pass
 
 def trm_single_image(image_path, transforms):

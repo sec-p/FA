@@ -45,8 +45,25 @@ K: 3
 csc: False
 template: 'a photo of a'
 
+# Templates for version 2 (SimpleCLIP) - use this instead of PromptLearner
+templates: ['a photo of a']
+# Can use multiple templates:
+# templates: ['a photo of a', 'a picture of a', 'an image of a']
+
 lr: 0.002 # 0.0002  0.02 0.002
 fine_tune_train_epoch: 50  # 200 30
 fine_tune_batch_size: 160  # 160 100
 
 test_batch_size: 250
+
+# --- Gating / RL hyperparameters ---
+# Use reinforcement learning for discrete gating (True) or soft sigmoid gating (False)
+use_rl: False
+# L1 sparsity weight (for soft mode) and sparsity penalty used in RL reward
+lambda_sparsity: 0.001
+# Minimal-set / negative suppression weight (used in soft mode and as lambda_min in RL reward)
+lambda_minimal: 0.01
+# Learning rate for gate network (if training separately)
+lr_gate: 0.0002
+# Gate network hidden dimension
+gate_hidden: 256

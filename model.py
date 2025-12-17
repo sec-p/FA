@@ -11,6 +11,7 @@ from torchvision import datasets
 import clip
 from clip.simple_tokenizer import SimpleTokenizer as _Tokenizer
 _tokenizer = _Tokenizer()
+from torch.distributions import Bernoulli
 
 
 class PromptLearner(nn.Module):
@@ -223,53 +224,147 @@ class CustomCLIP(nn.Module):
         self.repeat_sum_num = repeat_sum_num
         # print(f"self.text_features_classify_original.shape: {self.text_features_classify_original.shape}")
 
-        
-    def forward(self, image):        
+        # gating configuration
+        self.use_rl = bool(cfg.get('use_rl', False))
+        self.lambda_sparsity = float(cfg.get('lambda_sparsity', 1e-3))
+        self.lambda_minimal = float(cfg.get('lambda_minimal', 1e-2))
+
+        # gating network: produce per-token probability for local features
+        # determine local feature dim dynamically if possible
+        try:
+            local_dim = self.image_encoder.output_dim
+        except Exception:
+            # fallback to CLIP transformer width
+            local_dim = clip_model.ln_final.weight.shape[0]
+
+        gate_hidden = int(cfg.get('gate_hidden', 256))
+
+        self.gating = nn.Sequential(
+            nn.Linear(local_dim * 2, gate_hidden),
+            nn.ReLU(inplace=True),
+            nn.Linear(gate_hidden, 128),
+            nn.ReLU(inplace=True),
+            nn.Linear(128, 1),
+        )
+
+        # baseline for policy gradient
+        self.register_buffer('baseline', torch.tensor(0.0))
+
+    def forward(self, image, labels=None):        
         # image_features = self.image_encoder(image.type(self.dtype))
         image_features, local_image_features = self.image_encoder(image.type(self.dtype))
 
 
-        prompts = self.prompt_learner().to(image.device)   #[len(classnames), ctx_sum, transformer.width] 如[1000, 77, 512]
+        prompts = self.prompt_learner().to(image.device)   #[len(classnames), ctx_sum, transformer.width]
         tokenized_prompts = self.tokenized_prompts.to(image.device)  #[len(classnames), 77]
-        tokenized_prompts = tokenized_prompts
         text_features = self.text_encoder(prompts, tokenized_prompts).type(self.dtype)
 
         text_features_classify_final = torch.cat((text_features, self.text_features_classify_original), dim=0)
 
 
-        image_features = image_features / image_features.norm(dim=-1, keepdim=True)
-        local_image_features = local_image_features / local_image_features.norm(dim=-1, keepdim=True)
-        text_features_classify_final = text_features_classify_final / text_features_classify_final.norm(dim=-1, keepdim=True)
+        image_features = image_features / (image_features.norm(dim=-1, keepdim=True) + 1e-8)
+        local_image_features = local_image_features / (local_image_features.norm(dim=-1, keepdim=True) + 1e-8)
+        text_features_classify_final = text_features_classify_final / (text_features_classify_final.norm(dim=-1, keepdim=True) + 1e-8)
 
         logit_scale = self.logit_scale.exp()
 
+        # global logits
         logits = logit_scale * image_features @ text_features_classify_final.transpose(-1, -2)
-        logits_local = logit_scale * local_image_features @ text_features_classify_final.T
 
-        # print(f"logits.shape: {logits.shape}")
-        # print(f"logits_local.shape: {logits_local.shape}")
-        # print('-------')
+        # gating
+        rl_info = {}
+        aux_loss = {}
 
+        B, T, C = local_image_features.shape
+        device = local_image_features.device
+
+        if labels is not None:
+            labels = labels.to(device)
+
+        # build class text bank (assume first self.classnum correspond to classes)
+        if text_features_classify_final.shape[0] >= self.classnum:
+            class_text_bank = text_features_classify_final[: self.classnum]
+        else:
+            class_text_bank = text_features_classify_final
+
+        if labels is None:
+            with torch.no_grad():
+                pseudo = logits.argmax(dim=1)
+            selected_text = class_text_bank[pseudo]
+        else:
+            selected_text = class_text_bank[labels]
+
+        selected_text_exp = selected_text.unsqueeze(1).expand(-1, T, -1)  # [B, T, C]
+        gate_input = torch.cat([local_image_features, selected_text_exp], dim=-1)  # [B, T, 2C]
+        gate_input_flat = gate_input.view(B * T, -1)
+        gate_logits = self.gating(gate_input_flat).view(B, T)
+
+        if self.use_rl:
+            probs = torch.sigmoid(gate_logits)
+            m = Bernoulli(probs=probs)
+            mask_sample = m.sample()
+            log_prob = m.log_prob(mask_sample).sum(dim=1)
+            mask_apply = mask_sample.detach()
+            mask_ratio = mask_apply.mean(dim=1)
+            rl_info['log_prob'] = log_prob
+            rl_info['mask'] = mask_sample
+            rl_info['mask_ratio'] = mask_ratio
+        else:
+            probs = torch.sigmoid(gate_logits)
+            mask_apply = probs
+            mask_ratio = mask_apply.mean()
+            aux_loss['sparsity'] = mask_ratio
+
+        gated_local = local_image_features * mask_apply.unsqueeze(-1)
+
+        logits_local = logit_scale * gated_local @ text_features_classify_final.T
+
+        # compute negative logits for minimal set constraint
+        if labels is not None:
+            logits_local_cls = logits_local[:, :, : self.classnum]
+            all_idx = torch.arange(self.classnum, device=device)
+            negative_list = []
+            for i in range(B):
+                neg_idx = torch.cat([all_idx[:labels[i]], all_idx[labels[i]+1:]]) if self.classnum>1 else torch.tensor([], device=device, dtype=torch.long)
+                if neg_idx.numel() == 0:
+                    negative_list.append(torch.zeros((T,0), device=device))
+                else:
+                    negative_list.append(logits_local_cls[i,:, neg_idx])
+            negative_logits = torch.stack([neg for neg in negative_list], dim=0)  # [B, T, classnum-1]
+        else:
+            negative_logits = logits_local[:, :, : self.classnum]
+
+        if not self.use_rl:
+            minimal_loss = torch.mean(negative_logits ** 2)
+            aux_loss['minimal'] = minimal_loss
+        else:
+            with torch.no_grad():
+                prob_all = F.softmax(logits_local, dim=-1)
+            prob_neg = prob_all[:, :, : self.classnum]
+            prob_neg_mean_list = []
+            for i in range(B):
+                if labels is None:
+                    gt = logits[i].argmax()
+                else:
+                    gt = labels[i]
+                mask_idx = torch.ones(self.classnum, device=device, dtype=torch.bool)
+                mask_idx[gt] = False
+                if mask_idx.sum() == 0:
+                    prob_neg_mean_list.append(torch.tensor(0.0, device=device))
+                else:
+                    prob_neg_mean_list.append(prob_neg[i,:, mask_idx].mean())
+            confusion_penalty = torch.stack(prob_neg_mean_list).mean()
+            rl_info['confusion_penalty'] = confusion_penalty
+
+        # preserve previous repeat logic
         if self.repeat_sum_num - 1 > 0:
-            
             batch_size, token_len, sum_template_len = logits_local.shape
             logits_repeat_template = logits.view(batch_size, 2, self.classnum)[:,1,:]
-            # print(f"logits_repeat_template.shape: {logits_repeat_template.shape}")
             logits_repeat_context = logits_repeat_template.repeat(1, self.repeat_sum_num - 1)
-            # print(f"logits_repeat_context.shape: {logits_repeat_context.shape}")
-
             logits = torch.cat((logits, logits_repeat_context), dim=1)
-            # print(f"logits.shape: {logits.shape}")
-
-
 
             logits_local_repeat_template = logits_local.view(batch_size, token_len, 2, self.classnum)[:,:,1,:]
-            # print(f"logits_local_repeat_template.shape: {logits_local_repeat_template.shape}")
             logits_local_repeat_context = logits_local_repeat_template.repeat(1, 1, self.repeat_sum_num - 1)
-            # print(f"logits_local_repeat_context.shape: {logits_local_repeat_context.shape}")
-
             logits_local = torch.cat((logits_local, logits_local_repeat_context), dim=2)
-            # print(f"logits_local.shape: {logits_local.shape}")
 
-        
-        return logits, logits_local
+        return logits, logits_local, aux_loss, rl_info

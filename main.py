@@ -150,24 +150,29 @@ def main():
         # Model
         model = CustomCLIP(cfg, cfg['classnames'], clip_model ,cfg['template'], False, 16, cfg['csc'])
         model = torch.nn.DataParallel(model).to(device)
-        
 
+        # freeze backbone and other params by default; enable prompt_learner and gating params
         for name, param in model.named_parameters():
-            if  "prompt_learner" in name : #  
+            if  ("prompt_learner" in name) or ("gating" in name):
                 param.requires_grad_(True)
-                print(name)
+                print(f"trainable: {name}")
             else:
                 param.requires_grad_(False)
 
-
+        # separate optimizers: encoder (prompt learner etc.) and gate (policy)
+        encoder_params = [p for n, p in model.named_parameters() if p.requires_grad and ("prompt_learner" in n)]
+        gate_params = [p for n, p in model.named_parameters() if p.requires_grad and ("gating" in n)]
 
         criterion = torch.nn.CrossEntropyLoss()
-        optimizer = torch.optim.SGD(model.parameters(), lr=cfg['lr'], weight_decay=5e-4 ,momentum=0.9 ,dampening=0 ,nesterov=False)  # 
-        # optimizer = torch.optim.Adam(model.parameters(), lr=cfg['lr'], weight_decay=5e-4)
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer,  cfg['fine_tune_train_epoch'] * len(train_loader))
+        optimizer_encoder = torch.optim.SGD(encoder_params, lr=cfg['lr'], weight_decay=5e-4 ,momentum=0.9 ,dampening=0 ,nesterov=False)
+        lr_gate = cfg.get('lr_gate', cfg['lr'] * 0.1)
+        optimizer_gate = torch.optim.Adam(gate_params, lr=lr_gate, weight_decay=1e-4) if len(gate_params)>0 else None
 
-        print(optimizer)
-        print(scheduler)
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_encoder,  cfg['fine_tune_train_epoch'] * len(train_loader))
+
+        print('optimizer_encoder:', optimizer_encoder)
+        print('optimizer_gate:', optimizer_gate)
+        print('scheduler:', scheduler)
 
         train_epoch = cfg['fine_tune_train_epoch']
 
@@ -184,21 +189,96 @@ def main():
             for i, (images, target) in enumerate(tqdm(train_loader)):
                 images, target = images.cuda(), target.cuda()
 
-                logits,_ = model(images)
-                loss = criterion(logits, target)
-                acc = cls_acc(output=logits , target=target, topk=1)
+                logits, logits_local, aux_loss, rl_info = model(images, target)
+                # logits: [B, num_templates]
 
-                correct_samples += acc / 100 * len(logits)
-                all_samples += len(logits)
-                loss_list.append(loss.item())
+                loss_ce = criterion(logits, target)
 
-                optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
-                scheduler.step()
+                if not cfg.get('use_rl', False):
+                    sparsity = aux_loss.get('sparsity', torch.tensor(0.0, device=images.device))
+                    minimal = aux_loss.get('minimal', torch.tensor(0.0, device=images.device))
+                    total_loss = loss_ce + cfg.get('lambda_sparsity', 1e-3) * sparsity + cfg.get('lambda_minimal', 1e-2) * minimal
+
+                    acc = cls_acc(output=logits , target=target, topk=1)
+                    correct_samples += acc / 100 * len(logits)
+                    all_samples += len(logits)
+                    loss_list.append(total_loss.item())
+
+                    optimizer_encoder.zero_grad()
+                    total_loss.backward()
+                    optimizer_encoder.step()
+                    scheduler.step()
+                else:
+                    # RL mode: update encoder with CE, gate with policy gradient
+                    acc = cls_acc(output=logits , target=target, topk=1)
+                    correct_samples += acc / 100 * len(logits)
+                    all_samples += len(logits)
+                    loss_list.append(loss_ce.item())
+
+                    # encoder update (CE)
+                    optimizer_encoder.zero_grad()
+                    loss_ce.backward()
+                    optimizer_encoder.step()
+                    scheduler.step()
+
+                    # policy update
+                    if optimizer_gate is not None:
+                        # build reward
+                        with torch.no_grad():
+                            preds = logits.argmax(dim=1)
+                            base_reward = torch.where(preds == target, torch.ones_like(preds, dtype=torch.float32), -1 * torch.ones_like(preds, dtype=torch.float32)).float().to(images.device)
+
+                        # mask ratio per sample
+                        mask_ratio = rl_info.get('mask_ratio', torch.zeros(images.size(0), device=images.device))
+                        confusion = rl_info.get('confusion_penalty', torch.tensor(0.0, device=images.device))
+                        lambda_sp = cfg.get('lambda_sparsity', 1e-3)
+                        lambda_min = cfg.get('lambda_minimal', 1e-2)
+
+                        # ensure mask_ratio is tensor per-sample
+                        if mask_ratio.dim() == 0:
+                            mask_ratio = mask_ratio.repeat(images.size(0))
+
+                        if isinstance(confusion, torch.Tensor) and confusion.numel() == 1:
+                            confusion_term = confusion
+                        else:
+                            confusion_term = confusion
+
+                        rewards = base_reward - lambda_sp * mask_ratio - lambda_min * confusion_term
+
+                        # baseline (moving average)
+                        baseline = model.module.baseline if isinstance(model, torch.nn.DataParallel) else model.baseline
+                        advantage = rewards - baseline
+
+                        log_prob = rl_info.get('log_prob', torch.zeros(images.size(0), device=images.device))
+                        policy_loss = - (log_prob * advantage).mean()
+
+                        optimizer_gate.zero_grad()
+                        policy_loss.backward()
+                        optimizer_gate.step()
+
+                        # update baseline
+                        new_baseline = 0.9 * baseline + 0.1 * rewards.mean()
+                        if isinstance(model, torch.nn.DataParallel):
+                            model.module.baseline.copy_(new_baseline.detach())
+                        else:
+                            model.baseline.copy_(new_baseline.detach())
+
+                        # logging: convert to python floats for storing
+                        try:
+                            sparsity_val = float(mask_ratio.mean().cpu().numpy())
+                        except Exception:
+                            sparsity_val = 0.0
+                        try:
+                            confusion_val = float(confusion_term.cpu().numpy()) if isinstance(confusion_term, torch.Tensor) else float(confusion_term)
+                        except Exception:
+                            confusion_val = 0.0
+
+                        # append some metrics to loss_list for printing
+                        loss_list.append(policy_loss.item())
 
             current_lr = scheduler.get_last_lr()[0]
-            print('LR: {:.6f}, train_acc: {:.4f} ({:}/{:}), Loss: {:.4f}'.format(current_lr, correct_samples / all_samples, correct_samples, all_samples, sum(loss_list)/len(loss_list)))
+            avg_loss = sum(loss_list)/len(loss_list) if len(loss_list)>0 else 0.0
+            print('LR: {:.6f}, train_acc: {:.4f} ({:}/{:}), Loss: {:.4f}'.format(current_lr, correct_samples / all_samples, correct_samples, all_samples, avg_loss))
 
 
 
@@ -211,7 +291,7 @@ def main():
 
                     for images, labels in tqdm(test_loader):
                         images, labels = images.to(device), labels.to(device)
-                        outputs,_ = model(images)
+                        outputs, outputs_local, _, _ = model(images)
 
                         outputs = outputs / 100.0
                         batch_size, repeat_len = outputs.shape
@@ -299,10 +379,10 @@ def main():
 
 
             # run id dataset
-            for images, labels in tqdm(test_loader_id):
+                for images, labels in tqdm(test_loader_id):
                 images, labels = images.to(device), labels.to(device)
 
-                logits_id, logits_id_local = model(images)
+                logits_id, logits_id_local, _, _ = model(images)
                 logits_id /= 100.0
                 logits_id_local /= 100.0
 
@@ -378,7 +458,7 @@ def main():
                 for images, _ in tqdm(ood_loader):
                     images = images.to(device)
 
-                    logits_ood, logits_ood_local = model(images)
+                    logits_ood, logits_ood_local, _, _ = model(images)
                     logits_ood /= 100.0
                     logits_ood_local /= 100.0
                     # print(logits_ood.shape)

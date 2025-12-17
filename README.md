@@ -37,13 +37,24 @@ FA/
 pip install -r requirements.txt
 ```
 
-### 2. 训练单个方法 (最简单)
+### 2. 训练单个方法 (最简单，从项目根目录运行)
+
+**方式 A: 使用 Python 启动脚本（⭐ 推荐）**
 ```bash
-cd src
-python train_and_eval.py --method baseline_mean --epochs 50
+python run_training.py --method baseline_mean --epochs 50
 ```
 
-### 3. 并行网格搜索 (推荐)
+**方式 B: 使用 Bash 启动脚本**
+```bash
+bash run_training.sh --method baseline_mean --epochs 50
+```
+
+**方式 C: 使用完整的训练脚本**
+```bash
+bash scripts/train_all.sh -m baseline_mean -e 50
+```
+
+### 3. 并行网格搜索 (推荐快速对比多个方法)
 ```bash
 cd scripts
 python grid_search_parallel.py -m all -e 30 -j 4 --analyze
@@ -55,7 +66,9 @@ cd scripts
 python analyze_results.py --summary
 ```
 
-> 📖 详细说明请查看 `docs/START_HERE.md`
+> ⚠️ **重要**: 所有脚本都应该从项目根目录运行，或使用上面提供的启动脚本！
+
+> 📖 详细说明请查看 `docs/START_HERE.md` 或 `IMPORT_FIX_GUIDE.md`
 
 ## 📊 6种模型方法
 

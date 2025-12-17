@@ -34,8 +34,12 @@ class ExperimentConfig:
     
     def to_command(self) -> List[str]:
         """Convert to train_and_eval.py command"""
+        # Get path to train_and_eval.py in src/ directory
+        script_dir = Path(__file__).parent.parent / "src"
+        train_script = script_dir / "train_and_eval.py"
+        
         return [
-            "python3", "train_and_eval.py",
+            "python3", str(train_script),
             "--config", self.config_file,
             "--method", self.method,
             "--epochs", str(self.epochs),

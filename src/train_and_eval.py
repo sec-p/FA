@@ -21,11 +21,16 @@ import torch.nn.functional as F
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from tqdm import tqdm
 
+# Add project root to path for imports
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
 import clip
-from model_modular import build_modular_model
+from src.model_modular import build_modular_model
 from my_dataset import build_dataset
 from my_dataset.utils import build_data_loader
-from utils import Logger, cls_acc
+from src.utils import Logger, cls_acc
 
 
 class TrainingConfig:

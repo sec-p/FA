@@ -132,16 +132,21 @@ parse_arguments() {
 validate_config() {
     echo -e "${BLUE}Validating configuration...${NC}"
     
+    # Get project root directory
+    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+    
     # Check config file
-    if [[ ! -f "$CONFIG" ]]; then
-        echo -e "${RED}✗ Config file not found: $CONFIG${NC}"
+    if [[ ! -f "$PROJECT_ROOT/$CONFIG" ]]; then
+        echo -e "${RED}✗ Config file not found: $PROJECT_ROOT/$CONFIG${NC}"
         exit 1
     fi
     echo -e "${GREEN}✓ Config file found${NC}"
     
     # Check if train_and_eval.py exists
-    if [[ ! -f "train_and_eval.py" ]]; then
-        echo -e "${RED}✗ train_and_eval.py not found${NC}"
+    TRAIN_SCRIPT="$PROJECT_ROOT/src/train_and_eval.py"
+    if [[ ! -f "$TRAIN_SCRIPT" ]]; then
+        echo -e "${RED}✗ Training script not found: $TRAIN_SCRIPT${NC}"
         exit 1
     fi
     echo -e "${GREEN}✓ Training script found${NC}"
@@ -189,8 +194,13 @@ run_training() {
     echo "╚════════════════════════════════════════════════════════════════╝"
     echo ""
     
-    python3 train_and_eval.py \
-        --config "$CONFIG" \
+    # Get paths
+    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+    TRAIN_SCRIPT="$PROJECT_ROOT/src/train_and_eval.py"
+    
+    python3 "$TRAIN_SCRIPT" \
+        --config "$PROJECT_ROOT/$CONFIG" \
         --method "$method" \
         --epochs "$EPOCHS" \
         --lr "$LR" \

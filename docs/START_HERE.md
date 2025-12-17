@@ -1,205 +1,112 @@
-读我：快速导航
-================
+# 🚀 快速入门指南
 
-# 🚀 快速开始 (30秒)
-
-## 1️⃣ 查看可用实验
-```bash
-python run_quick_experiment.py --list
-```
-
-## 2️⃣ 运行单个实验
-```bash
-python run_quick_experiment.py --group baseline --gpu 0
-```
-
-## 3️⃣ 运行完整消融研究
-```bash
-python run_ablation_study.py
-```
-
-## 4️⃣ 分析结果
-```bash
-python analyze_results.py --all
-```
-
----
-
-# 📖 文档导航
-
-## 🟦 快速上手 (5分钟)
-→ **[QUICK_START.md](QUICK_START.md)**
-
-包含：快速命令、常见问题、快速参考
-
-## 🟩 项目总览 (15分钟)
-→ **[PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md)**
-
-包含：项目结构、组件详解、消融设计、快速使用
-
-## 🟨 实验框架 (20分钟)
-→ **[EXPERIMENTS_README.md](EXPERIMENTS_README.md)**
-
-包含：核心特性、快速开始、消折矩阵、性能指标
-
-## 🟧 消融指南 (30分钟)
-→ **[ABLATION_GUIDE.md](ABLATION_GUIDE.md)**
-
-包含：详细分组说明、使用方法、配置系统、高级用法
-
-## 🟪 工作总结
-→ **[COMPLETION_SUMMARY.md](COMPLETION_SUMMARY.md)** - 项目完成总结
-→ **[DELIVER_SUMMARY.md](DELIVER_SUMMARY.md)** - 工作交付总结
-
----
-
-# 🎯 按需求选择
-
-### "我想快速跑个实验"
-→ 运行上面的 **4个命令** → 完成！
-
-### "我想深入了解项目"
-→ 阅读 [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md)
-
-### "我想进行完整的消融研究"
-→ 阅读 [ABLATION_GUIDE.md](ABLATION_GUIDE.md)
-
-### "我想了解版本差异"
-→ 阅读 [VERSION_GUIDE.md](VERSION_GUIDE.md)
-
----
-
-# 📁 文件结构速记
-
-```
-FA/
-├── 【核心代码】
-│   ├── model_modular.py         ← 模块化模型 ⭐
-│   ├── train_modular.py         ← 训练脚本 ⭐
-│   └── model.py, model_v2.py    ← 参考版本
-│
-├── 【实验工具】
-│   ├── run_ablation_study.py    ← 消融研究 ⭐⭐
-│   ├── run_quick_experiment.py  ← 快速实验
-│   └── analyze_results.py       ← 结果分析 ⭐
-│
-├── 【配置和数据】
-│   ├── configs/my_config.yaml   ← 配置文件
-│   ├── my_dataset/              ← 数据集
-│   ├── clip/                    ← CLIP编码器
-│   └── ood_utils/               ← OOD工具
-│
-└── 【文档】
-    ├── QUICK_START.md           ← 快速导航 ⭐
-    ├── PROJECT_OVERVIEW.md      ← 项目总览 ⭐
-    ├── EXPERIMENTS_README.md    ← 实验说明 ⭐
-    ├── ABLATION_GUIDE.md        ← 消融指南 ⭐
-    └── 其他文档...
-```
-
----
-
-# ⚡ 关键命令
+## 📦 第一步：安装依赖
 
 ```bash
-# 查看实验组
-python run_quick_experiment.py --list
-
-# 运行Baseline
-python run_quick_experiment.py --group baseline --gpu 0
-
-# 运行Full (最强)
-python run_quick_experiment.py --group full --gpu 0
-
-# 完整消融 (所有5组×3种子)
-python run_ablation_study.py
-
-# 多GPU加速
-python run_ablation_study.py --gpus 0 1 2 --seeds 1 2 3 4 5
-
-# 分析结果
-python analyze_results.py --all
-
-# 生成报告+CSV
-python analyze_results.py --report --csv
+pip install -r requirements.txt
 ```
 
 ---
 
-# 🎯 5个消融研究分组
+## 🎯 第二步：选择你的工作方式
 
-| Group | 选择器 | 融合器 | 损失 | 命令 |
-|-------|--------|--------|------|------|
-| A | MLP | Mean | CE | `baseline` |
-| B | Slot | Mean | CE+O | `structure` |
-| C | MLP | Q.Attn | CE+D | `fusion` |
-| D | MLP | S.Attn | CE+D | `interaction` |
-| E | Slot | Q.Attn | All | `full` |
+### 选项A：最简单 - 单个方法训练 (推荐新手)
+```bash
+python train_and_eval.py --method baseline_mean --epochs 50
+```
+✅ 一条命令启动，自动进行50轮epoch的训练和OOD评估
+
+---
+
+### 选项B：快速对比 - 网格搜索多个方法 (推荐快速实验)
+```bash
+python grid_search_parallel.py \
+    -m baseline_mean selector_mlp full_model \
+    -e 30 \
+    -j 4 \
+    --analyze
+```
+✅ 并行运行3个方法，自动分析结果
+
+---
+
+### 选项C：完整优化 - 超参调优 (推荐深度研究)
+```bash
+bash grid_search.sh \
+    -m full_model \
+    -e 50 \
+    -s 1 2 3 \
+    -lr 0.0005 0.001 0.002 \
+    -bs 32 64
+```
+✅ 系统搜索最优超参数组合
+
+---
+
+## 📊 第三步：查看结果
 
 ```bash
-# 运行特定组
-python run_quick_experiment.py --group baseline
-python run_quick_experiment.py --group full
+# 显示最新实验结果
+python analyze_results.py --latest
+
+# 比较不同方法的性能
+python analyze_results.py --compare-methods
+
+# 导出结果为CSV
+python analyze_results.py --export results.csv
 ```
 
 ---
 
-# 📊 预期结果
+## 📖 文件功能速查表
 
-```
-Baseline:      78.0%
-Structure:     79.2%  (+1.2%)
-Fusion:        79.5%  (+1.5%)
-Interaction:   79.8%  (+1.8%)
-Full:          80.5%  (+2.5%)
-```
+| 文件 | 功能 | 何时使用 |
+|------|------|----------|
+| `train_and_eval.py` | 主训练引擎 | ⭐ 日常使用 |
+| `train_all.sh` | 启动器脚本 | 快速开始 |
+| `grid_search_parallel.py` | 并行网格搜索 | 超参优化 |
+| `grid_search.sh` | Bash网格搜索 | 简单搜索 |
+| `analyze_results.py` | 结果分析工具 | 实验总结 |
+| `model_modular.py` | 核心模型代码 | 了解模型 |
 
 ---
 
-# ❓ 常见问题
+## 💡 常用命令速记
 
-**Q: 内存不足怎么办？**
-编辑 `configs/my_config.yaml`，减小 `batch_size` 或 `num_select`
-
-**Q: 想用多GPU加速？**
 ```bash
-python run_ablation_study.py --gpus 0 1 2 3
-```
+# 快速验证 (5个epoch快速测试)
+python train_and_eval.py --method baseline_mean --epochs 5
 
-**Q: 想看详细结果？**
-```bash
-python analyze_results.py --detailed --comparison
-```
+# 标准训练 (50个epoch完整训练)
+python train_and_eval.py --method full_model --epochs 50
 
-**Q: 想生成论文数据？**
-```bash
-python analyze_results.py --csv --report
+# 4并发的方法对比
+python grid_search_parallel.py -m all -e 30 -j 4
+
+# 显示性能排名
+python analyze_results.py --summary
 ```
 
 ---
 
-# 🔗 核心链接
+## 🎓 6种模型方法简介
 
-| 文档 | 场景 |
-|------|------|
-| [QUICK_START.md](QUICK_START.md) | 快速参考 |
-| [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) | 全面理解 |
-| [ABLATION_GUIDE.md](ABLATION_GUIDE.md) | 详细指南 |
+1. **baseline_mean** - 直接平均 (最简单) ⭐
+2. **baseline_attention** - 注意力平均
+3. **selector_mlp** - MLP选择器
+4. **selector_slot** - Slot Attention选择器
+5. **fuser_attention** - 注意力融合器
+6. **full_model** - 完整模型 (最强) ⭐⭐
 
----
-
-# ✅ 项目状态
-
-- ✅ 代码: 完成 (1900+ 行)
-- ✅ 文档: 完整 (50+ 页)
-- ✅ 实验: 就绪 (5组预定义)
-- ✅ 分析: 自动化 (一键生成)
-- ✅ 发表: 准备完毕
+> 💡 **建议**: 先用`baseline_mean`验证环境，再试`full_model`追求最优性能
 
 ---
 
-**更多帮助**：查看 [QUICK_START.md](QUICK_START.md)
-**深入学习**：查看 [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md)
-**详细指南**：查看 [ABLATION_GUIDE.md](ABLATION_GUIDE.md)
+## ❓ 需要帮助？
 
-🎉 开始您的消融研究吧！
+📖 详细文档: 查看 `PROJECT_SUMMARY.md`
+🔧 网格搜索: 查看 `GRID_SEARCH_GUIDE.md`
+
+---
+
+**就这么简单！现在开始你的第一个实验吧** 🚀

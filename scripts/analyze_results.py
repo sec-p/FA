@@ -1,348 +1,273 @@
 """
-Evaluation and Comparison Script for Ablation Study Results
-Analyzes and visualizes results from different experiment groups.
+Training Results Analysis Tool
+Analyze and compare results from different methods and seeds.
 """
 
-import json
 import os
-import sys
+import json
+import argparse
+import numpy as np
 from pathlib import Path
 from typing import Dict, List, Tuple
-import numpy as np
+from collections import defaultdict
 
 
 class ResultsAnalyzer:
-    """Analyze and compare ablation study results."""
+    """Analyze training results."""
     
-    def __init__(self, results_dir: str = './ablation_results'):
+    def __init__(self, results_dir: str = 'results'):
         self.results_dir = results_dir
-        self.results_file = os.path.join(results_dir, 'ablation_results.json')
-        self.results = self._load_results()
+        self.all_results = self._load_all_results()
     
-    def _load_results(self) -> Dict:
-        """Load results from JSON file."""
-        if not os.path.exists(self.results_file):
-            print(f"Error: Results file not found at {self.results_file}")
-            return {}
+    def _load_all_results(self) -> Dict:
+        """Load all results from result directories."""
+        all_results = defaultdict(lambda: defaultdict(list))
         
-        with open(self.results_file, 'r') as f:
-            return json.load(f)
-    
-    def print_summary(self):
-        """Print summary of all experiments."""
-        if not self.results:
-            print("No results found.")
-            return
+        if not os.path.exists(self.results_dir):
+            print(f"Results directory not found: {self.results_dir}")
+            return all_results
         
-        print("\n" + "="*80)
-        print("ABLATION STUDY SUMMARY")
-        print("="*80)
-        print(f"\n{'Group':<15} {'Name':<40} {'Accuracy':<12} {'Std Dev':<10}")
-        print("-"*80)
-        
-        for group_key, group_data in sorted(self.results.items()):
-            name = group_data.get('name', 'Unknown')[:38]
-            mean_acc = group_data.get('mean_test_acc', 0.0) * 100
-            std_acc = group_data.get('std_test_acc', 0.0) * 100
-            
-            print(f"{group_key:<15} {name:<40} {mean_acc:>6.2f}%    ±{std_acc:<7.2f}%")
-        
-        print("-"*80)
-    
-    def print_detailed_results(self):
-        """Print detailed results for each group."""
-        if not self.results:
-            print("No results found.")
-            return
-        
-        print("\n" + "="*80)
-        print("DETAILED RESULTS")
-        print("="*80)
-        
-        for group_key, group_data in self.results.items():
-            print(f"\n{group_key.upper()}: {group_data['name']}")
-            print("-"*80)
-            
-            seeds_data = group_data.get('seeds', {})
-            for seed, seed_result in sorted(seeds_data.items(), key=lambda x: int(x[0])):
-                status = seed_result.get('status', 'unknown')
+        # Find all results.json files
+        for root, dirs, files in os.walk(self.results_dir):
+            if 'results.json' in files:
+                results_file = os.path.join(root, 'results.json')
                 
-                if status == 'completed':
-                    acc = seed_result['metrics'].get('best_test_acc', 0.0) * 100
-                    print(f"  Seed {seed:<3}: {acc:>6.2f}% ✓")
-                else:
-                    print(f"  Seed {seed:<3}: {status}")
-            
-            if 'mean_test_acc' in group_data:
-                mean = group_data['mean_test_acc'] * 100
-                std = group_data['std_test_acc'] * 100
-                completed = group_data['num_completed']
-                total = len(seeds_data)
-                print(f"  {'─'*40}")
-                print(f"  Mean: {mean:.2f}% ± {std:.2f}% ({completed}/{total})")
-    
-    def get_best_group(self) -> Tuple[str, float]:
-        """Get best performing group."""
-        if not self.results:
-            return None, 0.0
-        
-        best_group = None
-        best_acc = -1
-        
-        for group_key, group_data in self.results.items():
-            mean_acc = group_data.get('mean_test_acc', 0.0)
-            if mean_acc > best_acc:
-                best_acc = mean_acc
-                best_group = group_key
-        
-        return best_group, best_acc * 100
-    
-    def get_improvement_over_baseline(self) -> Dict[str, float]:
-        """Calculate improvement over baseline."""
-        if 'baseline' not in self.results:
-            print("Warning: Baseline group not found")
-            return {}
-        
-        baseline_acc = self.results['baseline'].get('mean_test_acc', 0.0)
-        improvements = {}
-        
-        for group_key, group_data in self.results.items():
-            if group_key != 'baseline':
-                mean_acc = group_data.get('mean_test_acc', 0.0)
-                improvement = (mean_acc - baseline_acc) * 100
-                improvements[group_key] = improvement
-        
-        return improvements
-    
-    def print_comparison(self):
-        """Print comparison with baseline."""
-        print("\n" + "="*80)
-        print("COMPARISON WITH BASELINE")
-        print("="*80)
-        
-        if 'baseline' not in self.results:
-            print("Baseline group not found.")
-            return
-        
-        baseline_acc = self.results['baseline'].get('mean_test_acc', 0.0) * 100
-        baseline_std = self.results['baseline'].get('std_test_acc', 0.0) * 100
-        
-        print(f"\nBaseline: {baseline_acc:.2f}% ± {baseline_std:.2f}%\n")
-        print(f"{'Group':<15} {'Accuracy':<15} {'Improvement':<15} {'Status'}")
-        print("-"*80)
-        
-        improvements = self.get_improvement_over_baseline()
-        
-        for group_key, group_data in sorted(self.results.items()):
-            if group_key == 'baseline':
-                continue
-            
-            name = group_key
-            acc = group_data.get('mean_test_acc', 0.0) * 100
-            std = group_data.get('std_test_acc', 0.0) * 100
-            
-            if group_key in improvements:
-                improvement = improvements[group_key]
-                symbol = "↑" if improvement > 0 else "↓" if improvement < 0 else "→"
-                print(f"{name:<15} {acc:>6.2f}% ±{std:>5.2f}%  "
-                     f"{symbol} {abs(improvement):>6.2f}%")
-            else:
-                print(f"{name:<15} {acc:>6.2f}% ±{std:>5.2f}%")
-        
-        print("-"*80)
-    
-    def generate_markdown_table(self) -> str:
-        """Generate markdown table for publication."""
-        if not self.results:
-            return "No results available."
-        
-        lines = [
-            "## Ablation Study Results\n",
-            "| Group | Architecture | Accuracy (%) | Std (%) | Improvement |\n",
-            "|-------|--------------|--------------|---------|-------------|\n"
-        ]
-        
-        improvements = self.get_improvement_over_baseline()
-        
-        for group_key, group_data in sorted(self.results.items()):
-            name = group_data.get('name', 'Unknown')
-            acc = group_data.get('mean_test_acc', 0.0) * 100
-            std = group_data.get('std_test_acc', 0.0) * 100
-            
-            if group_key == 'baseline':
-                improvement = "Baseline"
-            elif group_key in improvements:
-                improvement = f"+{improvements[group_key]:.2f}%"
-            else:
-                improvement = "N/A"
-            
-            lines.append(f"| {group_key} | {name} | {acc:.2f} | {std:.2f} | {improvement} |\n")
-        
-        return "".join(lines)
-    
-    def save_markdown_report(self, output_path: str = None):
-        """Save detailed markdown report."""
-        if output_path is None:
-            output_path = os.path.join(self.results_dir, 'ANALYSIS_REPORT.md')
-        
-        with open(output_path, 'w') as f:
-            f.write("# Ablation Study - Detailed Analysis Report\n\n")
-            
-            # Best group
-            best_group, best_acc = self.get_best_group()
-            f.write(f"## Best Performing Group\n\n")
-            f.write(f"**{best_group}**: {best_acc:.2f}%\n\n")
-            
-            # Summary table
-            f.write(self.generate_markdown_table())
-            f.write("\n")
-            
-            # Detailed results
-            f.write("## Detailed Results by Group\n\n")
-            
-            for group_key, group_data in sorted(self.results.items()):
-                f.write(f"### {group_key.upper()}\n\n")
-                f.write(f"**Name**: {group_data.get('name', 'Unknown')}\n\n")
-                
-                seeds_data = group_data.get('seeds', {})
-                f.write("| Seed | Status | Accuracy |\n")
-                f.write("|------|--------|----------|\n")
-                
-                for seed in sorted(seeds_data.keys(), key=lambda x: int(x)):
-                    seed_result = seeds_data[seed]
-                    status = seed_result.get('status', 'unknown')
+                # Extract method and seed from path
+                # Path format: results/method_seed_timestamp/results.json
+                path_parts = root.split(os.sep)
+                if len(path_parts) >= 2:
+                    dir_name = path_parts[-1]
+                    parts = dir_name.rsplit('_', 2)  # Split from right to separate timestamp
                     
-                    if status == 'completed':
-                        acc = seed_result['metrics'].get('best_test_acc', 0.0) * 100
-                        f.write(f"| {seed} | ✓ | {acc:.2f}% |\n")
-                    else:
-                        f.write(f"| {seed} | ✗ {status} | N/A |\n")
-                
-                if 'mean_test_acc' in group_data:
-                    mean = group_data['mean_test_acc'] * 100
-                    std = group_data['std_test_acc'] * 100
-                    f.write(f"\n**Mean**: {mean:.2f}% ± {std:.2f}%\n\n")
+                    if len(parts) >= 2:
+                        method = parts[0]
+                        seed = parts[1]
+                        
+                        try:
+                            with open(results_file, 'r') as f:
+                                results = json.load(f)
+                            all_results[method][seed] = results
+                        except Exception as e:
+                            print(f"Error loading {results_file}: {e}")
         
-        print(f"✓ Report saved to {output_path}")
+        return all_results
     
-    def export_csv(self, output_path: str = None) -> str:
-        """Export results as CSV."""
-        if output_path is None:
-            output_path = os.path.join(self.results_dir, 'ablation_results.csv')
+    def show_latest(self):
+        """Show latest result."""
+        if not self.all_results:
+            print("No results found.")
+            return
         
-        lines = ["Group,Name,Mean_Accuracy,Std_Dev,Completed_Seeds,Total_Seeds\n"]
+        # Find latest results
+        latest_method = max(self.all_results.keys(), 
+                           key=lambda m: max([max([len(r) for r in self.all_results[m].values()]) 
+                                            for seed, results in self.all_results[m].items()]))
         
-        for group_key, group_data in sorted(self.results.items()):
-            name = group_data.get('name', 'Unknown').replace(',', ';')
-            mean = group_data.get('mean_test_acc', 0.0) * 100
-            std = group_data.get('std_test_acc', 0.0) * 100
-            completed = group_data.get('num_completed', 0)
-            total = len(group_data.get('seeds', {}))
-            
-            lines.append(f"{group_key},{name},{mean:.2f},{std:.2f},{completed},{total}\n")
+        latest_seed = list(self.all_results[latest_method].keys())[-1]
+        results = self.all_results[latest_method][latest_seed]
         
-        with open(output_path, 'w') as f:
-            f.writelines(lines)
-        
-        print(f"✓ CSV exported to {output_path}")
-        return output_path
-    
-    def calculate_statistics(self) -> Dict:
-        """Calculate aggregate statistics."""
-        stats = {
-            'total_groups': len(self.results),
-            'completed_groups': 0,
-            'total_experiments': 0,
-            'completed_experiments': 0,
-            'mean_accuracy': 0.0,
-            'best_accuracy': 0.0,
-            'worst_accuracy': 1.0,
-        }
-        
-        accuracies = []
-        
-        for group_data in self.results.values():
-            if group_data.get('mean_test_acc'):
-                stats['completed_groups'] += 1
-                accuracies.append(group_data['mean_test_acc'])
-            
-            stats['total_experiments'] += len(group_data.get('seeds', {}))
-            stats['completed_experiments'] += group_data.get('num_completed', 0)
-        
-        if accuracies:
-            stats['mean_accuracy'] = np.mean(accuracies) * 100
-            stats['best_accuracy'] = max(accuracies) * 100
-            stats['worst_accuracy'] = min(accuracies) * 100
-        
-        return stats
-    
-    def print_statistics(self):
-        """Print aggregate statistics."""
-        stats = self.calculate_statistics()
+        # Show final epoch
+        final_epoch = results[-1]
         
         print("\n" + "="*80)
-        print("AGGREGATE STATISTICS")
+        print(f"Latest Results: {latest_method} (seed={latest_seed})")
         print("="*80)
-        print(f"\nTotal Groups: {stats['total_groups']}")
-        print(f"Completed Groups: {stats['completed_groups']}/{stats['total_groups']}")
-        print(f"Total Experiments: {stats['total_experiments']}")
-        print(f"Completed: {stats['completed_experiments']}/{stats['total_experiments']}")
-        print(f"\nAccuracy Range: {stats['worst_accuracy']:.2f}% - {stats['best_accuracy']:.2f}%")
-        print(f"Mean Accuracy: {stats['mean_accuracy']:.2f}%")
+        print(f"\nFinal Epoch (Epoch {final_epoch['epoch']+1}):")
+        print(f"  Train Loss: {final_epoch['train_loss']:.4f}")
+        print(f"  Train Acc:  {final_epoch['train_acc']:.2f}%")
+        print(f"  ID Accuracy: {final_epoch['id_accuracy']:.2f}%")
+        print(f"\n  OOD Results:")
+        print(f"    sun397:       AUROC={final_epoch['sun397_auroc']:.2f}%, FPR95={final_epoch['sun397_fpr95']:.2f}%")
+        print(f"    dtd:          AUROC={final_epoch['dtd_auroc']:.2f}%, FPR95={final_epoch['dtd_fpr95']:.2f}%")
+        print(f"    eurosat:      AUROC={final_epoch['eurosat_auroc']:.2f}%, FPR95={final_epoch['eurosat_fpr95']:.2f}%")
+        print(f"    oxford_pets:  AUROC={final_epoch['oxford_pets_auroc']:.2f}%, FPR95={final_epoch['oxford_pets_fpr95']:.2f}%")
+        print(f"  Avg OOD AUROC: {final_epoch['avg_ood_auroc']:.2f}%")
+        print("="*80 + "\n")
+    
+    def compare_methods(self):
+        """Compare performance across methods."""
+        if not self.all_results:
+            print("No results found.")
+            return
+        
+        print("\n" + "="*80)
+        print("Method Comparison (Latest Epoch)")
+        print("="*80)
+        print(f"\n{'Method':<20} {'Seed':<6} {'ID Acc':<12} {'Avg AUROC':<12} {'Avg FPR95':<12}")
+        print("-"*80)
+        
+        for method in sorted(self.all_results.keys()):
+            for seed in sorted(self.all_results[method].keys()):
+                results = self.all_results[method][seed]
+                final = results[-1]
+                
+                id_acc = final['id_accuracy']
+                avg_auroc = final['avg_ood_auroc']
+                avg_fpr95 = final['avg_ood_fpr95']
+                
+                print(f"{method:<20} {seed:<6} {id_acc:>10.2f}% {avg_auroc:>10.2f}% {avg_fpr95:>10.2f}%")
+        
+        print("="*80 + "\n")
+    
+    def compare_seeds(self):
+        """Compare stability across seeds for each method."""
+        if not self.all_results:
+            print("No results found.")
+            return
+        
+        print("\n" + "="*80)
+        print("Seed Stability Analysis")
+        print("="*80)
+        
+        for method in sorted(self.all_results.keys()):
+            seeds_data = self.all_results[method]
+            
+            id_accs = []
+            aurocs = []
+            fpr95s = []
+            
+            for seed in sorted(seeds_data.keys()):
+                results = seeds_data[seed]
+                final = results[-1]
+                
+                id_accs.append(final['id_accuracy'])
+                aurocs.append(final['avg_ood_auroc'])
+                fpr95s.append(final['avg_ood_fpr95'])
+            
+            id_accs = np.array(id_accs)
+            aurocs = np.array(aurocs)
+            fpr95s = np.array(fpr95s)
+            
+            print(f"\n{method}:")
+            print(f"  ID Accuracy:    {id_accs.mean():.2f}% ± {id_accs.std():.2f}%")
+            print(f"  Avg OOD AUROC:  {aurocs.mean():.2f}% ± {aurocs.std():.2f}%")
+            print(f"  Avg OOD FPR95:  {fpr95s.mean():.2f}% ± {fpr95s.std():.2f}%")
+        
+        print("\n" + "="*80 + "\n")
+    
+    def show_summary(self):
+        """Generate comprehensive summary."""
+        if not self.all_results:
+            print("No results found.")
+            return
+        
+        print("\n" + "="*80)
+        print("COMPREHENSIVE SUMMARY")
+        print("="*80)
+        
+        # Aggregate results by method
+        method_stats = {}
+        
+        for method in sorted(self.all_results.keys()):
+            seeds_data = self.all_results[method]
+            
+            id_accs = []
+            aurocs = []
+            
+            for seed in sorted(seeds_data.keys()):
+                results = seeds_data[seed]
+                final = results[-1]
+                id_accs.append(final['id_accuracy'])
+                aurocs.append(final['avg_ood_auroc'])
+            
+            id_accs = np.array(id_accs)
+            aurocs = np.array(aurocs)
+            
+            method_stats[method] = {
+                'id_acc_mean': id_accs.mean(),
+                'id_acc_std': id_accs.std(),
+                'auroc_mean': aurocs.mean(),
+                'auroc_std': aurocs.std(),
+                'num_seeds': len(seeds_data),
+            }
+        
+        # Sort by average AUROC
+        sorted_methods = sorted(method_stats.items(), 
+                               key=lambda x: x[1]['auroc_mean'], 
+                               reverse=True)
+        
+        print("\n" + "Ranking by Average OOD AUROC:")
+        print(f"{'Rank':<6} {'Method':<25} {'ID Acc':<20} {'OOD AUROC':<20}")
+        print("-"*80)
+        
+        for rank, (method, stats) in enumerate(sorted_methods, 1):
+            id_acc_str = f"{stats['id_acc_mean']:.2f}% ± {stats['id_acc_std']:.2f}%"
+            auroc_str = f"{stats['auroc_mean']:.2f}% ± {stats['auroc_std']:.2f}%"
+            print(f"{rank:<6} {method:<25} {id_acc_str:<20} {auroc_str:<20}")
+        
+        print("\n" + "="*80)
+        print("Summary Statistics:")
+        print("-"*80)
+        
+        best_method, best_stats = sorted_methods[0]
+        print(f"\n✓ Best Method: {best_method}")
+        print(f"  ID Accuracy:   {best_stats['id_acc_mean']:.2f}% ± {best_stats['id_acc_std']:.2f}%")
+        print(f"  Avg OOD AUROC: {best_stats['auroc_mean']:.2f}% ± {best_stats['auroc_std']:.2f}%")
+        print(f"  Seeds tested:  {best_stats['num_seeds']}")
+        
+        print("\n" + "="*80 + "\n")
+    
+    def export_csv(self, output_file: str = 'results_summary.csv'):
+        """Export results to CSV."""
+        import csv
+        
+        if not self.all_results:
+            print("No results found.")
+            return
+        
+        with open(output_file, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['Method', 'Seed', 'ID_Accuracy', 'Avg_OOD_AUROC', 'Avg_OOD_FPR95'])
+            
+            for method in sorted(self.all_results.keys()):
+                for seed in sorted(self.all_results[method].keys()):
+                    results = self.all_results[method][seed]
+                    final = results[-1]
+                    
+                    writer.writerow([
+                        method,
+                        seed,
+                        f"{final['id_accuracy']:.4f}",
+                        f"{final['avg_ood_auroc']:.4f}",
+                        f"{final['avg_ood_fpr95']:.4f}",
+                    ])
+        
+        print(f"Results exported to: {output_file}")
 
 
 def main():
-    import argparse
-    
-    parser = argparse.ArgumentParser(description='Analyze Ablation Study Results')
-    parser.add_argument('--results_dir', type=str, default='./ablation_results',
+    parser = argparse.ArgumentParser(description='Analyze training results')
+    parser.add_argument('--results-dir', type=str, default='results',
                        help='Results directory')
-    parser.add_argument('--summary', action='store_true', default=True,
-                       help='Print summary')
-    parser.add_argument('--detailed', action='store_true',
-                       help='Print detailed results')
-    parser.add_argument('--comparison', action='store_true',
-                       help='Print comparison with baseline')
-    parser.add_argument('--statistics', action='store_true',
-                       help='Print statistics')
-    parser.add_argument('--report', action='store_true',
-                       help='Generate markdown report')
-    parser.add_argument('--csv', action='store_true',
-                       help='Export as CSV')
-    parser.add_argument('--all', action='store_true',
-                       help='Print all analyses')
+    parser.add_argument('--latest', action='store_true',
+                       help='Show latest result')
+    parser.add_argument('--compare-methods', action='store_true',
+                       help='Compare methods')
+    parser.add_argument('--compare-seeds', action='store_true',
+                       help='Compare seeds (stability analysis)')
+    parser.add_argument('--summary', action='store_true',
+                       help='Show comprehensive summary')
+    parser.add_argument('--export-csv', type=str,
+                       help='Export results to CSV file')
     
     args = parser.parse_args()
     
     analyzer = ResultsAnalyzer(args.results_dir)
     
-    if not analyzer.results:
-        print(f"No results found in {args.results_dir}")
-        return
-    
-    print(f"\nLoading results from: {args.results_dir}")
-    
-    # Default: print summary
-    if args.summary or (not any([args.detailed, args.comparison, args.statistics, 
-                                args.report, args.csv, args.all])):
-        analyzer.print_summary()
-    
-    if args.detailed or args.all:
-        analyzer.print_detailed_results()
-    
-    if args.comparison or args.all:
-        analyzer.print_comparison()
-    
-    if args.statistics or args.all:
-        analyzer.print_statistics()
-    
-    if args.report or args.all:
-        analyzer.save_markdown_report()
-    
-    if args.csv or args.all:
-        analyzer.export_csv()
-    
-    print()
+    # If no action specified, show summary
+    if not any([args.latest, args.compare_methods, args.compare_seeds, args.summary, args.export_csv]):
+        analyzer.show_summary()
+    else:
+        if args.latest:
+            analyzer.show_latest()
+        if args.compare_methods:
+            analyzer.compare_methods()
+        if args.compare_seeds:
+            analyzer.compare_seeds()
+        if args.summary:
+            analyzer.show_summary()
+        if args.export_csv:
+            analyzer.export_csv(args.export_csv)
 
 
 if __name__ == '__main__':

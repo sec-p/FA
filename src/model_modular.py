@@ -185,9 +185,9 @@ class SparseSlotAttentionSelector(BaseSelector):
         
         # Learnable slot queries with orthogonal initialization
         # For orthogonal init, we need at least 2D tensor: (num_slots, input_dim)
-        self.slots = nn.Parameter(torch.empty(1, num_slots, input_dim))
-        nn.init.orthogonal_(self.slots.data.squeeze(0), gain=1.0)
-        self.slots.data = self.slots.data.unsqueeze(0)
+        self.slots = nn.Parameter(torch.empty(num_slots, input_dim))
+        nn.init.orthogonal_(self.slots.data, gain=1.0)
+        self.slots.data = self.slots.data.unsqueeze(0)  # Shape: (1, num_slots, input_dim)
         
         # Cross-attention components
         self.norm1 = nn.LayerNorm(input_dim)

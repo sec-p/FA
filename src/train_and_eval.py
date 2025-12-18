@@ -418,7 +418,7 @@ class TrainEvalOrchestrator:
                 if isinstance(batch, dict):
                     images = batch['images'].to(self.device)
                 else:
-                    images, _ = batch
+                    images, _, _ = batch
                     images = images.to(self.device)
                 
                 output_dict = self.model(images)

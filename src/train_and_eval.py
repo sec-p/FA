@@ -107,43 +107,12 @@ class TrainEvalOrchestrator:
     def _apply_method_config(self, method: str):
         """Apply method-specific configuration.
         
-        For preset methods (baseline_mean, selector_mlp, etc.):
-            - Overrides selector_type and fuser_type
-        
-        For 'custom' method:
-            - Uses provided selector_type and fuser_type as-is
+        The method parameter is now just a name for identification purposes.
+        It no longer restricts the choice of selector_type and fuser_type.
         """
-        # Method configurations (selector_type:fuser_type)
-        METHODS = {
-            'baseline_mean': {'selector_type': None, 'fuser_type': 'mean'},
-            'baseline_attention': {'selector_type': None, 'fuser_type': 'query_attn'},
-            'selector_mlp': {'selector_type': 'mlp', 'fuser_type': 'mean'},
-            'selector_slot': {'selector_type': 'slot', 'fuser_type': 'mean'},
-            'fuser_attention': {'selector_type': 'mlp', 'fuser_type': 'query_attn'},
-            'full_model': {'selector_type': 'slot', 'fuser_type': 'self_attn'},
-            'custom': None,  # Use config file settings as-is, no preset overrides
-        }
-        
-        if method not in METHODS:
-            raise ValueError(f"Unknown method: {method}. Available: {list(METHODS.keys())}")
-        
-        method_cfg = METHODS[method]
-        
-        # If method_cfg is None, it's a custom method that uses provided settings
-        if method_cfg is None:
-            # Don't override settings for custom methods
-            pass
-        else:
-            # Apply preset method configuration, but only override when the
-            # preset provides a non-None value. A preset value of `None`
-            # means "use whatever was provided".
-            sel_type = method_cfg.get('selector_type', None)
-            fus_type = method_cfg.get('fuser_type', None)
-            if sel_type is not None:
-                self.selector_type = sel_type
-            # fuser_type often set for baselines (e.g. 'mean'), override if present
-            if fus_type is not None:
-                self.fuser_type = fus_type
+        # Method parameter is now just a name, no configuration is applied
+        # selector_type and fuser_type are used as provided directly
+        pass
     
     def _setup_logging(self) -> str:
         """Setup logging directory."""
@@ -603,20 +572,9 @@ class TrainEvalOrchestrator:
 
 def main():
     parser = argparse.ArgumentParser(description='Train and evaluate modular OOD detection')
-    # Method configurations (selector_type:fuser_type)
-    METHODS = {
-        'baseline_mean': {'selector_type': None, 'fuser_type': 'mean'},
-        'baseline_attention': {'selector_type': None, 'fuser_type': 'query_attn'},
-        'selector_mlp': {'selector_type': 'mlp', 'fuser_type': 'mean'},
-        'selector_slot': {'selector_type': 'slot', 'fuser_type': 'mean'},
-        'fuser_attention': {'selector_type': 'mlp', 'fuser_type': 'query_attn'},
-        'full_model': {'selector_type': 'slot', 'fuser_type': 'self_attn'},
-        'custom': None,  # Use config file settings as-is, no preset overrides
-    }
     
-    parser.add_argument('--method', type=str, default='baseline_mean',
-                        choices=list(METHODS.keys()),
-                        help='Training method')
+    parser.add_argument('--method', type=str, default='custom',
+                        help='Training method name (just for identification)')
     parser.add_argument('--epochs', type=int, default=50,
                         help='Number of epochs')
     parser.add_argument('--lr', type=float, default=0.001,

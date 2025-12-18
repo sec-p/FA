@@ -86,9 +86,10 @@ class IdentitySelector(BaseSelector):
         """
         B, N, D = local_feats.shape
         device = local_feats.device
+        dtype = local_feats.dtype
         # Return all features without selection
         # For baseline, all features are considered foreground
-        mask = torch.ones(B, N, 1, device=device)
+        mask = torch.ones(B, N, 1, device=device, dtype=dtype)
         return local_feats, {}, mask
 
 
@@ -128,13 +129,14 @@ class MultiHeadMLPSelector(BaseSelector):
         """
         B, N, D = local_feats.shape
         device = local_feats.device
+        dtype = local_feats.dtype
         
         # 1. 打分: 计算 scores (B, N, H)
         head_scores = [scorer(local_feats) for scorer in self.scorers]  # num_heads × (B, N, 1)
         scores = torch.cat(head_scores, dim=-1)  # (B, N, num_heads)
         
         # 2. 生成硬 Mask
-        final_mask = torch.zeros(B, N, 1, device=device)
+        final_mask = torch.zeros(B, N, 1, device=device, dtype=dtype)
         k_per_head = max(1, self.num_select // self.num_heads)
         
         for h in range(self.num_heads):
@@ -142,7 +144,7 @@ class MultiHeadMLPSelector(BaseSelector):
             _, topk_indices_h = torch.topk(scores_h, k=k_per_head, dim=1)  # (B, k_per_head)
             # 将这些位置在final_mask中置为1.0 (取并集)
             for b in range(B):
-                final_mask[b, topk_indices_h[b], 0] = 1.0
+                final_mask[b, topk_indices_h[b], 0] = torch.tensor(1.0, device=device, dtype=dtype)
         
         # 3. 应用 STE (Straight-Through Estimator)
         scores_max = scores.max(dim=-1)[0].unsqueeze(-1)  # (B, N, 1)
@@ -247,7 +249,9 @@ class SparseSlotAttentionSelector(BaseSelector):
         mask = (mask_hard - attn_logits).detach() + attn_logits  # (B, num_slots, N)
         
         # 4. 加权: 计算注意力权重
-        attn = F.softmax(attn_logits * mask - 1e9 * (1 - mask).to(attn_logits.dtype), dim=-1)  # (B, num_slots, N)
+        # Ensure the large negative value uses the same dtype as attn_logits
+        neg_inf = torch.tensor(-1e9, device=device, dtype=attn_logits.dtype)
+        attn = F.softmax(attn_logits * mask + neg_inf * (1 - mask).to(attn_logits.dtype), dim=-1)  # (B, num_slots, N)
         
         # 计算 slot features
         slot_feats = torch.bmm(attn, local_feats)  # (B, num_slots, D)
@@ -315,7 +319,8 @@ class MeanPoolFuser(BaseFuser):
         Returns:
             final_feats: (B, D)
         """
-        return selected_feats.mean(dim=1)
+        dtype = selected_feats.dtype
+        return selected_feats.mean(dim=1).to(dtype)
 
 
 class QueryGuidedAttentionFuser(BaseFuser):
@@ -362,6 +367,13 @@ class QueryGuidedAttentionFuser(BaseFuser):
             # text_feats已经是(B, D)形状的查询
             query = text_feats.unsqueeze(1)  # (B, 1, D)
         
+        # Ensure query has the same dtype as selected_feats
+        query = query.to(selected_feats.dtype)
+        
+        # Ensure mha and norm layers use the same dtype as input
+        self.mha = self.mha.to(selected_feats.dtype)
+        self.norm = self.norm.to(selected_feats.dtype)
+        
         # Attention: query=text, key/value=selected_feats
         attn_out, _ = self.mha(query, selected_feats, selected_feats)  # (B, 1, D)
         
@@ -399,6 +411,10 @@ class SelfAttentionFuser(BaseFuser):
         Returns:
             final_feats: (B, D)
         """
+        # Ensure encoder_layer and norm are using the same dtype as input
+        self.encoder_layer = self.encoder_layer.to(selected_feats.dtype)
+        self.norm = self.norm.to(selected_feats.dtype)
+        
         # Self-attention over selected features
         attended = self.encoder_layer(selected_feats)  # (B, K, D)
         

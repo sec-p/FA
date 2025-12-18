@@ -214,10 +214,17 @@ class SparseSlotAttentionSelector(BaseSelector):
         """
         B, N, D = local_feats.shape
         device = local_feats.device
+        dtype = local_feats.dtype
+        
+        # 确保所有关键层使用相同的数据类型
+        self.norm1 = self.norm1.to(dtype)
+        self.norm2 = self.norm2.to(dtype)
+        self.mha = self.mha.to(dtype)
+        self.ff = self.ff.to(dtype)
         
         # 1. 计算 attention logits
         # Broadcast slots and ensure same dtype as local_feats
-        slots = self.slots.expand(B, -1, -1).to(local_feats.dtype)  # (B, num_slots, D)
+        slots = self.slots.expand(B, -1, -1).to(dtype)  # (B, num_slots, D)
         
         # 计算每个 slot 对每个 patch 的 attention
         local_feats_norm = F.normalize(local_feats, dim=-1)  # (B, N, D)
@@ -242,7 +249,9 @@ class SparseSlotAttentionSelector(BaseSelector):
         # 计算 slot features
         slot_feats = torch.bmm(attn, local_feats)  # (B, num_slots, D)
         
-        # 更新 slots
+        # 更新 slots - ensure compatible dtype
+        slots = slots.to(local_feats.dtype)
+        slot_feats = slot_feats.to(local_feats.dtype)
         slots_updated, _ = self.mha(self.norm1(slots), slot_feats, slot_feats)
         slots = slots + slots_updated
         
@@ -402,7 +411,7 @@ def compute_diversity_loss(selector_type: str, selector) -> torch.Tensor:
     """Extract diversity loss from selector if available."""
     if hasattr(selector, 'diversity_loss'):
         return selector.diversity_loss
-    return torch.tensor(0.0, device=next(selector.parameters()).device)
+    return torch.tensor(0.0, device=next(selector.parameters()).device, dtype=next(selector.parameters()).dtype)
 
 
 def compute_semantic_exclusion_loss(final_feat: torch.Tensor, 
@@ -470,7 +479,7 @@ def compute_redundancy_loss(selected_feats: torch.Tensor) -> torch.Tensor:
     gram = torch.stack(gram_list, dim=0)  # (B, K, K)
     
     # Create mask to zero out diagonal elements
-    diag_mask = torch.eye(K, device=device).unsqueeze(0).expand(B, -1, -1)
+    diag_mask = torch.eye(K, device=device, dtype=selected_feats.dtype).unsqueeze(0).expand(B, -1, -1)
     off_diag = gram * (1 - diag_mask)
     
     # Penalize non-diagonal elements

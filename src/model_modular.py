@@ -612,6 +612,9 @@ class ModularCustomCLIP(nn.Module):
         else:
             raise ValueError(f"Unknown selector_type: {selector_type}")
         
+        # Ensure selector uses the same dtype as CLIP model
+        self.selector = self.selector.to(self.dtype)
+        
         # Initialize fuser
         fuser_type = cfg.get('fuser_type', 'mean')
         
@@ -625,6 +628,9 @@ class ModularCustomCLIP(nn.Module):
             self.fuser = SelfAttentionFuser(self.feat_dim, num_heads, cfg)
         else:
             raise ValueError(f"Unknown fuser_type: {fuser_type}")
+        
+        # Ensure fuser uses the same dtype as CLIP model
+        self.fuser = self.fuser.to(self.dtype)
         
         # Get and cache text features
         self._cache_text_features()

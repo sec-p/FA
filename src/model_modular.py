@@ -719,6 +719,11 @@ class ModularCustomCLIP(nn.Module):
         """
         B, num_neg, D = neg_text_tokens.shape
         
+        # Convert to correct dtype
+        final_feats = final_feats.type(self.dtype)
+        pos_text_feats = pos_text_feats.type(self.dtype)
+        neg_text_tokens = neg_text_tokens.type(self.dtype)
+        
         # Normalize features
         final_feats_norm = final_feats / (final_feats.norm(dim=-1, keepdim=True) + 1e-8)  # (B, D)
         pos_text_norm = pos_text_feats / (pos_text_feats.norm(dim=-1, keepdim=True) + 1e-8)  # (B, D)

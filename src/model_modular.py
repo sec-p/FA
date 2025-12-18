@@ -216,8 +216,8 @@ class SparseSlotAttentionSelector(BaseSelector):
         device = local_feats.device
         
         # 1. 计算 attention logits
-        # Broadcast slots
-        slots = self.slots.expand(B, -1, -1)  # (B, num_slots, D)
+        # Broadcast slots and ensure same dtype as local_feats
+        slots = self.slots.expand(B, -1, -1).to(local_feats.dtype)  # (B, num_slots, D)
         
         # 计算每个 slot 对每个 patch 的 attention
         local_feats_norm = F.normalize(local_feats, dim=-1)  # (B, N, D)
@@ -231,13 +231,13 @@ class SparseSlotAttentionSelector(BaseSelector):
         threshold = threshold[:, :, -1:].expand(-1, -1, N)  # (B, num_slots, N)
         
         # 生成硬 mask
-        mask_hard = (attn_logits >= threshold).float()  # (B, num_slots, N)
+        mask_hard = (attn_logits >= threshold).to(attn_logits.dtype)  # (B, num_slots, N)
         
         # 3. 应用 STE
         mask = (mask_hard - attn_logits).detach() + attn_logits  # (B, num_slots, N)
         
         # 4. 加权: 计算注意力权重
-        attn = F.softmax(attn_logits * mask - 1e9 * (1 - mask), dim=-1)  # (B, num_slots, N)
+        attn = F.softmax(attn_logits * mask - 1e9 * (1 - mask).to(attn_logits.dtype), dim=-1)  # (B, num_slots, N)
         
         # 计算 slot features
         slot_feats = torch.bmm(attn, local_feats)  # (B, num_slots, D)
@@ -275,8 +275,8 @@ class SparseSlotAttentionSelector(BaseSelector):
         # Stack to get (B, num_slots, num_slots)
         gram = torch.stack(gram_list, dim=0)
         
-        # Create identity matrix for comparison
-        I = torch.eye(num_slots, device=slot_weights.device).unsqueeze(0).expand(B, -1, -1)
+        # Create identity matrix for comparison with same dtype as slot_weights
+        I = torch.eye(num_slots, device=slot_weights.device, dtype=slot_weights.dtype).unsqueeze(0).expand(B, -1, -1)
         
         # Penalize non-diagonal elements
         loss = (gram - I).abs().mean()

@@ -27,7 +27,7 @@ class BaseSelector(ABC, nn.Module):
         self.cfg = cfg or {}
     
     @abstractmethod
-    def forward(self, local_feats: torch.Tensor) -> Tuple[torch.Tensor, Dict]:
+    def forward(self, local_feats: torch.Tensor) -> Tuple[torch.Tensor, Dict, torch.Tensor]:
         """
         Args:
             local_feats: (B, N, D) local patch features
@@ -35,6 +35,7 @@ class BaseSelector(ABC, nn.Module):
         Returns:
             selected_feats: (B, K, D) selected features
             aux_loss: dict with auxiliary losses
+            mask: (B, N, 1) or (B, K, 1) mask indicating selected features
         """
         pass
 
@@ -49,11 +50,13 @@ class BaseFuser(ABC, nn.Module):
     
     @abstractmethod
     def forward(self, selected_feats: torch.Tensor, 
-                text_feats: Optional[torch.Tensor] = None) -> torch.Tensor:
+                text_feats: Optional[torch.Tensor] = None, 
+                labels: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
         Args:
             selected_feats: (B, K, D) selected features
             text_feats: (B, D) optional text features for guided fusion
+            labels: (B,) optional ground truth labels for training
         
         Returns:
             final_feats: (B, D) global representation
@@ -301,11 +304,13 @@ class MeanPoolFuser(BaseFuser):
     """Simple mean pooling of selected features."""
     
     def forward(self, selected_feats: torch.Tensor, 
-                text_feats: Optional[torch.Tensor] = None) -> torch.Tensor:
+                text_feats: Optional[torch.Tensor] = None, 
+                labels: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
         Args:
             selected_feats: (B, K, D)
             text_feats: unused
+            labels: unused
         
         Returns:
             final_feats: (B, D)
@@ -325,7 +330,8 @@ class QueryGuidedAttentionFuser(BaseFuser):
         self.norm = nn.LayerNorm(input_dim)
     
     def forward(self, selected_feats: torch.Tensor, 
-                text_feats: Optional[torch.Tensor] = None, labels: Optional[torch.Tensor] = None) -> torch.Tensor:
+                text_feats: Optional[torch.Tensor] = None, 
+                labels: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
         Use text features as query, selected features as key/value.
         
@@ -380,13 +386,15 @@ class SelfAttentionFuser(BaseFuser):
         self.norm = nn.LayerNorm(input_dim)
     
     def forward(self, selected_feats: torch.Tensor, 
-                text_feats: Optional[torch.Tensor] = None) -> torch.Tensor:
+                text_feats: Optional[torch.Tensor] = None, 
+                labels: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
         Apply transformer self-attention then mean pool.
         
         Args:
             selected_feats: (B, K, D)
             text_feats: unused
+            labels: unused
         
         Returns:
             final_feats: (B, D)
@@ -827,7 +835,7 @@ class ModularCustomCLIP(nn.Module):
             pos_text_feat = text_feats.mean(dim=0, keepdim=True).expand(B, -1)  # (B, D)
         
         # Feature fusion
-        final_feats = self.fuser(selected_feats, self.text_features, labels)  # (B, D)
+        final_feats = self.fuser(selected_feats, text_feats, labels)  # (B, D)
         
         # Normalize
         final_feats = final_feats / (final_feats.norm(dim=-1, keepdim=True) + 1e-8)

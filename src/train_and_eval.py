@@ -343,9 +343,15 @@ class TrainEvalOrchestrator:
                 for loss_name, loss_value in aux_losses.items():
                     loss += loss_value
             
-            # Backward pass
-            loss.backward()
-            self.optimizer.step()
+            # Check for NaN and prevent backward pass if NaN detected
+            if not torch.isnan(loss):
+                # Backward pass
+                loss.backward()
+                self.optimizer.step()
+            else:
+                # Skip this batch if loss is NaN
+                self.logger.log(f"WARNING: NaN loss detected at batch {batch_idx}, skipping backward pass")
+                self.optimizer.zero_grad()  # Ensure gradients are zeroed even if we skip backward
             
             # Track metrics
             total_loss += loss.item()
@@ -537,7 +543,7 @@ class TrainEvalOrchestrator:
             self.logger.log(f'  Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%')
             self.logger.log(f'  ID Accuracy: {eval_results["id_accuracy"]:.2f}%')
             
-            OOD_DATASETS = ['sun397', 'dtd', 'eurosat', 'oxford_pets']
+            OOD_DATASETS = ['iNaturalist', 'SUN', 'Places', 'Textures']
             for ood_dataset in OOD_DATASETS:
                 auroc = eval_results[f'{ood_dataset}_auroc']
                 fpr95 = eval_results[f'{ood_dataset}_fpr95']

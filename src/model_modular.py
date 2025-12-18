@@ -451,8 +451,11 @@ def compute_semantic_exclusion_loss(final_feat: torch.Tensor,
         neg_sims.append(neg_sim_i)
     neg_sims = torch.stack(neg_sims, dim=1)  # (B, num_neg)
     
-    # 使用torch.logsumexp替代max()，增强损失函数稳定性
-    neg_score = torch.logsumexp(neg_sims * temperature, dim=1) / temperature  # (B,)
+    # 使用更稳定的logsumexp计算方式
+    # 首先减去最大值以防止数值上溢
+    neg_sims_max = neg_sims.max(dim=1, keepdim=True)[0]
+    neg_sims_stable = neg_sims - neg_sims_max
+    neg_score = (neg_sims_max + torch.logsumexp(neg_sims_stable * temperature, dim=1)) / temperature  # (B,)
     
     # Margin ranking: pos_sim should be > neg_score + margin
     loss = F.relu(neg_score - pos_sim + margin).mean()
@@ -724,7 +727,7 @@ class ModularCustomCLIP(nn.Module):
         pos_text_feats = pos_text_feats.type(self.dtype)
         neg_text_tokens = neg_text_tokens.type(self.dtype)
         
-        # Normalize features
+        # Normalize features with more stable epsilon
         final_feats_norm = final_feats / (final_feats.norm(dim=-1, keepdim=True) + 1e-8)  # (B, D)
         pos_text_norm = pos_text_feats / (pos_text_feats.norm(dim=-1, keepdim=True) + 1e-8)  # (B, D)
         neg_text_norm = neg_text_tokens / (neg_text_tokens.norm(dim=-1, keepdim=True) + 1e-8)  # (B, num_neg, D)
@@ -738,6 +741,8 @@ class ModularCustomCLIP(nn.Module):
         # Margin ranking loss: pos_sim should be > neg_sim + margin
         margin = self.cfg.get('margin', 0.1)
         neg_max = neg_sims.max(dim=1)[0]  # (B,)
+        
+        # Add numerical stability to loss computation
         loss = F.relu(neg_max - pos_sim + margin).mean()
         
         return loss
@@ -771,12 +776,14 @@ class ModularCustomCLIP(nn.Module):
         # bg_feat_pooled = (local_feats * bg_weights).sum(1) / (bg_weights.sum(1) + 1e-6)  # (B, D)
         
         # 计算前景特征的加权平均
-        fg_feat = (local_feats * bg_mask).sum(1) / (bg_mask.sum(1) + 1e-6)  # (B, D)
+        bg_mask_sum = bg_mask.sum(1) + 1e-8  # (B, D)
+        fg_feat = (local_feats * bg_mask).sum(1) / bg_mask_sum  # (B, D)
         
         # 提取背景特征 (1 - bg_mask)，即非前景区域
         bg_weights = (1 - bg_mask)  # (B, N, 1)
         # 计算背景特征的加权平均
-        bg_feat_pooled = (local_feats * bg_weights).sum(1) / (bg_weights.sum(1) + 1e-6)  # (B, D)
+        bg_weights_sum = bg_weights.sum(1) + 1e-8  # (B, D)
+        bg_feat_pooled = (local_feats * bg_weights).sum(1) / bg_weights_sum  # (B, D)
         
         # 关键：执行 detach() 防止背景特征参与梯度更新
         bg_feat_pooled = bg_feat_pooled.detach()

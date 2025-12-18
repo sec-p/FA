@@ -116,8 +116,10 @@ class DatasetBase:
         self._val = val # validation data (optional)
         self._test = test # test data
 
-        self._num_classes = self.get_num_classes(train_x)
-        self._lab2cname, self._classnames = self.get_lab2cname(train_x)
+        # 优先使用test数据来确定类别数和类别名称（对于OOD数据集，train_x可能为空）
+        data_source = train_x if train_x and len(train_x) > 0 else test
+        self._num_classes = self.get_num_classes(data_source)
+        self._lab2cname, self._classnames = self.get_lab2cname(data_source)
 
     @property
     def train_x(self):
@@ -153,6 +155,8 @@ class DatasetBase:
         Args:
             data_source (list): a list of Datum objects. 即dataset
         """
+        if not data_source or len(data_source) == 0:
+            return 0
         label_set = set()
         for item in data_source:
             label_set.add(item.label)
@@ -164,6 +168,8 @@ class DatasetBase:
         Args:
             data_source (list): a list of Datum objects. 即dataset
         """
+        if not data_source or len(data_source) == 0:
+            return {}, []
         container = set()
         for item in data_source:
             container.add((item.label, item.classname))

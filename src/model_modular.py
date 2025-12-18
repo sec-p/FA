@@ -65,6 +65,30 @@ class BaseFuser(ABC, nn.Module):
 # PART 2: FEATURE SELECTORS
 # ============================================================================
 
+class IdentitySelector(BaseSelector):
+    """No-op selector that returns all features as-is (for baseline methods)."""
+    
+    def __init__(self, input_dim: int, num_select: int, cfg: Dict = None):
+        super().__init__(input_dim, num_select, cfg)
+    
+    def forward(self, local_feats: torch.Tensor) -> Tuple[torch.Tensor, Dict, torch.Tensor]:
+        """
+        Args:
+            local_feats: (B, N, D)
+        
+        Returns:
+            selected_feats: (B, N, D) - all features, unchanged
+            aux_loss: empty dict
+            mask: (B, N, 1) - all ones mask since all features are considered foreground
+        """
+        B, N, D = local_feats.shape
+        device = local_feats.device
+        # Return all features without selection
+        # For baseline, all features are considered foreground
+        mask = torch.ones(B, N, 1, device=device)
+        return local_feats, {}, mask
+
+
 class MultiHeadMLPSelector(BaseSelector):
     """
     Multi-head MLP-based feature selector.
@@ -89,65 +113,49 @@ class MultiHeadMLPSelector(BaseSelector):
         # Learnable head weights
         self.head_weights = nn.Parameter(torch.ones(num_heads) / num_heads)
     
-    def forward(self, local_feats: torch.Tensor) -> Tuple[torch.Tensor, Dict]:
+    def forward(self, local_feats: torch.Tensor) -> Tuple[torch.Tensor, Dict, torch.Tensor]:
         """
         Args:
             local_feats: (B, N, D)
         
         Returns:
-            selected_feats: (B, K, D)
+            selected_feats: (B, N, D) - features with STE mask applied
             aux_loss: dict with diversity loss
+            ste_mask: (B, N, 1) - STE mask for Mixup
         """
         B, N, D = local_feats.shape
         device = local_feats.device
         
-        # Get scores from each head: [(B, N, 1), ...]
+        # 1. 打分: 计算 scores (B, N, H)
         head_scores = [scorer(local_feats) for scorer in self.scorers]  # num_heads × (B, N, 1)
-        head_scores = torch.cat(head_scores, dim=-1)  # (B, N, num_heads)
+        scores = torch.cat(head_scores, dim=-1)  # (B, N, num_heads)
         
-        # Top-K per head
+        # 2. 生成硬 Mask
+        final_mask = torch.zeros(B, N, 1, device=device)
         k_per_head = max(1, self.num_select // self.num_heads)
-        selected_indices_per_head = []
         
         for h in range(self.num_heads):
-            scores_h = head_scores[:, :, h]  # (B, N)
-            _, indices_h = torch.topk(scores_h, k=k_per_head, dim=1)  # (B, k_per_head)
-            selected_indices_per_head.append(indices_h)
-        
-        # Union of indices to ensure diversity
-        all_indices = torch.cat(selected_indices_per_head, dim=1)  # (B, num_heads * k_per_head)
-        unique_indices = torch.unique(all_indices, dim=1)  # (B, K) where K <= num_heads * k_per_head
-        
-        # Pad or trim to exact K
-        current_k = unique_indices.shape[1]
-        if current_k < self.num_select:
-            # Pad with remaining indices
-            mask = torch.zeros(B, N, dtype=torch.bool, device=device)
-            mask.scatter_(1, unique_indices, True)
-            remaining = (~mask).nonzero(as_tuple=True)
-            padded_indices = torch.zeros(B, self.num_select - current_k, dtype=torch.long, device=device)
+            scores_h = scores[:, :, h]  # (B, N)
+            _, topk_indices_h = torch.topk(scores_h, k=k_per_head, dim=1)  # (B, k_per_head)
+            # 将这些位置在final_mask中置为1.0 (取并集)
             for b in range(B):
-                remaining_b = remaining[1][remaining[0] == b]
-                if len(remaining_b) > 0:
-                    padded_indices[b] = remaining_b[:self.num_select - current_k]
-            unique_indices = torch.cat([unique_indices, padded_indices], dim=1)
-        elif current_k > self.num_select:
-            unique_indices = unique_indices[:, :self.num_select]
+                final_mask[b, topk_indices_h[b], 0] = 1.0
         
-        # Gather selected features
-        selected_feats = torch.gather(
-            local_feats, 1,
-            unique_indices.unsqueeze(-1).expand(-1, -1, D)
-        )  # (B, K, D)
+        # 3. 应用 STE (Straight-Through Estimator)
+        scores_max = scores.max(dim=-1)[0].unsqueeze(-1)  # (B, N, 1)
+        ste_mask = (final_mask - scores_max).detach() + scores_max  # (B, N, 1)
+        
+        # 4. 应用 mask 到特征
+        selected_feats = local_feats * ste_mask  # (B, N, D)
         
         # Diversity loss: encourage different heads to select different patches
-        diversity_loss = self._compute_diversity_loss(head_scores, selected_indices_per_head)
+        diversity_loss = self._compute_diversity_loss(scores, None)
         
         aux_loss = {'diversity': diversity_loss}
-        return selected_feats, aux_loss
+        return selected_feats, aux_loss, ste_mask
     
     def _compute_diversity_loss(self, head_scores: torch.Tensor, 
-                               selected_indices_per_head: list) -> torch.Tensor:
+                               selected_indices_per_head: list = None) -> torch.Tensor:
         """Correlation loss between head score maps to encourage diversity."""
         # Flatten head scores: (B, N, num_heads) -> (B*N, num_heads)
         B, N, _ = head_scores.shape
@@ -190,73 +198,90 @@ class SparseSlotAttentionSelector(BaseSelector):
             nn.GELU(),
             nn.Linear(4 * input_dim, input_dim)
         )
+        
+        # Importance scorer: lightweight projection layer for better patch selection
+        self.importance_scorer = nn.Linear(input_dim, 1)
     
-    def forward(self, local_feats: torch.Tensor) -> Tuple[torch.Tensor, Dict]:
+    def forward(self, local_feats: torch.Tensor) -> Tuple[torch.Tensor, Dict, torch.Tensor]:
         """
         Args:
             local_feats: (B, N, D)
         
         Returns:
-            slot_feats: (B, K, D) weighted slot features
+            slot_feats: (B, num_slots, D) weighted slot features
             aux_loss: dict with orthogonality loss
+            img_space_mask: (B, N, 1) - all Slots mask的并集,用于告诉Mixup哪些是前景
         """
         B, N, D = local_feats.shape
         device = local_feats.device
         
+        # 1. 计算 attention logits
         # Broadcast slots
         slots = self.slots.expand(B, -1, -1)  # (B, num_slots, D)
         
-        # Top-K masking: select top-K patches based on importance
-        importance = (local_feats ** 2).sum(dim=-1)  # (B, N)
-        _, top_k_indices = torch.topk(importance, k=self.num_select, dim=1)  # (B, K)
+        # 计算每个 slot 对每个 patch 的 attention
+        local_feats_norm = F.normalize(local_feats, dim=-1)  # (B, N, D)
+        slots_norm = F.normalize(slots, dim=-1)  # (B, num_slots, D)
+        attn_logits = torch.bmm(slots_norm, local_feats_norm.transpose(1, 2))  # (B, num_slots, N)
         
-        # Create mask for top-K patches
-        mask = torch.zeros(B, N, dtype=torch.bool, device=device)
-        mask.scatter_(1, top_k_indices, True)
+        # 2. 生成硬 Mask
+        # 找到 Top-K 的阈值
+        k = self.num_select
+        threshold, _ = torch.topk(attn_logits, k=k, dim=-1, sorted=True)
+        threshold = threshold[:, :, -1:].expand(-1, -1, N)  # (B, num_slots, N)
         
-        # Apply sparse attention only to top-K patches
-        local_feats_sparse = local_feats[mask].reshape(B, self.num_select, D)  # (B, K, D)
+        # 生成硬 mask
+        mask_hard = (attn_logits >= threshold).float()  # (B, num_slots, N)
         
-        # Slot attention: update slots via cross-attention
-        slots_norm = self.norm1(slots)
-        slots_updated, _ = self.mha(slots_norm, local_feats_sparse, local_feats_sparse)
+        # 3. 应用 STE
+        mask = (mask_hard - attn_logits).detach() + attn_logits  # (B, num_slots, N)
+        
+        # 4. 加权: 计算注意力权重
+        attn = F.softmax(attn_logits * mask - 1e9 * (1 - mask), dim=-1)  # (B, num_slots, N)
+        
+        # 计算 slot features
+        slot_feats = torch.bmm(attn, local_feats)  # (B, num_slots, D)
+        
+        # 更新 slots
+        slots_updated, _ = self.mha(self.norm1(slots), slot_feats, slot_feats)
         slots = slots + slots_updated
         
-        # Feed-forward
         slots_ff = self.ff(self.norm2(slots))
         slots = slots + slots_ff
         
-        # Compute slot weights (soft assignment)
-        slot_logits = torch.bmm(slots, local_feats_sparse.transpose(1, 2))  # (B, num_slots, K)
-        slot_weights = F.softmax(slot_logits, dim=2)  # (B, num_slots, K)
-        
-        # Weighted sum of patches per slot
-        slot_feats = torch.bmm(slot_weights, local_feats_sparse)  # (B, num_slots, D)
+        # 5. 生成 img_space_mask (所有 Slots mask 的并集)
+        img_space_mask = mask_hard.max(dim=1)[0].unsqueeze(-1)  # (B, N, 1)
         
         # Orthogonality loss: encourage different slots to focus on different regions
-        ortho_loss = self._compute_orthogonality_loss(slots)
+        # Use slot_weights (attention maps) instead of slots themselves
+        ortho_loss = self._compute_orthogonality_loss(attn)
         
         aux_loss = {'orthogonality': ortho_loss}
-        return slot_feats, aux_loss
+        return slots, aux_loss, img_space_mask
     
-    def _compute_orthogonality_loss(self, slots: torch.Tensor) -> torch.Tensor:
-        """Cosine similarity between slots (force orthogonality)."""
-        # Normalize slots
-        slots_norm = F.normalize(slots, dim=-1)  # (B, num_slots, D)
+    def _compute_orthogonality_loss(self, slot_weights: torch.Tensor) -> torch.Tensor:
+        """Orthogonality loss on attention maps to prevent overlapping attention."""
+        # slot_weights shape: (B, num_slots, K)
+        B, num_slots, K = slot_weights.shape
         
-        # Pairwise cosine similarity
-        sim = torch.bmm(slots_norm, slots_norm.transpose(1, 2))  # (B, num_slots, num_slots)
-        
-        # Loss = sum of off-diagonal similarities
-        B, num_slots = sim.shape[0], sim.shape[1]
-        ortho_loss = 0.0
+        # Compute Gram matrix for each sample in batch
+        gram_list = []
         for b in range(B):
-            sim_b = sim[b]
-            sim_b.fill_diagonal_(0)
-            ortho_loss += sim_b.abs().mean()
-        ortho_loss = ortho_loss / B
+            # For each sample, compute gram matrix of shape (num_slots, num_slots)
+            weights_b = slot_weights[b]  # (num_slots, K)
+            gram_b = torch.mm(weights_b, weights_b.T)  # (num_slots, num_slots)
+            gram_list.append(gram_b)
         
-        return ortho_loss
+        # Stack to get (B, num_slots, num_slots)
+        gram = torch.stack(gram_list, dim=0)
+        
+        # Create identity matrix for comparison
+        I = torch.eye(num_slots, device=slot_weights.device).unsqueeze(0).expand(B, -1, -1)
+        
+        # Penalize non-diagonal elements
+        loss = (gram - I).abs().mean()
+        
+        return loss
 
 
 # ============================================================================
@@ -291,13 +316,14 @@ class QueryGuidedAttentionFuser(BaseFuser):
         self.norm = nn.LayerNorm(input_dim)
     
     def forward(self, selected_feats: torch.Tensor, 
-                text_feats: Optional[torch.Tensor] = None) -> torch.Tensor:
+                text_feats: Optional[torch.Tensor] = None, labels: Optional[torch.Tensor] = None) -> torch.Tensor:
         """
         Use text features as query, selected features as key/value.
         
         Args:
             selected_feats: (B, K, D)
-            text_feats: (B, D) query
+            text_feats: (num_classes, D) text features for all classes or (B, D) query
+            labels: (B,) optional ground truth labels for training
         
         Returns:
             final_feats: (B, D)
@@ -307,8 +333,19 @@ class QueryGuidedAttentionFuser(BaseFuser):
         
         B, K, D = selected_feats.shape
         
-        # Reshape text features as single query token
-        query = text_feats.unsqueeze(1)  # (B, 1, D)
+        # 检查text_feats的形状，如果是(num_classes, D)，则需要根据训练/推理情况处理
+        if text_feats.dim() == 2 and text_feats.shape[0] != B:
+            # text_feats是(num_classes, D)形状
+            if self.training and labels is not None:
+                # 训练时使用标签指导的文本特征作为Query
+                query = text_feats[labels].unsqueeze(1)  # (B, 1, D)
+            else:
+                # 推理时或无Label时，使用所有ID文本特征的平均值作为通用Query
+                generic_query = text_feats.mean(dim=0, keepdim=True)  # (1, D)
+                query = generic_query.expand(B, 1, -1)  # (B, 1, D)
+        else:
+            # text_feats已经是(B, D)形状的查询
+            query = text_feats.unsqueeze(1)  # (B, 1, D)
         
         # Attention: query=text, key/value=selected_feats
         attn_out, _ = self.mha(query, selected_feats, selected_feats)  # (B, 1, D)
@@ -371,7 +408,7 @@ def compute_diversity_loss(selector_type: str, selector) -> torch.Tensor:
 def compute_semantic_exclusion_loss(final_feat: torch.Tensor, 
                                    pos_text_feat: torch.Tensor,
                                    neg_text_feats: torch.Tensor,
-                                   margin: float = 0.1) -> torch.Tensor:
+                                   margin: float = 0.1, temperature: float = 1.0) -> torch.Tensor:
     """
     Margin ranking loss: final_feat should be closer to positive text 
     than to negative texts.
@@ -381,6 +418,7 @@ def compute_semantic_exclusion_loss(final_feat: torch.Tensor,
         pos_text_feat: (B, D)
         neg_text_feats: (B, num_neg, D)
         margin: margin for ranking loss
+        temperature: temperature for logsumexp softmax-like operation
     
     Returns:
         loss: scalar
@@ -396,10 +434,47 @@ def compute_semantic_exclusion_loss(final_feat: torch.Tensor,
         neg_sims.append(neg_sim_i)
     neg_sims = torch.stack(neg_sims, dim=1)  # (B, num_neg)
     
-    # Margin ranking: pos_sim should be > neg_sim + margin
-    # Loss = max(0, neg_sim - pos_sim + margin)
-    neg_max = neg_sims.max(dim=1)[0]  # (B,)
-    loss = F.relu(neg_max - pos_sim + margin).mean()
+    # 使用torch.logsumexp替代max()，增强损失函数稳定性
+    neg_score = torch.logsumexp(neg_sims * temperature, dim=1) / temperature  # (B,)
+    
+    # Margin ranking: pos_sim should be > neg_score + margin
+    loss = F.relu(neg_score - pos_sim + margin).mean()
+    
+    return loss
+
+
+def compute_redundancy_loss(selected_feats: torch.Tensor) -> torch.Tensor:
+    """
+    Redundancy loss: penalize non-diagonal elements in the Gram matrix of selected features.
+    Encourages diversity among selected features.
+    
+    Args:
+        selected_feats: (B, K, D) selected patch features
+    
+    Returns:
+        loss: scalar
+    """
+    B, K, D = selected_feats.shape
+    device = selected_feats.device
+    
+    # Normalize features
+    selected_feats_norm = selected_feats / (selected_feats.norm(dim=-1, keepdim=True) + 1e-8)
+    
+    # Compute Gram matrix for each sample
+    gram_list = []
+    for b in range(B):
+        feats_b = selected_feats_norm[b]  # (K, D)
+        gram_b = torch.mm(feats_b, feats_b.T)  # (K, K)
+        gram_list.append(gram_b)
+    
+    gram = torch.stack(gram_list, dim=0)  # (B, K, K)
+    
+    # Create mask to zero out diagonal elements
+    diag_mask = torch.eye(K, device=device).unsqueeze(0).expand(B, -1, -1)
+    off_diag = gram * (1 - diag_mask)
+    
+    # Penalize non-diagonal elements
+    loss = off_diag.abs().mean()
     
     return loss
 
@@ -508,7 +583,10 @@ class ModularCustomCLIP(nn.Module):
         selector_type = cfg.get('selector_type', 'mlp')
         num_select = cfg.get('num_select', 49)
         
-        if selector_type == 'mlp':
+        if selector_type is None:
+            # Baseline methods: no feature selection, use identity selector
+            self.selector = IdentitySelector(self.feat_dim, num_select, cfg)
+        elif selector_type == 'mlp':
             num_heads = cfg.get('num_heads_selector', 4)
             self.selector = MultiHeadMLPSelector(self.feat_dim, num_select, num_heads, cfg)
         elif selector_type == 'slot':
@@ -630,50 +708,59 @@ class ModularCustomCLIP(nn.Module):
         neg_sims = torch.einsum('bd,bnd->bn', final_feats_norm, neg_text_norm)  # (B, num_neg)
         
         # Margin ranking loss: pos_sim should be > neg_sim + margin
-        margin = 0.1
+        margin = self.cfg.get('margin', 0.1)
         neg_max = neg_sims.max(dim=1)[0]  # (B,)
         loss = F.relu(neg_max - pos_sim + margin).mean()
         
         return loss
     
     def compute_mixup_invariance_loss(self, selected_feats: torch.Tensor, 
-                                     bg_mask: Optional[torch.Tensor] = None,
-                                     labels: Optional[torch.Tensor] = None) -> torch.Tensor:
+                                     local_feats: torch.Tensor,
+                                     bg_mask: torch.Tensor,
+                                     labels: Optional[torch.Tensor] = None, 
+                                     alpha: float = 0.2) -> torch.Tensor:
         """
         Causal Mixup Invariance Loss: mixed features should maintain class predictions.
         
-        Logic: mixed_feat = selected_feat + (1-bg_mask) * shuffled_bg_feat
+        Logic: mixed_feat = fg_feat + alpha * shuffled_bg_feat
         
         Args:
-            selected_feats: (B, K, D) selected patch features
-            bg_mask: (B, K) or (B,) background mask for selective mixing
+            selected_feats: (B, N, D) selected patch features with STE mask applied
+            local_feats: (B, N, D) original patch features
+            bg_mask: (B, N, 1) - mask indicating foreground (1.0) and background (0.0)
             labels: (B,) optional ground truth labels
+            alpha: mixup parameter
         
         Returns:
             loss: scalar
         """
-        B, K, D = selected_feats.shape
-        device = selected_feats.device
+        B, N, D = local_feats.shape
+        device = local_feats.device
         
-        # Average selected features as foreground
-        fg_feat = selected_feats.mean(dim=1)  # (B, D)
+        # 1. 提取背景特征
+        # bg_weights = (1 - bg_mask)  # (B, N, 1)
+        # 计算背景特征的加权平均
+        # bg_feat_pooled = (local_feats * bg_weights).sum(1) / (bg_weights.sum(1) + 1e-6)  # (B, D)
         
-        # Create a random background feature by shuffling
+        # 计算前景特征的加权平均
+        fg_feat = (local_feats * bg_mask).sum(1) / (bg_mask.sum(1) + 1e-6)  # (B, D)
+        
+        # 提取背景特征 (1 - bg_mask)，即非前景区域
+        bg_weights = (1 - bg_mask)  # (B, N, 1)
+        # 计算背景特征的加权平均
+        bg_feat_pooled = (local_feats * bg_weights).sum(1) / (bg_weights.sum(1) + 1e-6)  # (B, D)
+        
+        # 关键：执行 detach() 防止背景特征参与梯度更新
+        bg_feat_pooled = bg_feat_pooled.detach()
+        
+        # 2. Shuffle 背景索引
         shuffle_idx = torch.randperm(B, device=device)
-        # Detach background features to prevent gradients flowing into background sources.
-        # This enforces the causal intervention: selector must learn to extract foreground,
-        # not adapt foreground to background changes.
-        bg_feat = fg_feat[shuffle_idx].detach()
+        shuffled_bg = bg_feat_pooled[shuffle_idx]  # (B, D)
         
-        # Create background mask if not provided
-        if bg_mask is None:
-            bg_mask = torch.ones(B, 1, device=device)
-        elif bg_mask.dim() == 1:
-            bg_mask = bg_mask.unsqueeze(1)  # (B, 1)
+        # 3. 混合：mixed_feat = fg_feat + alpha * shuffled_bg_feat
+        mixed_feat = fg_feat + alpha * shuffled_bg  # (B, D)
         
-        # Causal mixup: mixed_feat = fg_feat + (1-bg_mask) * shuffled_bg_feat
-        mixed_feat = fg_feat + (1.0 - bg_mask) * bg_feat  # (B, D)
-        
+        # 4. 计算 Loss
         # Normalize
         fg_feat_norm = fg_feat / (fg_feat.norm(dim=-1, keepdim=True) + 1e-8)
         mixed_feat_norm = mixed_feat / (mixed_feat.norm(dim=-1, keepdim=True) + 1e-8)
@@ -705,7 +792,7 @@ class ModularCustomCLIP(nn.Module):
             dict with:
                 logits: (B, num_classes)
                 aux_losses: dict of auxiliary losses
-                selected_feats: (B, K, D)
+                selected_feats: (B, N, D) with mask applied
                 final_feats: (B, D)
         """
         B = image.shape[0]
@@ -720,7 +807,7 @@ class ModularCustomCLIP(nn.Module):
         local_features = local_features / (local_features.norm(dim=-1, keepdim=True) + 1e-8)
         
         # Feature selection
-        selected_feats, sel_aux_loss = self.selector(local_features)  # (B, K, D), dict
+        selected_feats, sel_aux_loss, bg_mask = self.selector(local_features)  # (B, N, D), dict, (B, N, 1)
         
         # Get text features for guided fusion
         text_feats = self._text_features.type(self.dtype).to(device)  # (num_classes, D)
@@ -731,7 +818,7 @@ class ModularCustomCLIP(nn.Module):
             pos_text_feat = text_feats.mean(dim=0, keepdim=True).expand(B, -1)  # (B, D)
         
         # Feature fusion
-        final_feats = self.fuser(selected_feats, pos_text_feat)  # (B, D)
+        final_feats = self.fuser(selected_feats, self.text_features, labels)  # (B, D)
         
         # Normalize
         final_feats = final_feats / (final_feats.norm(dim=-1, keepdim=True) + 1e-8)
@@ -742,6 +829,12 @@ class ModularCustomCLIP(nn.Module):
         
         # Collect auxiliary losses
         aux_losses = sel_aux_loss.copy()
+        
+        # Redundancy loss: encourage diversity among selected features
+        if self.cfg.get('use_redundancy_loss', False):
+            redundancy_loss = compute_redundancy_loss(selected_feats)
+            lambda_redundancy = self.cfg.get('lambda_redundancy', 0.1)
+            aux_losses['redundancy'] = lambda_redundancy * redundancy_loss
         
         # LLM Negatives Loss (if provided)
         if negative_text_tokens is not None and self.cfg.get('use_llm_negatives', False):
@@ -775,7 +868,8 @@ class ModularCustomCLIP(nn.Module):
                     neg_b = per_sample_feats[b]
                     neg_tensor[b, :neg_b.shape[0], :] = neg_b
 
-                sem_excl_loss = compute_semantic_exclusion_loss(final_feats, pos_text_feat, neg_tensor)
+                margin = self.cfg.get('margin', 0.1)
+                sem_excl_loss = compute_semantic_exclusion_loss(final_feats, pos_text_feat, neg_tensor, margin=margin)
                 aux_losses['semantic_exclusion'] = sem_excl_loss
             else:
                 neg_indices = torch.arange(self.num_classes, device=device).unsqueeze(0)
@@ -784,12 +878,13 @@ class ModularCustomCLIP(nn.Module):
                 mask = torch.ones_like(neg_indices, dtype=torch.bool)
                 mask.scatter_(1, labels.unsqueeze(1), False)
                 neg_text_feats = text_feats[mask].reshape(B, -1, self.feat_dim)
-                sem_excl_loss = compute_semantic_exclusion_loss(final_feats, pos_text_feat, neg_text_feats)
+                margin = self.cfg.get('margin', 0.1)
+                sem_excl_loss = compute_semantic_exclusion_loss(final_feats, pos_text_feat, neg_text_feats, margin=margin)
                 aux_losses['semantic_exclusion'] = sem_excl_loss
         
         # Causal Mixup Invariance Loss (if enabled)
         if self.cfg.get('use_mixup_invariance', False):
-            mixup_loss = self.compute_mixup_invariance_loss(selected_feats, labels=labels)
+            mixup_loss = self.compute_mixup_invariance_loss(selected_feats, local_features, bg_mask, labels=labels)
             lambda_mixup = self.cfg.get('lambda_mixup', 0.1)
             aux_losses['mixup_invariance'] = lambda_mixup * mixup_loss
         
@@ -827,7 +922,7 @@ if __name__ == '__main__':
     }
     
     classnames = ["dog", "cat", "bird"]
-    clip_model, _ = clip_module.load("ViT-B/32", device=cfg['device'])
+    clip_model, _ = clip_module.load("ViT-B/16", device=cfg['device'])
     
     model = build_modular_model(cfg, classnames, clip_model)
     

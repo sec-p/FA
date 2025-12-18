@@ -44,6 +44,7 @@ class TrainingConfig:
         'selector_slot': {'selector_type': 'slot', 'fuser_type': 'mean'},
         'fuser_attention': {'selector_type': 'mlp', 'fuser_type': 'query_attn'},
         'full_model': {'selector_type': 'slot', 'fuser_type': 'self_attn'},
+        'custom': None,  # Use config file settings as-is, no preset overrides
     }
     
     # OOD datasets
@@ -60,7 +61,10 @@ class TrainEvalOrchestrator:
     """Orchestrates training and evaluation with per-epoch OOD testing."""
     
     def __init__(self, config_path: str, method: str, epochs: int, lr: float, 
-                 batch_size: int, seed: int, device: torch.device):
+                 batch_size: int, seed: int, device: torch.device,
+                 selector_type: str = None, fuser_type: str = None, id_dataset: str = None,
+                 root_path: str = None, shots: int = None, lambda_llm_negatives: float = None,
+                 lambda_mixup: float = None, margin: float = None):
         self.config_path = config_path
         self.method = method
         self.epochs = epochs
@@ -68,6 +72,18 @@ class TrainEvalOrchestrator:
         self.batch_size = batch_size
         self.seed = seed
         self.device = device
+        
+        # CLI overrides
+        self.selector_type = selector_type
+        self.fuser_type = fuser_type
+        self.id_dataset = id_dataset
+        self.root_path = root_path
+        self.shots = shots
+        
+        # Loss function coefficients (hyperparameters)
+        self.lambda_llm_negatives = lambda_llm_negatives
+        self.lambda_mixup = lambda_mixup
+        self.margin = margin
         
         # Setup random seeds
         self._setup_seed(seed)
@@ -79,6 +95,26 @@ class TrainEvalOrchestrator:
         self._apply_method_config(method)
         self.cfg['fine_tune_batch_size'] = batch_size
         self.cfg['learning_rate'] = lr
+        
+        # Apply CLI overrides if provided
+        if self.selector_type is not None:
+            self.cfg['selector_type'] = self.selector_type
+        if self.fuser_type is not None:
+            self.cfg['fuser_type'] = self.fuser_type
+        if self.id_dataset is not None:
+            self.cfg['id_dataset'] = self.id_dataset
+        if self.root_path is not None:
+            self.cfg['root_path'] = self.root_path
+        if self.shots is not None:
+            self.cfg['shots'] = self.shots
+        
+        # Apply loss function coefficients (hyperparameters) if provided
+        if self.lambda_llm_negatives is not None:
+            self.cfg['lambda_llm_negatives'] = self.lambda_llm_negatives
+        if self.lambda_mixup is not None:
+            self.cfg['lambda_mixup'] = self.lambda_mixup
+        if self.margin is not None:
+            self.cfg['margin'] = self.margin
         
         # Setup logging
         self.log_dir = self._setup_logging()
@@ -108,13 +144,35 @@ class TrainEvalOrchestrator:
             return yaml.load(f, Loader=yaml.FullLoader)
     
     def _apply_method_config(self, method: str):
-        """Apply method-specific configuration."""
+        """Apply method-specific configuration.
+        
+        For preset methods (baseline_mean, selector_mlp, etc.):
+            - Overrides config file selector_type and fuser_type
+        
+        For 'custom' method:
+            - Uses selector_type and fuser_type from config file as-is
+            - Allows full customization through config file
+        """
         if method not in TrainingConfig.METHODS:
             raise ValueError(f"Unknown method: {method}. Available: {list(TrainingConfig.METHODS.keys())}")
         
         method_cfg = TrainingConfig.METHODS[method]
-        self.cfg['selector_type'] = method_cfg['selector_type']
-        self.cfg['fuser_type'] = method_cfg['fuser_type']
+        
+        # If method_cfg is None, it's a custom method that uses config file settings
+        if method_cfg is None:
+            # Don't override config file settings for custom methods
+            pass
+        else:
+            # Apply preset method configuration, but only override when the
+            # preset provides a non-None value. A preset value of `None`
+            # means "use whatever the config file specifies".
+            sel_type = method_cfg.get('selector_type', None)
+            fus_type = method_cfg.get('fuser_type', None)
+            if sel_type is not None:
+                self.cfg['selector_type'] = sel_type
+            # fuser_type often set for baselines (e.g. 'mean'), override if present
+            if fus_type is not None:
+                self.cfg['fuser_type'] = fus_type
     
     def _setup_logging(self) -> str:
         """Setup logging directory."""
@@ -303,16 +361,28 @@ class TrainEvalOrchestrator:
             if isinstance(batch, dict):
                 images = batch['images'].to(self.device)
                 labels = batch['labels'].to(self.device)
+                # Check if we have negative text tokens for LLM Negatives Loss
+                negative_text_tokens = batch.get('negative_text_tokens', None)
+                if negative_text_tokens is not None:
+                    negative_text_tokens = negative_text_tokens.to(self.device)
             else:
                 images, labels = batch
                 images, labels = images.to(self.device), labels.to(self.device)
+                negative_text_tokens = None
             
             # Forward pass
             self.optimizer.zero_grad()
-            logits = self.model(images)
+            output_dict = self.model(images, labels=labels, negative_text_tokens=negative_text_tokens)
+            logits = output_dict['logits']
+            aux_losses = output_dict['aux_losses']
             
-            # Compute loss
+            # Compute total loss
             loss = F.cross_entropy(logits, labels)
+            
+            # Add auxiliary losses if any
+            if aux_losses:
+                for loss_name, loss_value in aux_losses.items():
+                    loss += loss_value
             
             # Backward pass
             loss.backward()
@@ -346,7 +416,8 @@ class TrainEvalOrchestrator:
                     images, labels = batch
                     images, labels = images.to(self.device), labels.to(self.device)
                 
-                logits = self.model(images)
+                output_dict = self.model(images, labels=labels)
+                logits = output_dict['logits']
                 _, predicted = logits.max(1)
                 correct += predicted.eq(labels).sum().item()
                 total += labels.size(0)
@@ -374,7 +445,8 @@ class TrainEvalOrchestrator:
                     images, _ = batch
                     images = images.to(self.device)
                 
-                logits = self.model(images)
+                output_dict = self.model(images)
+                logits = output_dict['logits']
                 scores = F.softmax(logits, dim=1).max(1)[0]
                 id_scores.extend(scores.cpu().numpy())
         
@@ -388,7 +460,8 @@ class TrainEvalOrchestrator:
                     images, _ = batch
                     images = images.to(self.device)
                 
-                logits = self.model(images)
+                output_dict = self.model(images)
+                logits = output_dict['logits']
                 scores = F.softmax(logits, dim=1).max(1)[0]
                 ood_scores.extend(scores.cpu().numpy())
         
@@ -541,37 +614,70 @@ class TrainEvalOrchestrator:
 def main():
     parser = argparse.ArgumentParser(description='Train and evaluate modular OOD detection')
     parser.add_argument('--config', type=str, default='configs/my_config.yaml',
-                       help='Path to config file')
+                        help='Path to config file')
+    parser.add_argument('--no-config', action='store_true',
+                        help='Run without a config file; all required settings must be passed via CLI')
     parser.add_argument('--method', type=str, default='baseline_mean',
-                       choices=list(TrainingConfig.METHODS.keys()),
-                       help='Training method')
+                        choices=list(TrainingConfig.METHODS.keys()),
+                        help='Training method')
     parser.add_argument('--epochs', type=int, default=TrainingConfig.DEFAULT_EPOCHS,
-                       help='Number of epochs')
+                        help='Number of epochs')
     parser.add_argument('--lr', type=float, default=TrainingConfig.DEFAULT_LR,
-                       help='Learning rate')
+                        help='Learning rate')
     parser.add_argument('--batch_size', type=int, default=TrainingConfig.DEFAULT_BATCH_SIZE,
-                       help='Batch size')
+                        help='Batch size')
     parser.add_argument('--seed', type=int, default=TrainingConfig.DEFAULT_SEED,
-                       help='Random seed')
+                        help='Random seed')
     parser.add_argument('--device', type=str, default='cuda',
-                       help='Device to use (cuda or cpu)')
+                        help='Device to use (cuda or cpu)')
+
+    # Additional CLI overrides so .sh can supply experiment parameters directly
+    parser.add_argument('--selector_type', type=str, default=None,
+                        help="Override selector_type (e.g. 'mlp','slot' or leave empty to use config)")
+    parser.add_argument('--fuser_type', type=str, default=None,
+                        help="Override fuser_type (e.g. 'mean','query_attn','self_attn')")
+    parser.add_argument('--id_dataset', type=str, default=None,
+                        help='ID dataset name (overrides config)')
+    parser.add_argument('--root_path', type=str, default=None,
+                        help='Root path for datasets (overrides config)')
+    parser.add_argument('--shots', type=int, default=None,
+                        help='Few-shot shots (overrides config)')
     
+    # Loss function coefficients (hyperparameters)
+    parser.add_argument('--lambda_llm_negatives', type=float, default=None,
+                        help='Weight for LLM Negatives Loss (overrides config)')
+    parser.add_argument('--lambda_mixup', type=float, default=None,
+                        help='Weight for Causal Mixup Invariance Loss (overrides config)')
+    parser.add_argument('--margin', type=float, default=None,
+                        help='Margin for ranking losses (Semantic Exclusion and LLM Negatives, overrides config)')
+
     args = parser.parse_args()
-    
+
     # Setup device
     device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
-    
-    # Create trainer
+
+    # Determine config path or None
+    config_path = None if args.no_config else args.config
+
+    # Create trainer: pass CLI overrides so the orchestrator uses them when provided
     trainer = TrainEvalOrchestrator(
-        config_path=args.config,
+        config_path=config_path,
         method=args.method,
         epochs=args.epochs,
         lr=args.lr,
         batch_size=args.batch_size,
         seed=args.seed,
-        device=device
+        device=device,
+        selector_type=args.selector_type,
+        fuser_type=args.fuser_type,
+        id_dataset=args.id_dataset,
+        root_path=args.root_path,
+        shots=args.shots,
+        lambda_llm_negatives=args.lambda_llm_negatives,
+        lambda_mixup=args.lambda_mixup,
+        margin=args.margin
     )
-    
+
     # Train and evaluate
     trainer.train_with_eval()
 

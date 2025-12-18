@@ -4,13 +4,13 @@ from .utils import Datum, DatasetBase, listdir_nohidden
 template = ['a photo of a {}.']
 
 
-class SUN397(DatasetBase):
+class INaturalist(DatasetBase):
 
-    dataset_dir = 'sun397'
+    dataset_dir = 'iNaturalist'
 
     def __init__(self, root, num_shots):
         self.dataset_dir = os.path.join(root, self.dataset_dir)
-        self.image_dir = os.path.join(self.dataset_dir, 'SUN397')
+        self.image_dir = self.dataset_dir
 
         self.template = template
 

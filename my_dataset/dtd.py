@@ -1,9 +1,5 @@
 import os
-import random
-
 from .utils import Datum, DatasetBase, listdir_nohidden
-from .oxford_pets import OxfordPets
-
 
 template = ['{} texture.']
 
@@ -15,17 +11,17 @@ class DescribableTextures(DatasetBase):
     def __init__(self, root, num_shots):
         self.dataset_dir = os.path.join(root, self.dataset_dir)
         self.image_dir = os.path.join(self.dataset_dir, 'images')
-        self.split_path = os.path.join(self.dataset_dir, 'split_zhou_DescribableTextures.json')
 
         self.template = template
 
-        train, val, test = OxfordPets.read_split(self.split_path, self.image_dir)
+        # 直接从图像目录加载数据，不使用JSON分割文件
+        train, val, test = self.read_and_split_data(self.image_dir)
         train = self.generate_fewshot_dataset(train, num_shots=num_shots)
 
         super().__init__(train_x=train, val=val, test=test)
     
-    @staticmethod
     def read_and_split_data(
+        self,
         image_dir,
         p_trn=0.5,
         p_val=0.2,
@@ -43,9 +39,6 @@ class DescribableTextures(DatasetBase):
         categories = [c for c in categories if c not in ignored]
         categories.sort()
 
-        p_tst = 1 - p_trn - p_val
-        print(f'Splitting into {p_trn:.0%} train, {p_val:.0%} val, and {p_tst:.0%} test')
-
         def _collate(ims, y, c):
             items = []
             for im in ims:
@@ -62,18 +55,9 @@ class DescribableTextures(DatasetBase):
             category_dir = os.path.join(image_dir, category)
             images = listdir_nohidden(category_dir)
             images = [os.path.join(category_dir, im) for im in images]
-            random.shuffle(images)
-            n_total = len(images)
-            n_train = round(n_total * p_trn)
-            n_val = round(n_total * p_val)
-            n_test = n_total - n_train - n_val
-            assert n_train > 0 and n_val > 0 and n_test > 0
-
-            if new_cnames is not None and category in new_cnames:
-                category = new_cnames[category]
-
-            train.extend(_collate(images[:n_train], label, category))
-            val.extend(_collate(images[n_train:n_train+n_val], label, category))
-            test.extend(_collate(images[n_train+n_val:], label, category))
+            
+            # 简单地将所有数据作为测试集（OOD场景通常不需要训练/验证集）
+            test.extend(_collate(images, label, category))
         
-        return train, val, test
+        # 对于OOD数据集，我们只需要测试集
+        return [], [], test

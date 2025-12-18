@@ -10,6 +10,8 @@ from .oxford_flowers import OxfordFlowers
 from .stanford_cars import StanfordCars
 from .imagenet import CustomImageNet
 from .imagenet import CustomImageNet100
+from .inaturalist import INaturalist
+from .places import Places
 
 dataset_list = {
                 "oxford_pets": OxfordPets,
@@ -23,7 +25,9 @@ dataset_list = {
                 "oxford_flowers": OxfordFlowers,
                 "stanford_cars": StanfordCars,
                 "imagenet": CustomImageNet,
-                "imagenet100": CustomImageNet100
+                "imagenet100": CustomImageNet100,
+                "inaturalist": INaturalist,
+                "places": Places
                 }
 
 

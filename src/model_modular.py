@@ -900,12 +900,13 @@ class ModularCustomCLIP(nn.Module):
                 sem_excl_loss = compute_semantic_exclusion_loss(final_feats, pos_text_feat, neg_tensor, margin=margin)
                 aux_losses['semantic_exclusion'] = sem_excl_loss
             else:
-                neg_indices = torch.arange(self.num_classes, device=device).unsqueeze(0)
-                neg_indices = neg_indices.expand(B, -1)
-                # Mask out positive class
-                mask = torch.ones_like(neg_indices, dtype=torch.bool)
-                mask.scatter_(1, labels.unsqueeze(1), False)
-                neg_text_feats = text_feats[mask].reshape(B, -1, self.feat_dim)
+                # Create a mask of shape [B, num_classes] to exclude positive class for each sample
+                mask = torch.ones(B, self.num_classes, dtype=torch.bool, device=device)
+                mask[torch.arange(B), labels] = False
+                
+                # Expand text_feats to [B, num_classes, feat_dim] and apply mask
+                expanded_text_feats = text_feats.unsqueeze(0).expand(B, -1, -1)
+                neg_text_feats = expanded_text_feats[mask].reshape(B, -1, self.feat_dim)
                 margin = self.cfg.get('margin', 0.1)
                 sem_excl_loss = compute_semantic_exclusion_loss(final_feats, pos_text_feat, neg_text_feats, margin=margin)
                 aux_losses['semantic_exclusion'] = sem_excl_loss

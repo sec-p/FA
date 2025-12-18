@@ -170,7 +170,7 @@ class TrainEvalOrchestrator:
         )
         
         # Setup OOD data loaders
-        OOD_DATASETS = ['sun397', 'dtd', 'eurosat', 'oxford_pets']
+        OOD_DATASETS = ['iNaturalist', 'SUN', 'Places', 'Textures']
         for ood_dataset in OOD_DATASETS:
             try:
                 ood_data = build_dataset(ood_dataset, self.root_path, -1)
@@ -323,9 +323,11 @@ class TrainEvalOrchestrator:
                 if negative_text_tokens is not None:
                     negative_text_tokens = negative_text_tokens.to(self.device)
             else:
-                images, labels = batch
+                # Data loader returns (images, labels, negative_text_tokens)
+                images, labels, negative_text_tokens = batch
                 images, labels = images.to(self.device), labels.to(self.device)
-                negative_text_tokens = None
+                if negative_text_tokens is not None:
+                    negative_text_tokens = negative_text_tokens.to(self.device)
             
             # Forward pass
             self.optimizer.zero_grad()
@@ -370,7 +372,8 @@ class TrainEvalOrchestrator:
                     images = batch['images'].to(self.device)
                     labels = batch['labels'].to(self.device)
                 else:
-                    images, labels = batch
+                    # Data loader returns (images, labels, negative_text_tokens)
+                    images, labels, _ = batch
                     images, labels = images.to(self.device), labels.to(self.device)
                 
                 output_dict = self.model(images, labels=labels)
@@ -399,7 +402,8 @@ class TrainEvalOrchestrator:
                 if isinstance(batch, dict):
                     images = batch['images'].to(self.device)
                 else:
-                    images, _ = batch
+                    # Data loader returns (images, labels, negative_text_tokens)
+                    images, _, _ = batch
                     images = images.to(self.device)
                 
                 output_dict = self.model(images)
@@ -469,7 +473,7 @@ class TrainEvalOrchestrator:
         # OOD evaluations
         ood_aurocs = []
         ood_fpr95s = []
-        OOD_DATASETS = ['sun397', 'dtd', 'eurosat', 'oxford_pets']
+        OOD_DATASETS = ['iNaturalist', 'SUN', 'Places', 'Textures']
         
         for ood_dataset in OOD_DATASETS:
             auroc, fpr95 = self.evaluate_ood_dataset(ood_dataset)

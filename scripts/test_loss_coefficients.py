@@ -37,21 +37,35 @@ def test_cli_args():
     sys.argv = ['train_and_eval.py'] + test_args
     
     try:
-        # Import the main function's parser logic
-        from src.train_and_eval import TrainingConfig
+        # Define the method configurations (copied from main function)
+        METHODS = {
+            'baseline_mean': {'selector_type': None, 'fuser_type': 'mean'},
+            'baseline_attention': {'selector_type': None, 'fuser_type': 'query_attn'},
+            'selector_mlp': {'selector_type': 'mlp', 'fuser_type': 'mean'},
+            'selector_slot': {'selector_type': 'slot', 'fuser_type': 'mean'},
+            'fuser_attention': {'selector_type': 'mlp', 'fuser_type': 'query_attn'},
+            'full_model': {'selector_type': 'slot', 'fuser_type': 'self_attn'},
+            'custom': None,  # Use config file settings as-is, no preset overrides
+        }
+        
+        # Define default parameters (copied from main function)
+        DEFAULT_EPOCHS = 50
+        DEFAULT_LR = 0.001
+        DEFAULT_BATCH_SIZE = 32
+        DEFAULT_SEED = 42
         
         # Recreate the parser here to avoid side effects
         parser = argparse.ArgumentParser(description='Train and evaluate modular OOD detection')
         parser.add_argument('--method', type=str, default='baseline_mean',
-                            choices=list(TrainingConfig.METHODS.keys()),
+                            choices=list(METHODS.keys()),
                             help='Training method')
-        parser.add_argument('--epochs', type=int, default=TrainingConfig.DEFAULT_EPOCHS,
+        parser.add_argument('--epochs', type=int, default=DEFAULT_EPOCHS,
                             help='Number of epochs')
-        parser.add_argument('--lr', type=float, default=TrainingConfig.DEFAULT_LR,
+        parser.add_argument('--lr', type=float, default=DEFAULT_LR,
                             help='Learning rate')
-        parser.add_argument('--batch_size', type=int, default=TrainingConfig.DEFAULT_BATCH_SIZE,
+        parser.add_argument('--batch_size', type=int, default=DEFAULT_BATCH_SIZE,
                             help='Batch size')
-        parser.add_argument('--seed', type=int, default=TrainingConfig.DEFAULT_SEED,
+        parser.add_argument('--seed', type=int, default=DEFAULT_SEED,
                             help='Random seed')
         parser.add_argument('--device', type=str, default='cuda',
                             help='Device to use (cuda or cpu)')

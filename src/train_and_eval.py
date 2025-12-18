@@ -32,28 +32,7 @@ from my_dataset.utils import build_data_loader
 from src.utils import Logger, cls_acc
 
 
-class TrainingConfig:
-    """Configuration for training and evaluation."""
-    
-    # Method configurations (selector_type:fuser_type)
-    METHODS = {
-        'baseline_mean': {'selector_type': None, 'fuser_type': 'mean'},
-        'baseline_attention': {'selector_type': None, 'fuser_type': 'query_attn'},
-        'selector_mlp': {'selector_type': 'mlp', 'fuser_type': 'mean'},
-        'selector_slot': {'selector_type': 'slot', 'fuser_type': 'mean'},
-        'fuser_attention': {'selector_type': 'mlp', 'fuser_type': 'query_attn'},
-        'full_model': {'selector_type': 'slot', 'fuser_type': 'self_attn'},
-        'custom': None,  # Use config file settings as-is, no preset overrides
-    }
-    
-    # OOD datasets
-    OOD_DATASETS = ['sun397', 'dtd', 'eurosat', 'oxford_pets']
-    
-    # Default hyperparameters
-    DEFAULT_EPOCHS = 50
-    DEFAULT_LR = 0.001
-    DEFAULT_BATCH_SIZE = 32
-    DEFAULT_SEED = 42
+
 
 
 class TrainEvalOrchestrator:
@@ -134,10 +113,21 @@ class TrainEvalOrchestrator:
         For 'custom' method:
             - Uses provided selector_type and fuser_type as-is
         """
-        if method not in TrainingConfig.METHODS:
-            raise ValueError(f"Unknown method: {method}. Available: {list(TrainingConfig.METHODS.keys())}")
+        # Method configurations (selector_type:fuser_type)
+        METHODS = {
+            'baseline_mean': {'selector_type': None, 'fuser_type': 'mean'},
+            'baseline_attention': {'selector_type': None, 'fuser_type': 'query_attn'},
+            'selector_mlp': {'selector_type': 'mlp', 'fuser_type': 'mean'},
+            'selector_slot': {'selector_type': 'slot', 'fuser_type': 'mean'},
+            'fuser_attention': {'selector_type': 'mlp', 'fuser_type': 'query_attn'},
+            'full_model': {'selector_type': 'slot', 'fuser_type': 'self_attn'},
+            'custom': None,  # Use config file settings as-is, no preset overrides
+        }
         
-        method_cfg = TrainingConfig.METHODS[method]
+        if method not in METHODS:
+            raise ValueError(f"Unknown method: {method}. Available: {list(METHODS.keys())}")
+        
+        method_cfg = METHODS[method]
         
         # If method_cfg is None, it's a custom method that uses provided settings
         if method_cfg is None:
@@ -211,7 +201,8 @@ class TrainEvalOrchestrator:
         )
         
         # Setup OOD data loaders
-        for ood_dataset in TrainingConfig.OOD_DATASETS:
+        OOD_DATASETS = ['sun397', 'dtd', 'eurosat', 'oxford_pets']
+        for ood_dataset in OOD_DATASETS:
             try:
                 ood_data = build_dataset(ood_dataset, self.root_path, -1)
                 ood_loader = build_data_loader(
@@ -509,8 +500,9 @@ class TrainEvalOrchestrator:
         # OOD evaluations
         ood_aurocs = []
         ood_fpr95s = []
+        OOD_DATASETS = ['sun397', 'dtd', 'eurosat', 'oxford_pets']
         
-        for ood_dataset in TrainingConfig.OOD_DATASETS:
+        for ood_dataset in OOD_DATASETS:
             auroc, fpr95 = self.evaluate_ood_dataset(ood_dataset)
             results[f'{ood_dataset}_auroc'] = auroc
             results[f'{ood_dataset}_fpr95'] = fpr95
@@ -572,7 +564,8 @@ class TrainEvalOrchestrator:
             self.logger.log(f'  Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%')
             self.logger.log(f'  ID Accuracy: {eval_results["id_accuracy"]:.2f}%')
             
-            for ood_dataset in TrainingConfig.OOD_DATASETS:
+            OOD_DATASETS = ['sun397', 'dtd', 'eurosat', 'oxford_pets']
+            for ood_dataset in OOD_DATASETS:
                 auroc = eval_results[f'{ood_dataset}_auroc']
                 fpr95 = eval_results[f'{ood_dataset}_fpr95']
                 self.logger.log(f'  {ood_dataset:15} AUROC: {auroc:.2f}%, FPR95: {fpr95:.2f}%')
@@ -610,16 +603,27 @@ class TrainEvalOrchestrator:
 
 def main():
     parser = argparse.ArgumentParser(description='Train and evaluate modular OOD detection')
+    # Method configurations (selector_type:fuser_type)
+    METHODS = {
+        'baseline_mean': {'selector_type': None, 'fuser_type': 'mean'},
+        'baseline_attention': {'selector_type': None, 'fuser_type': 'query_attn'},
+        'selector_mlp': {'selector_type': 'mlp', 'fuser_type': 'mean'},
+        'selector_slot': {'selector_type': 'slot', 'fuser_type': 'mean'},
+        'fuser_attention': {'selector_type': 'mlp', 'fuser_type': 'query_attn'},
+        'full_model': {'selector_type': 'slot', 'fuser_type': 'self_attn'},
+        'custom': None,  # Use config file settings as-is, no preset overrides
+    }
+    
     parser.add_argument('--method', type=str, default='baseline_mean',
-                        choices=list(TrainingConfig.METHODS.keys()),
+                        choices=list(METHODS.keys()),
                         help='Training method')
-    parser.add_argument('--epochs', type=int, default=TrainingConfig.DEFAULT_EPOCHS,
+    parser.add_argument('--epochs', type=int, default=50,
                         help='Number of epochs')
-    parser.add_argument('--lr', type=float, default=TrainingConfig.DEFAULT_LR,
+    parser.add_argument('--lr', type=float, default=0.001,
                         help='Learning rate')
-    parser.add_argument('--batch_size', type=int, default=TrainingConfig.DEFAULT_BATCH_SIZE,
+    parser.add_argument('--batch_size', type=int, default=32,
                         help='Batch size')
-    parser.add_argument('--seed', type=int, default=TrainingConfig.DEFAULT_SEED,
+    parser.add_argument('--seed', type=int, default=42,
                         help='Random seed')
     parser.add_argument('--device', type=str, default='cuda',
                         help='Device to use (cuda or cpu)')

@@ -440,27 +440,57 @@ def compute_semantic_exclusion_loss(final_feat: torch.Tensor,
     Returns:
         loss: scalar
     """
+    # Ensure all inputs are finite
+    if not torch.isfinite(final_feat).all():
+        return torch.tensor(0.0, device=final_feat.device, dtype=final_feat.dtype)
+    if not torch.isfinite(pos_text_feat).all():
+        return torch.tensor(0.0, device=final_feat.device, dtype=final_feat.dtype)
+    if not torch.isfinite(neg_text_feats).all():
+        return torch.tensor(0.0, device=final_feat.device, dtype=final_feat.dtype)
+    
     # Positive similarity
     pos_sim = F.cosine_similarity(final_feat, pos_text_feat, dim=1)  # (B,)
     
-    # Negative similarities
+    # Negative similarities - more efficient implementation
     B, num_neg, D = neg_text_feats.shape
-    neg_sims = []
-    for i in range(num_neg):
-        neg_sim_i = F.cosine_similarity(final_feat, neg_text_feats[:, i], dim=1)  # (B,)
-        neg_sims.append(neg_sim_i)
-    neg_sims = torch.stack(neg_sims, dim=1)  # (B, num_neg)
+    # Reshape to (B, 1, D) for broadcasting
+    final_feat_reshaped = final_feat.unsqueeze(1).expand(B, num_neg, D)
+    # Compute cosine similarity in one step
+    neg_sims = F.cosine_similarity(final_feat_reshaped, neg_text_feats, dim=2)  # (B, num_neg)
     
-    # 使用更稳定的logsumexp计算方式
-    # 首先减去最大值以防止数值上溢
+    # Use stable implementation of logsumexp
+    if temperature != 1.0:
+        neg_sims = neg_sims * temperature
+    
+    # Compute logsumexp with stability correction
     neg_sims_max = neg_sims.max(dim=1, keepdim=True)[0]
     neg_sims_stable = neg_sims - neg_sims_max
-    neg_score = (neg_sims_max + torch.logsumexp(neg_sims_stable * temperature, dim=1)) / temperature  # (B,)
+    exp_neg_sims = torch.exp(neg_sims_stable)
+    sum_exp_neg_sims = exp_neg_sims.sum(dim=1, keepdim=True)
+    neg_score = neg_sims_max.squeeze(1) + torch.log(sum_exp_neg_sims + 1e-8).squeeze(1)
+    
+    if temperature != 1.0:
+        neg_score = neg_score / temperature
     
     # Margin ranking: pos_sim should be > neg_score + margin
-    loss = F.relu(neg_score - pos_sim + margin).mean()
+    # Ensure margin is finite and reasonable
+    margin = torch.tensor(margin, device=final_feat.device, dtype=final_feat.dtype)
+    if not torch.isfinite(margin):
+        margin = torch.tensor(0.1, device=final_feat.device, dtype=final_feat.dtype)
     
-    return loss
+    # Add stability checks for all components
+    if not torch.isfinite(pos_sim).all():
+        pos_sim = torch.where(torch.isfinite(pos_sim), pos_sim, torch.tensor(0.0, device=pos_sim.device, dtype=pos_sim.dtype))
+    if not torch.isfinite(neg_score).all():
+        neg_score = torch.where(torch.isfinite(neg_score), neg_score, torch.tensor(0.0, device=neg_score.device, dtype=neg_score.dtype))
+    
+    loss = F.relu(neg_score - pos_sim + margin)
+    
+    # Filter out NaN and Inf values from loss
+    loss = torch.where(torch.isfinite(loss), loss, torch.tensor(0.0, device=loss.device, dtype=loss.dtype))
+    loss = torch.clamp(loss, 0, 100)  # Clip to reasonable range
+    
+    return loss.mean()
 
 
 def compute_redundancy_loss(selected_feats: torch.Tensor) -> torch.Tensor:
@@ -553,7 +583,20 @@ def compute_mixup_invariance_loss(final_feat: torch.Tensor,
     orig_probs = F.softmax(orig_logits, dim=1)
     mixed_log_probs = F.log_softmax(mixed_logits, dim=1)
     
+    # Add numerical stability for logits
+    orig_probs = torch.where(torch.isfinite(orig_probs), orig_probs, 
+                            torch.tensor(0.0, device=orig_probs.device, dtype=orig_probs.dtype))
+    mixed_log_probs = torch.where(torch.isfinite(mixed_log_probs), mixed_log_probs, 
+                                torch.tensor(0.0, device=mixed_log_probs.device, dtype=mixed_log_probs.dtype))
+    
+    # Ensure orig_probs has valid probabilities
+    orig_probs = torch.clamp(orig_probs, 1e-8, 1.0)  # Prevent zero or one probabilities
+    
     mixup_loss = F.kl_div(mixed_log_probs, orig_probs, reduction='batchmean')
+    
+    # Final check for NaN/Inf
+    if not torch.isfinite(mixup_loss):
+        mixup_loss = torch.tensor(0.0, device=mixup_loss.device, dtype=mixup_loss.dtype)
     
     return mixup_loss
 
@@ -720,6 +763,14 @@ class ModularCustomCLIP(nn.Module):
         Returns:
             loss: scalar
         """
+        # Check for NaN/Inf inputs
+        if not torch.isfinite(final_feats).all():
+            return torch.tensor(0.0, device=final_feats.device, dtype=self.dtype)
+        if not torch.isfinite(pos_text_feats).all():
+            return torch.tensor(0.0, device=final_feats.device, dtype=self.dtype)
+        if not torch.isfinite(neg_text_tokens).all():
+            return torch.tensor(0.0, device=final_feats.device, dtype=self.dtype)
+        
         B, num_neg, D = neg_text_tokens.shape
         
         # Convert to correct dtype
@@ -727,10 +778,18 @@ class ModularCustomCLIP(nn.Module):
         pos_text_feats = pos_text_feats.type(self.dtype)
         neg_text_tokens = neg_text_tokens.type(self.dtype)
         
-        # Normalize features with more stable epsilon
+        # Normalize features with stable epsilon
         final_feats_norm = final_feats / (final_feats.norm(dim=-1, keepdim=True) + 1e-8)  # (B, D)
         pos_text_norm = pos_text_feats / (pos_text_feats.norm(dim=-1, keepdim=True) + 1e-8)  # (B, D)
         neg_text_norm = neg_text_tokens / (neg_text_tokens.norm(dim=-1, keepdim=True) + 1e-8)  # (B, num_neg, D)
+        
+        # Check for NaNs after normalization
+        if torch.isnan(final_feats_norm).any() or torch.isinf(final_feats_norm).any():
+            return torch.tensor(0.0, device=final_feats.device, dtype=self.dtype)
+        if torch.isnan(pos_text_norm).any() or torch.isinf(pos_text_norm).any():
+            return torch.tensor(0.0, device=final_feats.device, dtype=self.dtype)
+        if torch.isnan(neg_text_norm).any() or torch.isinf(neg_text_norm).any():
+            return torch.tensor(0.0, device=final_feats.device, dtype=self.dtype)
         
         # Positive similarity (maximize)
         pos_sim = (final_feats_norm * pos_text_norm).sum(dim=1)  # (B,)
@@ -740,10 +799,30 @@ class ModularCustomCLIP(nn.Module):
         
         # Margin ranking loss: pos_sim should be > neg_sim + margin
         margin = self.cfg.get('margin', 0.1)
+        
+        # Ensure margin is finite and reasonable
+        margin = torch.tensor(margin, device=final_feats.device, dtype=final_feats.dtype)
+        if not torch.isfinite(margin):
+            margin = torch.tensor(0.1, device=final_feats.device, dtype=final_feats.dtype)
+        
         neg_max = neg_sims.max(dim=1)[0]  # (B,)
         
-        # Add numerical stability to loss computation
-        loss = F.relu(neg_max - pos_sim + margin).mean()
+        # Add stability checks for all components
+        if not torch.isfinite(pos_sim).all():
+            pos_sim = torch.where(torch.isfinite(pos_sim), pos_sim, torch.tensor(0.0, device=pos_sim.device, dtype=pos_sim.dtype))
+        if not torch.isfinite(neg_max).all():
+            neg_max = torch.where(torch.isfinite(neg_max), neg_max, torch.tensor(0.0, device=neg_max.device, dtype=neg_max.dtype))
+        
+        # Compute loss with clipping to prevent extreme values
+        loss_components = F.relu(neg_max - pos_sim + margin)
+        loss_components = torch.where(torch.isfinite(loss_components), loss_components, 
+                                     torch.tensor(0.0, device=loss_components.device, dtype=loss_components.dtype))
+        loss_components = torch.clamp(loss_components, 0, 100)  # Clip to reasonable range
+        loss = loss_components.mean()
+        
+        # Final check
+        if not torch.isfinite(loss):
+            loss = torch.tensor(0.0, device=loss.device, dtype=loss.dtype)
         
         return loss
     
@@ -767,13 +846,14 @@ class ModularCustomCLIP(nn.Module):
         Returns:
             loss: scalar
         """
+        # Check for NaN/Inf inputs
+        if not torch.isfinite(local_feats).all():
+            return torch.tensor(0.0, device=local_feats.device, dtype=local_feats.dtype)
+        if not torch.isfinite(bg_mask).all():
+            return torch.tensor(0.0, device=local_feats.device, dtype=local_feats.dtype)
+        
         B, N, D = local_feats.shape
         device = local_feats.device
-        
-        # 1. 提取背景特征
-        # bg_weights = (1 - bg_mask)  # (B, N, 1)
-        # 计算背景特征的加权平均
-        # bg_feat_pooled = (local_feats * bg_weights).sum(1) / (bg_weights.sum(1) + 1e-6)  # (B, D)
         
         # 计算前景特征的加权平均
         bg_mask_sum = bg_mask.sum(1) + 1e-8  # (B, D)
@@ -785,6 +865,10 @@ class ModularCustomCLIP(nn.Module):
         bg_weights_sum = bg_weights.sum(1) + 1e-8  # (B, D)
         bg_feat_pooled = (local_feats * bg_weights).sum(1) / bg_weights_sum  # (B, D)
         
+        # 检查中间结果
+        if not torch.isfinite(fg_feat).all() or not torch.isfinite(bg_feat_pooled).all():
+            return torch.tensor(0.0, device=device, dtype=local_feats.dtype)
+        
         # 关键：执行 detach() 防止背景特征参与梯度更新
         bg_feat_pooled = bg_feat_pooled.detach()
         
@@ -795,23 +879,46 @@ class ModularCustomCLIP(nn.Module):
         # 3. 混合：mixed_feat = fg_feat + alpha * shuffled_bg_feat
         mixed_feat = fg_feat + alpha * shuffled_bg  # (B, D)
         
+        # 检查混合结果
+        if not torch.isfinite(mixed_feat).all():
+            return torch.tensor(0.0, device=device, dtype=local_feats.dtype)
+        
         # 4. 计算 Loss
-        # Normalize
+        # Normalize with stability
         fg_feat_norm = fg_feat / (fg_feat.norm(dim=-1, keepdim=True) + 1e-8)
         mixed_feat_norm = mixed_feat / (mixed_feat.norm(dim=-1, keepdim=True) + 1e-8)
+        
+        # Check normalization results
+        if not torch.isfinite(fg_feat_norm).all() or not torch.isfinite(mixed_feat_norm).all():
+            return torch.tensor(0.0, device=device, dtype=local_feats.dtype)
         
         # Compute logits for original and mixed features
         text_feats = self._text_features.type(self.dtype).to(device)
         logit_scale = self.logit_scale.exp()
         
+        # Clip logit_scale to reasonable range to prevent explosion
+        logit_scale = torch.clamp(logit_scale, max=100.0)
+        
         orig_logits = logit_scale * fg_feat_norm @ text_feats.T  # (B, num_classes)
         mixed_logits = logit_scale * mixed_feat_norm @ text_feats.T  # (B, num_classes)
         
+        # Check logits
+        if not torch.isfinite(orig_logits).all() or not torch.isfinite(mixed_logits).all():
+            return torch.tensor(0.0, device=device, dtype=local_feats.dtype)
+        
         # KL divergence: mixed logits should be similar to original logits
-        orig_probs = F.softmax(orig_logits, dim=1)
-        mixed_log_probs = F.log_softmax(mixed_logits, dim=1)
+        # Use stable softmax implementation
+        orig_logits_stable = orig_logits - orig_logits.max(dim=1, keepdim=True)[0]
+        mixed_logits_stable = mixed_logits - mixed_logits.max(dim=1, keepdim=True)[0]
+        
+        orig_probs = F.softmax(orig_logits_stable, dim=1)
+        mixed_log_probs = F.log_softmax(mixed_logits_stable, dim=1)
         
         mixup_loss = F.kl_div(mixed_log_probs, orig_probs.detach(), reduction='batchmean')
+        
+        # Ensure loss is finite
+        if not torch.isfinite(mixup_loss):
+            return torch.tensor(0.0, device=device, dtype=local_feats.dtype)
         
         return mixup_loss
     

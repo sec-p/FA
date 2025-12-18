@@ -273,6 +273,17 @@ class TrainEvalOrchestrator:
             'use_mixup_invariance': True
         }
         
+        # Log all hyperparameters for debugging
+        self.logger.log('\n=== Hyperparameters ===')
+        self.logger.log(f'Learning rate: {self.lr}')
+        self.logger.log(f'Batch size: {self.batch_size}')
+        self.logger.log(f'LLM Negatives Weight: {self.lambda_llm_negatives}')
+        self.logger.log(f'Mixup Weight: {self.lambda_mixup}')
+        self.logger.log(f'Margin: {self.margin}')
+        self.logger.log(f'Selector type: {self.selector_type}')
+        self.logger.log(f'Fuser type: {self.fuser_type}')
+        self.logger.log('======================')
+        
         # Build modular model
         self.model = build_modular_model(cfg, self.classnames, clip_model)
         self.model = self.model.to(self.device)
@@ -310,6 +321,7 @@ class TrainEvalOrchestrator:
         total_loss = 0.0
         correct = 0
         total = 0
+        optimizer_steps = 0  # Track how many times optimizer.step() was called
         
         pbar = tqdm(self.train_loader, desc=f'Epoch {epoch+1}/{self.epochs} [Train]', ncols=100)
         
@@ -331,30 +343,77 @@ class TrainEvalOrchestrator:
             
             # Forward pass
             self.optimizer.zero_grad()
+            
+            # Check if images are NaN
+            if torch.isnan(images).any():
+                self.logger.log(f"WARNING: NaN values detected in input images at batch {batch_idx}")
+            
+            # Check image statistics
+            if batch_idx == 0:
+                self.logger.log(f"Image stats - min: {images.min()}, max: {images.max()}, mean: {images.mean()}, std: {images.std()}")
+            
             output_dict = self.model(images, labels=labels, negative_text_tokens=negative_text_tokens)
             logits = output_dict['logits']
             aux_losses = output_dict['aux_losses']
+            final_feats = output_dict['final_feats']
+            
+            # Check for NaNs in intermediate features
+            if torch.isnan(final_feats).any():
+                self.logger.log(f"WARNING: NaN values detected in final features at batch {batch_idx}")
+            if torch.isnan(logits).any():
+                self.logger.log(f"WARNING: NaN values detected in logits at batch {batch_idx}")
+            
+            # Check feature statistics
+            if batch_idx == 0:
+                self.logger.log(f"Final feats stats - min: {final_feats.min()}, max: {final_feats.max()}, mean: {final_feats.mean()}, std: {final_feats.std()}")
+                self.logger.log(f"Logits stats - min: {logits.min()}, max: {logits.max()}, mean: {logits.mean()}, std: {logits.std()}")
             
             # Compute total loss
-            loss = F.cross_entropy(logits, labels)
+            ce_loss = F.cross_entropy(logits, labels)
+            
+            # Debug loss components
+            if batch_idx % 10 == 0:
+                self.logger.log(f"Batch {batch_idx} - CE Loss: {ce_loss.item():.6f}")
             
             # Add auxiliary losses if any
+            total_aux_loss = 0.0
             if aux_losses:
                 for loss_name, loss_value in aux_losses.items():
-                    loss += loss_value
+                    if torch.isnan(loss_value):
+                        self.logger.log(f"WARNING: NaN value detected in {loss_name} at batch {batch_idx}")
+                    else:
+                        if batch_idx % 10 == 0:
+                            self.logger.log(f"Batch {batch_idx} - {loss_name}: {loss_value.item():.6f}")
+                        total_aux_loss += loss_value
+            
+            if batch_idx % 10 == 0 and aux_losses:
+                self.logger.log(f"Batch {batch_idx} - Total Aux Loss: {total_aux_loss.item():.6f}")
+            
+            # Combine losses with stability checks
+            loss = ce_loss + total_aux_loss
+            
+            # Check if either component is NaN
+            if torch.isnan(ce_loss):
+                self.logger.log(f"WARNING: CE Loss is NaN at batch {batch_idx}")
+            if torch.isnan(total_aux_loss):
+                self.logger.log(f"WARNING: Total Aux Loss is NaN at batch {batch_idx}")
             
             # Check for NaN and prevent backward pass if NaN detected
             if not torch.isnan(loss):
                 # Backward pass
                 loss.backward()
+                # Gradient clipping to prevent explosion
+                torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
                 self.optimizer.step()
+                optimizer_steps += 1
             else:
                 # Skip this batch if loss is NaN
                 self.logger.log(f"WARNING: NaN loss detected at batch {batch_idx}, skipping backward pass")
                 self.optimizer.zero_grad()  # Ensure gradients are zeroed even if we skip backward
             
             # Track metrics
-            total_loss += loss.item()
+            if not torch.isnan(loss):
+                total_loss += loss.item()
             _, predicted = logits.max(1)
             correct += predicted.eq(labels).sum().item()
             total += labels.size(0)
@@ -364,7 +423,7 @@ class TrainEvalOrchestrator:
         avg_loss = total_loss / len(self.train_loader)
         train_acc = 100.0 * correct / total
         
-        return avg_loss, train_acc
+        return avg_loss, train_acc, optimizer_steps > 0
     
     def evaluate_id(self) -> float:
         """Evaluate on ID (ImageNet) test set."""
@@ -533,7 +592,7 @@ class TrainEvalOrchestrator:
         
         for epoch in range(self.epochs):
             # Train
-            train_loss, train_acc = self.train_epoch(epoch)
+            train_loss, train_acc, optimizer_updated = self.train_epoch(epoch)
             
             # Evaluate
             eval_results = self.evaluate_epoch(epoch)
@@ -555,8 +614,9 @@ class TrainEvalOrchestrator:
             ckpt_path = self.save_checkpoint(epoch, eval_results)
             self.logger.log(f'  Checkpoint saved: {os.path.basename(ckpt_path)}')
             
-            # Update scheduler
-            self.scheduler.step()
+            # Update scheduler only if optimizer.step() was called in this epoch
+            if optimizer_updated:
+                self.scheduler.step()
             
             # Track best
             if eval_results["id_accuracy"] > best_id_acc:

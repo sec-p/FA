@@ -7,7 +7,6 @@ Optimized for Linux servers with checkpoint savings for learnable parameters onl
 import os
 import sys
 import json
-import yaml
 import argparse
 import random
 import numpy as np
@@ -60,12 +59,12 @@ class TrainingConfig:
 class TrainEvalOrchestrator:
     """Orchestrates training and evaluation with per-epoch OOD testing."""
     
-    def __init__(self, config_path: str, method: str, epochs: int, lr: float, 
+    def __init__(self, method: str, epochs: int, lr: float, 
                  batch_size: int, seed: int, device: torch.device,
-                 selector_type: str = None, fuser_type: str = None, id_dataset: str = None,
-                 root_path: str = None, shots: int = None, lambda_llm_negatives: float = None,
-                 lambda_mixup: float = None, margin: float = None):
-        self.config_path = config_path
+                 selector_type: str = None, fuser_type: str = None, id_dataset: str = 'imagenet',
+                 root_path: str = './data', shots: int = 16, lambda_llm_negatives: float = 0.1,
+                 lambda_mixup: float = 0.1, margin: float = 0.2, num_select: int = 16,
+                 backbone: str = 'ViT-L/14', class_negatives_path: str = '', use_full_data: bool = False):
         self.method = method
         self.epochs = epochs
         self.lr = lr
@@ -73,48 +72,34 @@ class TrainEvalOrchestrator:
         self.seed = seed
         self.device = device
         
-        # CLI overrides
+        # Model components
         self.selector_type = selector_type
         self.fuser_type = fuser_type
+        
+        # Dataset settings
         self.id_dataset = id_dataset
         self.root_path = root_path
         self.shots = shots
+        self.use_full_data = use_full_data
         
         # Loss function coefficients (hyperparameters)
         self.lambda_llm_negatives = lambda_llm_negatives
         self.lambda_mixup = lambda_mixup
         self.margin = margin
         
+        # Model settings
+        self.num_select = num_select
+        self.backbone = backbone
+        self.class_negatives_path = class_negatives_path
+        
         # Setup random seeds
         self._setup_seed(seed)
         
-        # Load base config
-        self.cfg = self._load_config(config_path)
+        # Classnames will be set in setup_data
+        self.classnames = []
         
-        # Update config with method and hyperparameters
+        # Update model components based on method
         self._apply_method_config(method)
-        self.cfg['fine_tune_batch_size'] = batch_size
-        self.cfg['learning_rate'] = lr
-        
-        # Apply CLI overrides if provided
-        if self.selector_type is not None:
-            self.cfg['selector_type'] = self.selector_type
-        if self.fuser_type is not None:
-            self.cfg['fuser_type'] = self.fuser_type
-        if self.id_dataset is not None:
-            self.cfg['id_dataset'] = self.id_dataset
-        if self.root_path is not None:
-            self.cfg['root_path'] = self.root_path
-        if self.shots is not None:
-            self.cfg['shots'] = self.shots
-        
-        # Apply loss function coefficients (hyperparameters) if provided
-        if self.lambda_llm_negatives is not None:
-            self.cfg['lambda_llm_negatives'] = self.lambda_llm_negatives
-        if self.lambda_mixup is not None:
-            self.cfg['lambda_mixup'] = self.lambda_mixup
-        if self.margin is not None:
-            self.cfg['margin'] = self.margin
         
         # Setup logging
         self.log_dir = self._setup_logging()
@@ -138,41 +123,37 @@ class TrainEvalOrchestrator:
         torch.cuda.manual_seed_all(seed)
         torch.backends.cudnn.deterministic = True
         
-    def _load_config(self, config_path: str) -> Dict:
-        """Load YAML configuration."""
-        with open(config_path, 'r') as f:
-            return yaml.load(f, Loader=yaml.FullLoader)
+
     
     def _apply_method_config(self, method: str):
         """Apply method-specific configuration.
         
         For preset methods (baseline_mean, selector_mlp, etc.):
-            - Overrides config file selector_type and fuser_type
+            - Overrides selector_type and fuser_type
         
         For 'custom' method:
-            - Uses selector_type and fuser_type from config file as-is
-            - Allows full customization through config file
+            - Uses provided selector_type and fuser_type as-is
         """
         if method not in TrainingConfig.METHODS:
             raise ValueError(f"Unknown method: {method}. Available: {list(TrainingConfig.METHODS.keys())}")
         
         method_cfg = TrainingConfig.METHODS[method]
         
-        # If method_cfg is None, it's a custom method that uses config file settings
+        # If method_cfg is None, it's a custom method that uses provided settings
         if method_cfg is None:
-            # Don't override config file settings for custom methods
+            # Don't override settings for custom methods
             pass
         else:
             # Apply preset method configuration, but only override when the
             # preset provides a non-None value. A preset value of `None`
-            # means "use whatever the config file specifies".
+            # means "use whatever was provided".
             sel_type = method_cfg.get('selector_type', None)
             fus_type = method_cfg.get('fuser_type', None)
             if sel_type is not None:
-                self.cfg['selector_type'] = sel_type
+                self.selector_type = sel_type
             # fuser_type often set for baselines (e.g. 'mean'), override if present
             if fus_type is not None:
-                self.cfg['fuser_type'] = fus_type
+                self.fuser_type = fus_type
     
     def _setup_logging(self) -> str:
         """Setup logging directory."""
@@ -191,17 +172,17 @@ class TrainEvalOrchestrator:
         test_transform = self._get_test_transform()
         
         # Load ID dataset
-        use_full_data = self.cfg.get('use_full_data', False)
-        shots = -1 if use_full_data else self.cfg.get('shots', 16)
+        use_full_data = self.use_full_data
+        shots = -1 if use_full_data else self.shots
         
         id_dataset = build_dataset(
-            self.cfg['id_dataset'],
-            self.cfg['root_path'],
+            self.id_dataset,
+            self.root_path,
             shots
         )
         
         # Setup training data loader
-        train_data = id_dataset.train_x if not use_full_data else id_dataset.train_x + id_dataset.val
+        train_data = id_dataset.train_x
         test_data = id_dataset.test if len(id_dataset.test) > 0 else id_dataset.val
         
         # Load class negatives
@@ -232,7 +213,7 @@ class TrainEvalOrchestrator:
         # Setup OOD data loaders
         for ood_dataset in TrainingConfig.OOD_DATASETS:
             try:
-                ood_data = build_dataset(ood_dataset, self.cfg['root_path'], -1)
+                ood_data = build_dataset(ood_dataset, self.root_path, -1)
                 ood_loader = build_data_loader(
                     data_source=ood_data.test if len(ood_data.test) > 0 else ood_data.val,
                     batch_size=self.batch_size,
@@ -249,7 +230,6 @@ class TrainEvalOrchestrator:
                 self.logger.log(f'  ⚠ Failed to load OOD dataset {ood_dataset}: {e}')
         
         self.classnames = id_dataset.classnames
-        self.cfg['classnames'] = self.classnames
         self.logger.log(f'  ✓ Training samples: {len(train_data)}')
         self.logger.log(f'  ✓ ID test samples: {len(test_data)}')
         self.logger.log(f'  ✓ OOD loaders: {len(self.ood_loaders)}')
@@ -258,8 +238,8 @@ class TrainEvalOrchestrator:
         """Load class negatives from file."""
         class_negatives = {}
         
-        # Try config path first
-        neg_path = self.cfg.get('class_negatives_path', '')
+        # Try provided path first
+        neg_path = self.class_negatives_path
         if neg_path and os.path.exists(neg_path):
             with open(neg_path, 'r') as f:
                 class_negatives = json.load(f)
@@ -312,12 +292,29 @@ class TrainEvalOrchestrator:
         self.logger.log('Setting up model...')
         
         # Load CLIP
-        clip_model, _ = clip.load(self.cfg['backbone'], device=self.device)
+        clip_model, _ = clip.load(self.backbone, device=self.device)
         clip_model = nn.DataParallel(clip_model).to(self.device)
         clip_model = clip_model.module
         
+        # Create config dict for modular model
+        cfg = {
+            'device': self.device,
+            'selector_type': self.selector_type,
+            'num_select': self.num_select,
+            'fuser_type': self.fuser_type,
+            'lambda_llm_negatives': self.lambda_llm_negatives,
+            'lambda_mixup': self.lambda_mixup,
+            'margin': self.margin,
+            # Add other default config values
+            'templates': ["a photo of a"],
+            'use_redundancy_loss': False,
+            'use_llm_negatives': True,
+            'use_semantic_exclusion': True,
+            'use_mixup_invariance': True
+        }
+        
         # Build modular model
-        self.model = build_modular_model(self.cfg, self.classnames, clip_model)
+        self.model = build_modular_model(cfg, self.classnames, clip_model)
         self.model = self.model.to(self.device)
         
         # Setup optimizer (only for trainable parameters)
@@ -613,10 +610,6 @@ class TrainEvalOrchestrator:
 
 def main():
     parser = argparse.ArgumentParser(description='Train and evaluate modular OOD detection')
-    parser.add_argument('--config', type=str, default='configs/my_config.yaml',
-                        help='Path to config file')
-    parser.add_argument('--no-config', action='store_true',
-                        help='Run without a config file; all required settings must be passed via CLI')
     parser.add_argument('--method', type=str, default='baseline_mean',
                         choices=list(TrainingConfig.METHODS.keys()),
                         help='Training method')
@@ -631,37 +624,47 @@ def main():
     parser.add_argument('--device', type=str, default='cuda',
                         help='Device to use (cuda or cpu)')
 
-    # Additional CLI overrides so .sh can supply experiment parameters directly
+    # Model components
     parser.add_argument('--selector_type', type=str, default=None,
-                        help="Override selector_type (e.g. 'mlp','slot' or leave empty to use config)")
+                        help="Selector type (e.g. 'mlp','slot' or None)")
     parser.add_argument('--fuser_type', type=str, default=None,
-                        help="Override fuser_type (e.g. 'mean','query_attn','self_attn')")
-    parser.add_argument('--id_dataset', type=str, default=None,
-                        help='ID dataset name (overrides config)')
-    parser.add_argument('--root_path', type=str, default=None,
-                        help='Root path for datasets (overrides config)')
-    parser.add_argument('--shots', type=int, default=None,
-                        help='Few-shot shots (overrides config)')
+                        help="Fuser type (e.g. 'mean','query_attn','self_attn')")
+    
+    # Dataset settings
+    parser.add_argument('--id_dataset', type=str, default='imagenet',
+                        help='ID dataset name')
+    parser.add_argument('--root_path', type=str, default='./data',
+                        help='Root path for datasets')
+    parser.add_argument('--shots', type=int, default=16,
+                        help='Few-shot shots')
+    parser.add_argument('--use_full_data', action='store_true',
+                        help='Use full dataset instead of few-shot')
+    
+    # Model settings
+    parser.add_argument('--backbone', type=str, default='ViT-L/14',
+                        help='CLIP backbone model')
+    parser.add_argument('--class_negatives_path', type=str, default='',
+                        help='Path to class negatives file')
     
     # Loss function coefficients (hyperparameters)
-    parser.add_argument('--lambda_llm_negatives', type=float, default=None,
-                        help='Weight for LLM Negatives Loss (overrides config)')
-    parser.add_argument('--lambda_mixup', type=float, default=None,
-                        help='Weight for Causal Mixup Invariance Loss (overrides config)')
-    parser.add_argument('--margin', type=float, default=None,
-                        help='Margin for ranking losses (Semantic Exclusion and LLM Negatives, overrides config)')
+    parser.add_argument('--lambda_llm_negatives', type=float, default=0.1,
+                        help='Weight for LLM Negatives Loss')
+    parser.add_argument('--lambda_mixup', type=float, default=0.1,
+                        help='Weight for Causal Mixup Invariance Loss')
+    parser.add_argument('--margin', type=float, default=0.2,
+                        help='Margin for ranking losses (Semantic Exclusion and LLM Negatives)')
+
+    # Selector hyperparameters
+    parser.add_argument('--num_select', type=int, default=16,
+                        help='Number of tokens/features to retain in selector (k)')
 
     args = parser.parse_args()
 
     # Setup device
     device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
 
-    # Determine config path or None
-    config_path = None if args.no_config else args.config
-
-    # Create trainer: pass CLI overrides so the orchestrator uses them when provided
+    # Create trainer with all parameters
     trainer = TrainEvalOrchestrator(
-        config_path=config_path,
         method=args.method,
         epochs=args.epochs,
         lr=args.lr,
@@ -675,7 +678,11 @@ def main():
         shots=args.shots,
         lambda_llm_negatives=args.lambda_llm_negatives,
         lambda_mixup=args.lambda_mixup,
-        margin=args.margin
+        margin=args.margin,
+        num_select=args.num_select,
+        backbone=args.backbone,
+        class_negatives_path=args.class_negatives_path,
+        use_full_data=args.use_full_data
     )
 
     # Train and evaluate

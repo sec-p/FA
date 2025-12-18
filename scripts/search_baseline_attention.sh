@@ -1,41 +1,75 @@
 #!/bin/bash
-# Grid search for baseline_attention
-# Usage: edit SEEDS LRS BSS EPOCHS below or export PYTHON_CMD to override python
+# ==============================================================================
+# Hyperparameter search for baseline_attention method
+# ==============================================================================
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
-PYTHON_CMD=${PYTHON_CMD:-python3}
+# Load common parameters
+source "$(dirname "${BASH_SOURCE[0]}")/common_params.sh"
 
+# Method-specific configuration
 METHOD="baseline_attention"
-EPOCHS=${EPOCHS:-50}
-SEEDS=(1 2 3)
-LRS=(0.001 0.002)
-BSS=(32 64)
+SELECTOR_TYPE=""
+FUSER_TYPE="self_attn"
 
-# Loss function hyperparameters
-LAMBDA_LLM_NEGATIVES=(0.05)
-LAMBDA_MIXUP=(0.1)
-MARGINS=(0.1)
+# Log directory
+LOG_DIR="$PROJECT_ROOT/logs/search_${METHOD}"
+mkdir -p "$LOG_DIR"
 
-OUT_DIR="$PROJECT_ROOT/results/grid_search/${METHOD}"
-mkdir -p "$OUT_DIR"
+# Start time
+START_TIME=$(date +%s)
+echo "Starting hyperparameter search for ${METHOD} at $(date)"
+echo "Log directory: $LOG_DIR"
+echo "Method: $METHOD"
+echo "Selector: $SELECTOR_TYPE"
+echo "Fuser: $FUSER_TYPE"
+echo "====================================="
 
-for s in "${SEEDS[@]}"; do
-  for lr in "${LRS[@]}"; do
-    for bs in "${BSS[@]}"; do
-      for llm_coeff in "${LAMBDA_LLM_NEGATIVES[@]}"; do
-        for mixup_coeff in "${LAMBDA_MIXUP[@]}"; do
-          for margin in "${MARGINS[@]}"; do
-            run_id="${METHOD}_s${s}_lr${lr}_bs${bs}_llm${llm_coeff}_mix${mixup_coeff}_m${margin}"
-            logfile="$OUT_DIR/${run_id}.log"
-            echo "Running ${run_id} -> $logfile"
-            "$PYTHON_CMD" "$PROJECT_ROOT/run_training.sh" --no-config --method "$METHOD" --epochs "$EPOCHS" --lr "$lr" --batch_size "$bs" --seed "$s" \
-              --lambda_llm_negatives "$llm_coeff" --lambda_mixup "$mixup_coeff" --margin "$margin" >> "$logfile" 2>&1
-          done
+# Hyperparameter combinations counter
+COUNTER=0
+total_combinations=$(( ${#LEARNING_RATES[@]} * ${#BATCH_SIZES[@]} * ${#SEEDS[@]} * ${#LAMBDA_LLM_NEGATIVES[@]} * ${#LAMBDA_MIXUP[@]} * ${#MARGIN_VALUES[@]} ))
+
+# Grid search loop
+for lr in "${LEARNING_RATES[@]}"; do
+    for bs in "${BATCH_SIZES[@]}"; do
+        for seed in "${SEEDS[@]}"; do
+            for llm_neg_lambda in "${LAMBDA_LLM_NEGATIVES[@]}"; do
+                for mixup_lambda in "${LAMBDA_MIXUP[@]}"; do
+                    for margin_val in "${MARGIN_VALUES[@]}"; do
+                        ((COUNTER++))
+                        echo -e "\n[$COUNTER/$total_combinations] Running: $METHOD - lr=$lr, bs=$bs, seed=$seed, lambda_llm=$llm_neg_lambda, lambda_mixup=$mixup_lambda, margin=$margin_val"
+                        
+                        # Run training command
+                        if python3 "$PROJECT_ROOT/src/train_and_eval.py" \
+                            --method "$METHOD" \
+                            --epochs "$DEFAULT_EPOCHS" \
+                            --lr "$lr" \
+                            --batch_size "$bs" \
+                            --seed "$seed" \
+                            --backbone "$DEFAULT_BACKBONE" \
+                            --root_path "$DEFAULT_ROOT_PATH" \
+                            --shots "$DEFAULT_SHOTS" \
+                            --class_negatives_path "$DEFAULT_CLASS_NEGATIVES_PATH" \
+                            --lambda_llm_negatives "$llm_neg_lambda" \
+                            --lambda_mixup "$mixup_lambda" \
+                            --margin "$margin_val" \
+                            --selector_type "$SELECTOR_TYPE" \
+                            --fuser_type "$FUSER_TYPE" 2>&1 | tee -a "$LOG_DIR/grid_search.log"; then
+                            echo "  ✓ Success"
+                        else
+                            echo "  ✗ Failed"
+                        fi
+                    done
+                done
+            done
         done
-      done
     done
-  done
 done
 
-echo "Grid search for ${METHOD} completed. Logs in $OUT_DIR"
+# End time
+END_TIME=$(date +%s)
+DURATION=$((END_TIME - START_TIME))
+
+echo "====================================="
+echo "Hyperparameter search completed at $(date)"
+echo "Total duration: $((DURATION/3600))h $(((DURATION%3600)/60))m $((DURATION%60))s"
+echo "Results saved to: $LOG_DIR"

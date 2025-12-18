@@ -1,15 +1,15 @@
 #!/bin/bash
 # ==============================================================================
-# Hyperparameter search for baseline_mean method
+# Hyperparameter search for baseline_self_attn method
 # ==============================================================================
 
 # Load common parameters
 source "$(dirname "${BASH_SOURCE[0]}")/common_params.sh"
 
 # Method-specific configuration
-METHOD="baseline_mean"
+METHOD="baseline_self_attn"
 SELECTOR_TYPE=""
-FUSER_TYPE="mean"
+FUSER_TYPE="self_attn"
 
 # Log directory
 LOG_DIR="$PROJECT_ROOT/logs/search_${METHOD}"

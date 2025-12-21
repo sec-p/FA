@@ -217,63 +217,115 @@ class SparseSlotAttentionSelector(BaseSelector):
             aux_loss: dict with orthogonality loss
             img_space_mask: (B, N, 1) - all Slots mask的并集,用于告诉Mixup哪些是前景
         """
+        # import pdb
+        # pdb.set_trace()
+        # B, N, D = local_feats.shape
+        # device = local_feats.device
+        # dtype = local_feats.dtype
+        
+        # # 确保所有关键层使用相同的数据类型
+        # self.norm1 = self.norm1.to(dtype)
+        # self.norm2 = self.norm2.to(dtype)
+        # self.mha = self.mha.to(dtype)
+        # self.ff = self.ff.to(dtype)
+        
+        # # 1. 计算 attention logits
+        # # Broadcast slots and ensure same dtype as local_feats
+        # slots = self.slots.expand(B, -1, -1).to(dtype)  # (B, num_slots, D)
+        
+        # # 计算每个 slot 对每个 patch 的 attention
+        # local_feats_norm = F.normalize(local_feats, dim=-1)  # (B, N, D)
+        # slots_norm = F.normalize(slots, dim=-1)  # (B, num_slots, D)
+        # attn_logits = torch.bmm(slots_norm, local_feats_norm.transpose(1, 2))  # (B, num_slots, N)
+        
+        # # 2. 生成硬 Mask
+        # # 找到 Top-K 的阈值
+        # k = self.num_select
+        # threshold, _ = torch.topk(attn_logits, k=k, dim=-1, sorted=True)
+        # threshold = threshold[:, :, -1:].expand(-1, -1, N)  # (B, num_slots, N)
+        
+        # # 生成硬 mask
+        # mask_hard = (attn_logits >= threshold).to(attn_logits.dtype)  # (B, num_slots, N)
+        
+        # # 3. 应用 STE
+        # mask = (mask_hard - attn_logits).detach() + attn_logits  # (B, num_slots, N)
+        
+        # # 4. 加权: 计算注意力权重
+        # # Ensure the large negative value uses the same dtype as attn_logits
+        # neg_inf = torch.tensor(-1e4, device=device, dtype=attn_logits.dtype)
+        # attn = F.softmax(attn_logits * mask + neg_inf * (1 - mask).to(attn_logits.dtype), dim=-1)  # (B, num_slots, N)
+        
+        # # 计算 slot features
+        # slot_feats = torch.bmm(attn, local_feats)  # (B, num_slots, D)
+        
+        # # 更新 slots - ensure compatible dtype
+        # slots = slots.to(local_feats.dtype)
+        # slot_feats = slot_feats.to(local_feats.dtype)
+        # slots_updated, _ = self.mha(self.norm1(slots), slot_feats, slot_feats)
+        # slots = slots + slots_updated
+        
+        # slots_ff = self.ff(self.norm2(slots))
+        # slots = slots + slots_ff
+        
+        # # 5. 生成 img_space_mask (所有 Slots mask 的并集)
+        # img_space_mask = mask_hard.max(dim=1)[0].unsqueeze(-1)  # (B, N, 1)
+        
+        # # Orthogonality loss: encourage different slots to focus on different regions
+        # # Use slot_weights (attention maps) instead of slots themselves
+        # ortho_loss = self._compute_orthogonality_loss(attn)
+        
+        # aux_loss = {'orthogonality': ortho_loss}
+        # return slots, aux_loss, img_space_mask
         B, N, D = local_feats.shape
-        device = local_feats.device
         dtype = local_feats.dtype
-        
-        # 确保所有关键层使用相同的数据类型
-        self.norm1 = self.norm1.to(dtype)
-        self.norm2 = self.norm2.to(dtype)
-        self.mha = self.mha.to(dtype)
-        self.ff = self.ff.to(dtype)
-        
-        # 1. 计算 attention logits
-        # Broadcast slots and ensure same dtype as local_feats
-        slots = self.slots.expand(B, -1, -1).to(dtype)  # (B, num_slots, D)
-        
-        # 计算每个 slot 对每个 patch 的 attention
-        local_feats_norm = F.normalize(local_feats, dim=-1)  # (B, N, D)
-        slots_norm = F.normalize(slots, dim=-1)  # (B, num_slots, D)
-        attn_logits = torch.bmm(slots_norm, local_feats_norm.transpose(1, 2))  # (B, num_slots, N)
-        
-        # 2. 生成硬 Mask
-        # 找到 Top-K 的阈值
-        k = self.num_select
-        threshold, _ = torch.topk(attn_logits, k=k, dim=-1, sorted=True)
-        threshold = threshold[:, :, -1:].expand(-1, -1, N)  # (B, num_slots, N)
-        
-        # 生成硬 mask
-        mask_hard = (attn_logits >= threshold).to(attn_logits.dtype)  # (B, num_slots, N)
-        
-        # 3. 应用 STE
-        mask = (mask_hard - attn_logits).detach() + attn_logits  # (B, num_slots, N)
-        
-        # 4. 加权: 计算注意力权重
-        # Ensure the large negative value uses the same dtype as attn_logits
-        neg_inf = torch.tensor(-1e9, device=device, dtype=attn_logits.dtype)
-        attn = F.softmax(attn_logits * mask + neg_inf * (1 - mask).to(attn_logits.dtype), dim=-1)  # (B, num_slots, N)
-        
-        # 计算 slot features
-        slot_feats = torch.bmm(attn, local_feats)  # (B, num_slots, D)
-        
-        # 更新 slots - ensure compatible dtype
-        slots = slots.to(local_feats.dtype)
-        slot_feats = slot_feats.to(local_feats.dtype)
-        slots_updated, _ = self.mha(self.norm1(slots), slot_feats, slot_feats)
+        device = local_feats.device
+
+        # -------- 1. prepare slots (queries) --------
+        slots = self.slots.expand(B, -1, -1).to(dtype)  # (B, S, D)
+
+        # -------- 2. cosine similarity as attention logits --------
+        local_norm = F.normalize(local_feats, dim=-1)   # (B, N, D)
+        slot_norm  = F.normalize(slots, dim=-1)         # (B, S, D)
+
+        # attn_logits: (B, S, N)
+        attn_logits = torch.einsum("bsd,bnd->bsn", slot_norm, local_norm)
+
+        # -------- 3. Top-K sparse mask (OPTIONAL) --------
+        use_sparse = True  # <<< 方便你做消融
+        if use_sparse:
+            k = self.num_select
+            _, topk_idx = attn_logits.topk(k, dim=-1)
+            mask = torch.zeros_like(attn_logits, dtype=torch.bool)
+            mask.scatter_(-1, topk_idx, True)
+
+            # IMPORTANT: use finite negative value
+            attn_logits = attn_logits.masked_fill(~mask, -1e4)
+
+        # -------- 4. softmax (SAFE) --------
+        attn = F.softmax(attn_logits, dim=-1)  # (B, S, N)
+
+        # -------- 5. aggregate token features --------
+        slot_feats = torch.einsum("bsn,bnd->bsd", attn, local_feats)
+
+        # -------- 6. slot update (Slot Attention style) --------
+        slots_updated, _ = self.mha(
+            self.norm1(slots),
+            slot_feats,
+            slot_feats
+        )
         slots = slots + slots_updated
-        
-        slots_ff = self.ff(self.norm2(slots))
-        slots = slots + slots_ff
-        
-        # 5. 生成 img_space_mask (所有 Slots mask 的并集)
-        img_space_mask = mask_hard.max(dim=1)[0].unsqueeze(-1)  # (B, N, 1)
-        
-        # Orthogonality loss: encourage different slots to focus on different regions
-        # Use slot_weights (attention maps) instead of slots themselves
+        slots = slots + self.ff(self.norm2(slots))
+
+        # -------- 7. image-space mask (for mixup / foreground) --------
+        if use_sparse:
+            img_space_mask = mask.any(dim=1).float().unsqueeze(-1)  # (B, N, 1)
+        else:
+            img_space_mask = torch.ones(B, N, 1, device=device, dtype=dtype)
+
+        # -------- 8. orthogonality loss (on attention maps) --------
         ortho_loss = self._compute_orthogonality_loss(attn)
-        
-        aux_loss = {'orthogonality': ortho_loss}
-        return slots, aux_loss, img_space_mask
+
+        return slots, {"orthogonality": ortho_loss}, img_space_mask
     
     def _compute_orthogonality_loss(self, slot_weights: torch.Tensor) -> torch.Tensor:
         """Orthogonality loss on attention maps to prevent overlapping attention."""
@@ -872,13 +924,13 @@ class ModularCustomCLIP(nn.Module):
         device = local_feats.device
         
         # 计算前景特征的加权平均
-        bg_mask_sum = bg_mask.sum(1) + 1e-8  # (B, D)
+        bg_mask_sum = bg_mask.sum(1) + 1e-4  # (B, D)
         fg_feat = (local_feats * bg_mask).sum(1) / bg_mask_sum  # (B, D)
         
         # 提取背景特征 (1 - bg_mask)，即非前景区域
         bg_weights = (1 - bg_mask)  # (B, N, 1)
         # 计算背景特征的加权平均
-        bg_weights_sum = bg_weights.sum(1) + 1e-8  # (B, D)
+        bg_weights_sum = bg_weights.sum(1) + 1e-4  # (B, D)
         bg_feat_pooled = (local_feats * bg_weights).sum(1) / bg_weights_sum  # (B, D)
         
         # 检查中间结果
@@ -901,8 +953,8 @@ class ModularCustomCLIP(nn.Module):
         
         # 4. 计算 Loss
         # Normalize with stability
-        fg_feat_norm = fg_feat / (fg_feat.norm(dim=-1, keepdim=True) + 1e-8)
-        mixed_feat_norm = mixed_feat / (mixed_feat.norm(dim=-1, keepdim=True) + 1e-8)
+        fg_feat_norm = fg_feat / (fg_feat.norm(dim=-1, keepdim=True) + 1e-4)
+        mixed_feat_norm = mixed_feat / (mixed_feat.norm(dim=-1, keepdim=True) + 1e-4)
         
         # Check normalization results
         if not torch.isfinite(fg_feat_norm).all() or not torch.isfinite(mixed_feat_norm).all():
@@ -953,6 +1005,8 @@ class ModularCustomCLIP(nn.Module):
                 selected_feats: (B, N, D) with mask applied
                 final_feats: (B, D)
         """
+        # import pdb
+        # pdb.set_trace()
         B = image.shape[0]
         device = image.device
         

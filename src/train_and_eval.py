@@ -270,7 +270,7 @@ class TrainEvalOrchestrator:
             'use_redundancy_loss': False,
             'use_llm_negatives': True,
             'use_semantic_exclusion': True,
-            'use_mixup_invariance': True
+            'use_mixup_invariance': False
         }
         
         # Log all hyperparameters for debugging
@@ -353,6 +353,8 @@ class TrainEvalOrchestrator:
                 self.logger.log(f"Image stats - min: {images.min()}, max: {images.max()}, mean: {images.mean()}, std: {images.std()}")
             
             output_dict = self.model(images, labels=labels, negative_text_tokens=negative_text_tokens)
+            import pdb
+            pdb.set_trace()
             logits = output_dict['logits']
             aux_losses = output_dict['aux_losses']
             final_feats = output_dict['final_feats']

@@ -17,7 +17,7 @@ DEFAULT_SHOTS=16
 DEFAULT_CLASS_NEGATIVES_PATH="/data/ICML2026/clip/FA/my_dataset/class_negatives.json"
 
 # Hyperparameter search grids
-LEARNING_RATES=(0.0005 0.001 0.002)
+LEARNING_RATES=(0.05 0.001 0.002)
 BATCH_SIZES=(512 1024)
 SEEDS=(42)
 

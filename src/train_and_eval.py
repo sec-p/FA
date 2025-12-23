@@ -259,7 +259,7 @@ class TrainEvalOrchestrator:
             transforms.RandomResizedCrop(size=224, scale=(0.8, 1),
                                         interpolation=transforms.InterpolationMode.BICUBIC),
             transforms.RandomHorizontalFlip(p=0.5),
-            transforms.RandomVerticalFlip(p=0.5),
+            # transforms.RandomVerticalFlip(p=0.5),
             transforms.RandomRotation(degrees=5),
             transforms.ColorJitter(brightness=0.15, contrast=0.1, saturation=0.1),
             transforms.RandomGrayscale(p=0.1),
@@ -437,13 +437,9 @@ class TrainEvalOrchestrator:
     def evaluate_id(self) -> float:
         """Evaluate on ID (ImageNet) test set."""
 
-        import pdb
-        pdb.set_trace()
         self.model.eval()
         correct = 0
         total = 0
-        import pdb
-        pdb.set_trace()
         with torch.no_grad():
             for batch in self.test_loader:
                 if isinstance(batch, dict):

@@ -31,33 +31,33 @@ class DescribableTextures(DatasetBase):
         # The data are supposed to be organized into the following structure
         # =============
         # images/
-        #     dog/
-        #     cat/
-        #     horse/
+        #     category1/
+        #     category2/
+        #     ...
         # =============
         categories = listdir_nohidden(image_dir)
         categories = [c for c in categories if c not in ignored]
         categories.sort()
 
-        def _collate(ims, y, c):
+        def _collate(ims):
             items = []
             for im in ims:
                 item = Datum(
                     impath=im,
-                    label=y, # is already 0-based
-                    classname=c
+                    label=0,  # OOD数据集不需要真实标签，统一设为0
+                    classname='ood'  # 统一类名
                 )
                 items.append(item)
             return items
 
         train, val, test = [], [], []
-        for label, category in enumerate(categories):
+        for category in categories:
             category_dir = os.path.join(image_dir, category)
             images = listdir_nohidden(category_dir)
             images = [os.path.join(category_dir, im) for im in images]
             
             # 简单地将所有数据作为测试集（OOD场景通常不需要训练/验证集）
-            test.extend(_collate(images, label, category))
+            test.extend(_collate(images))
         
         # 对于OOD数据集，我们只需要测试集
         return [], [], test

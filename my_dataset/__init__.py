@@ -27,7 +27,11 @@ dataset_list = {
                 "imagenet": CustomImageNet,
                 "imagenet100": CustomImageNet100,
                 "inaturalist": INaturalist,
-                "places": Places
+                "iNaturalist": INaturalist,  # Add capitalized version
+                "places": Places,
+                "Places": Places,  # Add capitalized version
+                "SUN": SUN397,  # Add SUN alias for SUN397
+                "Textures": DescribableTextures  # Add Textures alias for DescribableTextures
                 }
 
 

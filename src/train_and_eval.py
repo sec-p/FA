@@ -619,10 +619,12 @@ class TrainEvalOrchestrator:
             
             for ood_name in self.ood_loaders.keys():
                 auroc = eval_results[f'{ood_name}_auroc']
-                self.logger.log(f'  {ood_name:15} AUROC: {auroc:.2f}%')
+                fpr95 = eval_results[f'{ood_name}_fpr95']
+                self.logger.log(f'  {ood_name:15} AUROC: {auroc:.2f}%, FPR95: {fpr95:.2f}%')
             
             avg_auroc = eval_results["avg_ood_auroc"]
-            self.logger.log(f'  Avg OOD AUROC: {avg_auroc:.2f}%')
+            avg_fpr95 = eval_results["avg_ood_fpr95"]
+            self.logger.log(f'  Avg OOD AUROC: {avg_auroc:.2f}%, Avg OOD FPR95: {avg_fpr95:.2f}%')
             
             # Save checkpoint (Every 5 epochs or best)
             if epoch % 5 == 0 or epoch == self.epochs - 1:

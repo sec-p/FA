@@ -5,6 +5,40 @@ Optimized for Linux servers with checkpoint savings for learnable parameters onl
 Now supports Automatic Mixed Precision (AMP) for stability and speed.
 """
 
+imagenet_templates = [
+    "a bad photo of a {}.",
+    "a photo of many {}.",
+    "a sculpture of a {}.",
+    "a photo of the hard to see {}.",
+    "a low resolution photo of the {}.",
+    "a rendering of a {}.",
+    "graffiti of a {}.",
+    "a bad photo of the {}.",
+    "a cropped photo of the {}.",
+    "a tattoo of a {}.",
+    "the embroidered {}.",
+    "a photo of a hard to see {}.",
+    "a bright photo of a {}.",
+    "a photo of a clean {}.",
+    "a photo of a large {}.",
+    "a drawing of a {}.",
+    "a photo of the {}.",
+    "a monocolor photo of the {}.",
+    "a photo of a small {}.",
+    "a photo of the small {}.",
+    "a painting of the {}.",
+    "a photo of a large {}.",
+    "a black and white photo of the {}.",
+    "a sketch of a {}.",
+    "a pixelated photo of the {}.",
+    "a photo of the cool {}.",
+    "a close-up photo of a {}.",
+    "a photo of a {}.",  # 原始的
+]
+# 在 _cache_text_features 中，你的代码已经写好了 mean() 逻辑，
+# 只要传入这个长列表，性能马上回升 3-5 个点。
+
+
 import os
 import sys
 import json
@@ -270,7 +304,7 @@ class TrainEvalOrchestrator:
             'margin': self.margin,
             'selector_temperature': self.selector_temperature,
             'patches_per_slot_attn': self.patches_per_slot_attn,
-            'templates': ["a photo of a"],
+            'templates': imagenet_templates,
             
             # Feature flags - Turn on everything for "Full Method"
             'use_redundancy_loss': True,
@@ -366,7 +400,7 @@ class TrainEvalOrchestrator:
             # 3. Backward with Scaler - 关键修改
             # Scaler 会自动处理梯度下溢(underflow)问题，无需手动检查 NaN
             self.scaler.scale(loss).backward()
-            
+
             # 4. Gradient Clipping (must unscale first)
             self.scaler.unscale_(self.optimizer)
             torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
@@ -381,7 +415,7 @@ class TrainEvalOrchestrator:
                 _, predicted = logits.max(1)
                 correct += predicted.eq(labels).sum().item()
                 total += labels.size(0)
-            
+
             # Update progress bar (simplified)
             pbar.set_postfix({
                 'Loss': f"{loss.item():.4f}", 
@@ -402,10 +436,14 @@ class TrainEvalOrchestrator:
     
     def evaluate_id(self) -> float:
         """Evaluate on ID (ImageNet) test set."""
+
+        import pdb
+        pdb.set_trace()
         self.model.eval()
         correct = 0
         total = 0
-        
+        import pdb
+        pdb.set_trace()
         with torch.no_grad():
             for batch in self.test_loader:
                 if isinstance(batch, dict):

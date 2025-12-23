@@ -150,7 +150,7 @@ class SparseSlotAttentionSelector(BaseSelector):
     Critically optimized: Logic runs in FP32 to prevent NaN during softmax/exp.
     """
     
-    def __init__(self, input_dim: int, num_select: int, num_slots: int = 4, cfg: Dict = None):
+    def __init__(self, input_dim: int, num_select: int, num_slots: int = 8, cfg: Dict = None):
         super().__init__(input_dim, num_select, cfg)
         self.num_slots = num_slots
         
@@ -180,7 +180,7 @@ class SparseSlotAttentionSelector(BaseSelector):
         s_norm = F.normalize(slots, dim=-1, eps=1e-6)
         
         # Scale by 10 for better gradient flow
-        attn_logits = torch.einsum('bkd,bnd->bkn', s_norm, x_norm) * 10.0
+        attn_logits = torch.einsum('bkd,bnd->bkn', s_norm, x_norm)
 
         # 2. Top-K Masking
         # Determine K per slot or global K
@@ -235,8 +235,8 @@ class SparseSlotAttentionSelector(BaseSelector):
         
         # Standard Transformer Update
         slots_updated, _ = self.mha(self.norm1(slots), slot_feats, slot_feats)
-        slots = slots + slots_updated
-        slots = slots + self.ff(self.norm2(slots))
+        # slots = slots + slots_updated
+        # slots = slots + self.ff(self.norm2(slots))
         
         return slots, {'orthogonality': ortho_loss.to(dtype)}, img_space_mask_fp32.to(dtype)
 
@@ -286,23 +286,48 @@ class QueryGuidedAttentionFuser(BaseFuser):
         return final_feats
 
 
+# class SelfAttentionFuser(BaseFuser):
+#     """Fixed: Added correct arguments to forward matching BaseFuser."""
+#     def __init__(self, input_dim: int, num_heads: int = 4, cfg: Dict = None):
+#         super().__init__(input_dim, cfg)
+#         self.encoder_layer = nn.TransformerEncoderLayer(
+#             d_model=input_dim, nhead=num_heads, dim_feedforward=4*input_dim,
+#             batch_first=True, activation='gelu'
+#         )
+#         self.norm = nn.LayerNorm(input_dim)
+    
+#     def forward(self, selected_feats: torch.Tensor, 
+#                 text_feats: Optional[torch.Tensor] = None, 
+#                 labels: Optional[torch.Tensor] = None) -> torch.Tensor:
+        
+#         attended = self.encoder_layer(selected_feats)
+#         attended = self.norm(attended)
+#         return attended.mean(dim=1)
+
+
 class SelfAttentionFuser(BaseFuser):
-    """Fixed: Added correct arguments to forward matching BaseFuser."""
-    def __init__(self, input_dim: int, num_heads: int = 4, cfg: Dict = None):
+    def __init__(self, input_dim, num_heads=4, cfg=None):
         super().__init__(input_dim, cfg)
         self.encoder_layer = nn.TransformerEncoderLayer(
-            d_model=input_dim, nhead=num_heads, dim_feedforward=4*input_dim,
+            d_model=input_dim, nhead=num_heads,
+            dim_feedforward=4*input_dim,
             batch_first=True, activation='gelu'
         )
         self.norm = nn.LayerNorm(input_dim)
-    
-    def forward(self, selected_feats: torch.Tensor, 
-                text_feats: Optional[torch.Tensor] = None, 
-                labels: Optional[torch.Tensor] = None) -> torch.Tensor:
-        
-        attended = self.encoder_layer(selected_feats)
-        attended = self.norm(attended)
-        return attended.mean(dim=1)
+        self.proj = nn.Sequential(
+            nn.Linear(input_dim, input_dim),
+            nn.GELU(),
+            nn.Linear(input_dim, input_dim)
+        )
+        nn.init.normal_(self.proj[-1].weight, std=1e-3)
+
+    def forward(self, selected_feats, text_feats=None, labels=None):
+        x = self.encoder_layer(selected_feats)
+        x = self.norm(x)
+        x = x.mean(dim=1)
+        x = self.proj(x)
+        return F.normalize(x, dim=-1)
+
 
 
 # ============================================================================
@@ -452,7 +477,7 @@ class ModularCustomCLIP(nn.Module):
         if s_type == 'mlp':
             self.selector = MultiHeadMLPSelector(self.feat_dim, num_sel, self.cfg.get('num_heads_selector', 4), self.cfg)
         elif s_type == 'slot':
-            self.selector = SparseSlotAttentionSelector(self.feat_dim, num_sel, self.cfg.get('num_slots', 4), self.cfg)
+            self.selector = SparseSlotAttentionSelector(self.feat_dim, num_sel, self.cfg.get('num_slots', 8), self.cfg)
         else:
             self.selector = IdentitySelector(self.feat_dim, num_sel, self.cfg)
         # self.selector = self.selector.to(self.dtype)
@@ -467,7 +492,7 @@ class ModularCustomCLIP(nn.Module):
         # self.fuser = self.fuser.to(self.dtype)
 
     def _cache_text_features(self):
-        templates = self.cfg.get('templates', ["a photo of a"])
+        templates = self.cfg.get('templates', ["a photo of a {}"])
         if isinstance(templates, str): templates = [templates]
         
         text_features_list = []
@@ -500,18 +525,19 @@ class ModularCustomCLIP(nn.Module):
 
     def forward(self, image: torch.Tensor, labels: Optional[torch.Tensor] = None, 
                 negative_text_tokens: Optional[torch.Tensor] = None) -> Dict:
+
         B = image.shape[0]
         
         # 1. Encode Image (FP16)
-        with torch.no_grad():
-            image_features, local_features = self.image_encoder(image.type(self.dtype))
+        image_features, local_features = self.image_encoder(image.type(self.dtype))
+
         
         image_features = F.normalize(image_features, dim=-1)
         local_features = F.normalize(local_features, dim=-1)
         
         # 2. Select Features (Mixed Precision managed internally)
         selected_feats, sel_aux_loss, bg_mask = self.selector(local_features)
-        
+
         # 3. Text Features
         text_feats = self._text_features.type(self.dtype)
         if labels is not None:
@@ -521,10 +547,11 @@ class ModularCustomCLIP(nn.Module):
             
         # 4. Fusion
         final_feats = self.fuser(selected_feats, text_feats, labels)
-        final_feats = F.normalize(final_feats, dim=-1)
-        
+        # final_feats = F.normalize(image_features+final_feats, dim=-1)
+        final_feats = F.normalize(image_features, dim=-1)
+
         # 5. Logits
-        logit_scale = self.logit_scale.exp().clamp(max=100.0)
+        logit_scale = self.logit_scale.exp()
         logits = logit_scale * final_feats @ text_feats.T
         
         # 6. Losses

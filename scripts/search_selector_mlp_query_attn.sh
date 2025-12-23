@@ -9,7 +9,7 @@ source "$(dirname "${BASH_SOURCE[0]}")/common_params.sh"
 # Method-specific configuration
 METHOD="selector_mlp_query_attn"
 SELECTOR_TYPE="mlp"
-FUSER_TYPE="query_attn"
+FUSER_TYPE=""
 
 # Log directory
 LOG_DIR="$PROJECT_ROOT/logs/search_${METHOD}"

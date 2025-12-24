@@ -426,7 +426,7 @@ def build_data_loader(
         dataset_wrapper(data_source, input_size=input_size, transform=tfm, is_train=is_train,
                        class_negatives=class_negatives, text_encoder=text_encoder, device=device),
         batch_size=batch_size,
-        num_workers=16,
+        num_workers=8,
         shuffle=shuffle,
         drop_last=False,
         pin_memory=(torch.cuda.is_available())

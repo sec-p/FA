@@ -482,7 +482,7 @@ class TrainEvalOrchestrator:
                     output_dict = self.model(images)
                     logits = output_dict['logits']
                     # MSP score (Maximum Softmax Probability)
-                    scores = F.softmax(logits, dim=1).max(1)[0]
+                    scores = logits.max(1)[0]
                 
                 id_scores.extend(scores.cpu().numpy())
         
@@ -609,25 +609,29 @@ class TrainEvalOrchestrator:
             train_loss, train_acc, _ = self.train_epoch(epoch)
             self.scheduler.step()
             
-            # Evaluate
-            eval_results = self.evaluate_epoch(epoch)
+
+            eval_results={}
             
             # Log results
             self.logger.log(f'\n[Epoch {epoch+1}/{self.epochs}]')
             self.logger.log(f'  Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%')
-            self.logger.log(f'  ID Accuracy: {eval_results["id_accuracy"]:.2f}%')
-            
-            for ood_name in self.ood_loaders.keys():
-                auroc = eval_results[f'{ood_name}_auroc']
-                fpr95 = eval_results[f'{ood_name}_fpr95']
-                self.logger.log(f'  {ood_name:15} AUROC: {auroc:.2f}%, FPR95: {fpr95:.2f}%')
-            
-            avg_auroc = eval_results["avg_ood_auroc"]
-            avg_fpr95 = eval_results["avg_ood_fpr95"]
-            self.logger.log(f'  Avg OOD AUROC: {avg_auroc:.2f}%, Avg OOD FPR95: {avg_fpr95:.2f}%')
+
+            if (epoch+1)%5==0 and epoch+1>10:
+                # Evaluate
+                eval_results = self.evaluate_epoch(epoch)
+                self.logger.log(f'  ID Accuracy: {eval_results["id_accuracy"]:.2f}%')
+                
+                for ood_name in self.ood_loaders.keys():
+                    auroc = eval_results[f'{ood_name}_auroc']
+                    fpr95 = eval_results[f'{ood_name}_fpr95']
+                    self.logger.log(f'  {ood_name:15} AUROC: {auroc:.2f}%, FPR95: {fpr95:.2f}%')
+                
+                avg_auroc = eval_results["avg_ood_auroc"]
+                avg_fpr95 = eval_results["avg_ood_fpr95"]
+                self.logger.log(f'  Avg OOD AUROC: {avg_auroc:.2f}%, Avg OOD FPR95: {avg_fpr95:.2f}%')
             
             # Save checkpoint (Every 5 epochs or best)
-            if epoch % 5 == 0 or epoch == self.epochs - 1:
+            if (epoch % 5 == 0 or epoch == self.epochs - 1) and epoch+1>10:
                 self.save_checkpoint(epoch, eval_results)
             
             # Track best

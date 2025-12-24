@@ -308,25 +308,57 @@ class QueryGuidedAttentionFuser(BaseFuser):
 class SelfAttentionFuser(BaseFuser):
     def __init__(self, input_dim, num_heads=4, cfg=None):
         super().__init__(input_dim, cfg)
-        self.encoder_layer = nn.TransformerEncoderLayer(
+        
+        # 允许配置层数，建议 2 层
+        num_layers = cfg.get('fuser_layers', 2) if cfg else 2
+        
+        # 【修改点 1】删掉了 self.cls_token = nn.Parameter(...)
+        # 我们直接用外部传入的特征
+        
+        encoder_layer = nn.TransformerEncoderLayer(
             d_model=input_dim, nhead=num_heads,
-            dim_feedforward=4*input_dim,
-            batch_first=True, activation='gelu'
+            dim_feedforward=8*input_dim,
+            batch_first=True, activation='gelu',
+            norm_first=True
         )
+        self.encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
         self.norm = nn.LayerNorm(input_dim)
+        
         self.proj = nn.Sequential(
             nn.Linear(input_dim, input_dim),
             nn.GELU(),
             nn.Linear(input_dim, input_dim)
         )
-        nn.init.normal_(self.proj[-1].weight, std=1e-3)
+        # 依然保持零初始化，保证初始阶段不破坏原特征
+        nn.init.zeros_(self.proj[-1].weight)
+        nn.init.zeros_(self.proj[-1].bias)
 
-    def forward(self, selected_feats, text_feats=None, labels=None):
-        x = self.encoder_layer(selected_feats)
+    def forward(self, selected_feats, global_feat, text_feats=None, labels=None):
+        """
+        selected_feats: [B, N, D] (Patches)
+        global_feat:    [B, D]    (CLIP Original CLS)
+        """
+        B = selected_feats.shape[0]
+        
+        # 【修改点 2】拼接：把 Global Feat 变成序列的第一个 Token
+        # [B, D] -> [B, 1, D]
+        global_token = global_feat.unsqueeze(1)
+        
+        # 拼接: [B, 1+N, D]
+        # 这样 Transformer 里的 Self-Attention 就会计算 Global 与 Patches 的交互
+        x = torch.cat((global_token, selected_feats), dim=1)
+        
+        # 交互
+        x = self.encoder(x)
         x = self.norm(x)
-        x = x.mean(dim=1)
-        x = self.proj(x)
-        return F.normalize(x, dim=-1)
+        
+        # 取出第一个 Token (也就是被 Refine 过的 Global Token)
+        x_aggregated = x[:, 0, :] 
+        
+        # 投影
+        x_out = self.proj(x_aggregated)
+        
+        return x_out
 
 
 
@@ -475,7 +507,7 @@ class ModularCustomCLIP(nn.Module):
         num_sel = self.cfg.get('num_select', 49)
         
         if s_type == 'mlp':
-            self.selector = MultiHeadMLPSelector(self.feat_dim, num_sel, self.cfg.get('num_heads_selector', 4), self.cfg)
+            self.selector = MultiHeadMLPSelector(self.feat_dim, num_sel, self.cfg.get('num_heads_selector', 8), self.cfg)
         elif s_type == 'slot':
             self.selector = SparseSlotAttentionSelector(self.feat_dim, num_sel, self.cfg.get('num_slots', 8), self.cfg)
         else:
@@ -484,9 +516,9 @@ class ModularCustomCLIP(nn.Module):
         
         f_type = self.cfg.get('fuser_type', 'mean')
         if f_type == 'query_attn':
-            self.fuser = QueryGuidedAttentionFuser(self.feat_dim, self.cfg.get('num_heads_fuser', 4), self.cfg)
+            self.fuser = QueryGuidedAttentionFuser(self.feat_dim, self.cfg.get('num_heads_fuser', 8), self.cfg)
         elif f_type == 'self_attn':
-            self.fuser = SelfAttentionFuser(self.feat_dim, self.cfg.get('num_heads_fuser', 4), self.cfg)
+            self.fuser = SelfAttentionFuser(self.feat_dim, self.cfg.get('num_heads_fuser', 8), self.cfg)
         else:
             self.fuser = MeanPoolFuser(self.feat_dim, self.cfg)
         # self.fuser = self.fuser.to(self.dtype)
@@ -516,7 +548,7 @@ class ModularCustomCLIP(nn.Module):
 
     def _compute_llm_negatives_loss_wrapper(self, final_feats, neg_text_tokens, pos_text_feats):
         # Wrapper to pass logit scale
-        scale_val = self.logit_scale.exp().clamp(max=100.0).item()
+        scale_val = self.logit_scale.exp().item()
         return compute_semantic_exclusion_loss(
             final_feats, pos_text_feats, neg_text_tokens,
             margin=self.cfg.get('margin', 0.1),
@@ -546,9 +578,10 @@ class ModularCustomCLIP(nn.Module):
             pos_text_feat = text_feats.mean(dim=0, keepdim=True).expand(B, -1)
             
         # 4. Fusion
-        final_feats = self.fuser(selected_feats, text_feats, labels)
-        # final_feats = F.normalize(image_features+final_feats, dim=-1)
-        final_feats = F.normalize(image_features, dim=-1)
+        final_feats = self.fuser(selected_feats, global_feat=image_features)
+        final_feats = F.normalize(image_features+final_feats, dim=-1)
+        # final_feats = F.normalize(image_features, dim=-1)
+        # final_feats = F.normalize(final_feats, dim=-1)
 
         # 5. Logits
         logit_scale = self.logit_scale.exp()

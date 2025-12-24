@@ -348,37 +348,7 @@ class DatasetWrapper(TorchDataset):
         if self.return_img0:
             output['img0'] = self.to_tensor(img0)
 
-        # LLM Negatives Pipeline: sample negative tokens
-        neg_tokens = torch.zeros(1, 512, dtype=torch.float32)
-        if self.class_negatives and item.classname in self.class_negatives:
-            neg_words = self.class_negatives[item.classname]
-            # Randomly sample 1-2 negative words
-            num_negs = min(random.randint(1, 2), len(neg_words))
-            sampled_negs = random.sample(neg_words, num_negs)
-            
-            # Encode negative texts (cache for efficiency)
-            neg_tokens_list = []
-            if self.text_encoder is not None:
-                for neg_word in sampled_negs:
-                    cache_key = f"{item.classname}_{neg_word}"
-                    if cache_key not in self._neg_text_cache:
-                        import clip
-                        text = f"a photo of a {neg_word}"
-                        try:
-                            token = clip.tokenize(text).to(self.device)
-                            with torch.no_grad():
-                                neg_feat = self.text_encoder.encode_text(token)
-                            self._neg_text_cache[cache_key] = neg_feat.cpu().float()
-                        except:
-                            pass
-                    
-                    if cache_key in self._neg_text_cache:
-                        neg_tokens_list.append(self._neg_text_cache[cache_key].to(self.device))
-                
-                if neg_tokens_list:
-                    neg_tokens = torch.cat(neg_tokens_list, dim=0)  # (num_negs, D)
-
-        return output['img'], output['label'], neg_tokens
+        return output['img'], output['label']
 
     def _transform_image(self, tfm, img0):
         img_list = []

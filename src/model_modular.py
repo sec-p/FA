@@ -476,7 +476,7 @@ def compute_mixup_invariance_loss(final_feat: torch.Tensor,
 # ============================================================================
 
 class ModularCustomCLIP(nn.Module):
-    def __init__(self, cfg: Dict, classnames: list, clip_model):
+    def __init__(self, cfg: Dict, classnames: list, clip_model, class_negatives: Dict = None):
         super().__init__()
         self.cfg = cfg
         self.classnames = classnames
@@ -485,6 +485,7 @@ class ModularCustomCLIP(nn.Module):
         self.lab2idx = {c: i for i, c in enumerate(self.classnames)}
         self.ood_text_feats = {}
         self.has_ood_map = False
+        self.class_negatives = class_negatives or {}
         
         self.image_encoder = clip_model.visual
         self.text_encoder = clip_model
@@ -500,6 +501,7 @@ class ModularCustomCLIP(nn.Module):
         
         self._build_components()
         self._cache_text_features()
+        self._cache_negative_text_features()
         print(f"✓ ModularCustomCLIP initialized. Dtype: {self.dtype}")
 
     def _build_components(self):
@@ -541,6 +543,55 @@ class ModularCustomCLIP(nn.Module):
         
         self.text_features = torch.stack(text_features_list, dim=0).to(self.device).type(self.dtype)
         self.register_buffer('_text_features', self.text_features)
+
+    def _cache_negative_text_features(self):
+        """
+        Cache negative text features for all classes in class_negatives.
+        Maps each class to its negative class features for efficient retrieval during training.
+        """
+        if not self.class_negatives:
+            self.negative_text_features = {}
+            self.label_to_neg_features = {}
+            return
+            
+        self.negative_text_features = {}
+        templates = self.cfg.get('templates', ["a photo of a {}"])
+        if isinstance(templates, str): templates = [templates]
+        
+        with torch.no_grad():
+            for classname, neg_classnames in self.class_negatives.items():
+                if classname not in self.lab2idx:
+                    continue  # Skip if class not in our dataset
+                    
+                neg_feats_list = []
+                for neg_classname in neg_classnames:
+                    # Format negative class name with templates
+                    neg_classname = neg_classname.replace('_', ' ')
+                    texts = [t.format(neg_classname) for t in templates]
+                    
+                    # Tokenize and encode
+                    tokens = clip.tokenize(texts).to(self.device)
+                    text_embeddings = self.text_encoder.encode_text(tokens)
+                    
+                    # Normalize and average
+                    text_embeddings = text_embeddings / (text_embeddings.norm(dim=-1, keepdim=True) + 1e-8)
+                    neg_feat = text_embeddings.mean(dim=0)
+                    neg_feat = neg_feat / (neg_feat.norm() + 1e-8)
+                    
+                    neg_feats_list.append(neg_feat)
+                
+                # Stack and store for this class
+                if neg_feats_list:
+                    self.negative_text_features[classname] = torch.stack(neg_feats_list, dim=0).to(self.device).type(self.dtype)
+        
+        # Create label-to-negative-features mapping for efficient lookup during forward pass
+        self.label_to_neg_features = {}
+        for classname, feats in self.negative_text_features.items():
+            if classname in self.lab2idx:
+                label = self.lab2idx[classname]
+                self.label_to_neg_features[label] = feats
+        
+        print(f"✓ Cached negative text features for {len(self.negative_text_features)} classes")
 
     def set_ood_classmap(self, ood_map: Dict[str, list], templates: Optional[list] = None):
         # ... (Same as before, skipped for brevity)
@@ -595,15 +646,40 @@ class ModularCustomCLIP(nn.Module):
             aux_losses['redundancy'] = self.cfg.get('lambda_redundancy', 0.1) * \
                                      compute_redundancy_loss(selected_feats)
         
-        # B. LLM Negatives
-        if negative_text_tokens is not None and self.cfg.get('use_llm_negatives', False):
+        # B. LLM Negatives - now uses cached negative features
+        if labels is not None and self.cfg.get('use_llm_negatives', False):
             scale_val = logit_scale.item()
-            llm_loss = compute_semantic_exclusion_loss(
-                final_feats, pos_text_feat, negative_text_tokens,
-                margin=self.cfg.get('margin', 0.1),
-                logit_scale=scale_val
-            )
-            aux_losses['llm_negatives'] = self.cfg.get('lambda_llm_negatives', 0.05) * llm_loss
+            
+            # Get negative features for each sample in batch
+            batch_neg_feats = []
+            for label in labels:
+                label = label.item()
+                if label in self.label_to_neg_features:
+                    # Get cached negative features for this label
+                    neg_feats = self.label_to_neg_features[label]
+                    # Add batch dimension [num_neg, feat_dim] -> [1, num_neg, feat_dim]
+                    batch_neg_feats.append(neg_feats.unsqueeze(0))
+                else:
+                    # Fallback if no negatives for this label
+                    batch_neg_feats.append(None)
+            
+            # Filter out samples without negative features
+            valid_indices = [i for i, neg_feats in enumerate(batch_neg_feats) if neg_feats is not None]
+            
+            if valid_indices:
+                # Stack only valid samples
+                valid_neg_feats = torch.cat([batch_neg_feats[i] for i in valid_indices], dim=0)
+                valid_final_feats = final_feats[valid_indices]
+                valid_pos_text_feat = pos_text_feat[valid_indices]
+                
+                llm_loss = compute_semantic_exclusion_loss(
+                    valid_final_feats, valid_pos_text_feat, valid_neg_feats,
+                    margin=self.cfg.get('margin', 0.1),
+                    logit_scale=scale_val
+                )
+                
+                # Scale loss by number of valid samples
+                aux_losses['llm_negatives'] = self.cfg.get('lambda_llm_negatives', 0.05) * llm_loss
             
         # C. Semantic Exclusion (All other classes)
         if self.cfg.get('use_semantic_exclusion', False) and labels is not None:
@@ -643,9 +719,9 @@ class ModularCustomCLIP(nn.Module):
 # Helper function to build model
 # ============================================================================
 
-def build_modular_model(cfg: Dict, classnames: list, clip_model):
+def build_modular_model(cfg: Dict, classnames: list, clip_model, class_negatives: Dict = None):
     """Factory function to create modular model."""
-    return ModularCustomCLIP(cfg, classnames, clip_model)
+    return ModularCustomCLIP(cfg, classnames, clip_model, class_negatives=class_negatives)
 
 
 if __name__ == '__main__':

@@ -319,7 +319,7 @@ class TrainEvalOrchestrator:
         self.logger.log(f'Config: {json.dumps(cfg, default=str, indent=2)}')
         
         # Build modular model
-        self.model = build_modular_model(cfg, self.classnames, clip_model)
+        self.model = build_modular_model(cfg, self.classnames, clip_model, class_negatives=self.class_negatives)
         self.model = self.model.to(self.device)
         
         # Setup optimizer (only for trainable parameters)

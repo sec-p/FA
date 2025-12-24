@@ -288,19 +288,13 @@ class DatasetBase:
 
 class DatasetWrapper(TorchDataset):
     def __init__(self, data_source, input_size, transform=None, is_train=False,
-                 return_img0=False, k_tfm=1, class_negatives=None, text_encoder=None, device='cpu'):
+                 return_img0=False, k_tfm=1):
         self.data_source = data_source
         self.transform = transform # accept list (tuple) as input
         self.is_train = is_train
         # Augmenting an image K>1 times is only allowed during training
         self.k_tfm = k_tfm if is_train else 1
         self.return_img0 = return_img0
-        
-        # LLM Negatives Pipeline
-        self.class_negatives = class_negatives or {}  # dict: class_name -> list of negative words
-        self.text_encoder = text_encoder
-        self.device = device
-        self._neg_text_cache = {}  # Cache encoded negative texts
 
         if self.k_tfm > 1 and transform is None:
             raise ValueError(
@@ -370,10 +364,7 @@ def build_data_loader(
     tfm=None,
     is_train=True,
     shuffle=False,
-    dataset_wrapper=None,
-    class_negatives=None,
-    text_encoder=None,
-    device='cpu'
+    dataset_wrapper=None
 ):
 
     if dataset_wrapper is None:
@@ -393,8 +384,7 @@ def build_data_loader(
 
     # Build data loader
     data_loader = torch.utils.data.DataLoader(
-        dataset_wrapper(data_source, input_size=input_size, transform=tfm, is_train=is_train,
-                       class_negatives=class_negatives, text_encoder=text_encoder, device=device),
+        dataset_wrapper(data_source, input_size=input_size, transform=tfm, is_train=is_train),
         batch_size=batch_size,
         num_workers=16,
         shuffle=shuffle,

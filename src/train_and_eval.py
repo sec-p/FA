@@ -185,10 +185,7 @@ class TrainEvalOrchestrator:
             batch_size=self.batch_size,
             tfm=train_transform,
             is_train=True,
-            shuffle=True,
-            class_negatives=class_negatives,
-            text_encoder=None,
-            device=self.device
+            shuffle=True
         )
         
         self.test_loader = build_data_loader(
@@ -196,10 +193,7 @@ class TrainEvalOrchestrator:
             batch_size=self.batch_size,
             is_train=False,
             tfm=test_transform,
-            shuffle=False,
-            class_negatives=class_negatives,
-            text_encoder=None,
-            device=self.device
+            shuffle=False
         )
         
         # Setup OOD data loaders
@@ -215,10 +209,7 @@ class TrainEvalOrchestrator:
                     batch_size=self.batch_size,
                     is_train=False,
                     tfm=test_transform,
-                    shuffle=False,
-                    class_negatives={},
-                    text_encoder=None,
-                    device=self.device
+                    shuffle=False
                 )
                 self.ood_loaders[ood_dataset] = ood_loader
                 self.logger.log(f'  ✓ Loaded OOD dataset: {ood_dataset}')
@@ -364,17 +355,9 @@ class TrainEvalOrchestrator:
         
         for batch_idx, batch in enumerate(pbar):
             # 1. Prepare Data
-            if isinstance(batch, dict):
-                images = batch['images'].to(self.device)
-                labels = batch['labels'].to(self.device)
-                negative_text_tokens = batch.get('negative_text_tokens', None)
-                if negative_text_tokens is not None:
-                    negative_text_tokens = negative_text_tokens.to(self.device)
-            else:
-                images, labels, negative_text_tokens = batch
-                images, labels = images.to(self.device), labels.to(self.device)
-                if negative_text_tokens is not None:
-                    negative_text_tokens = negative_text_tokens.to(self.device)
+            images, labels = batch
+            images, labels = images.to(self.device), labels.to(self.device)
+            negative_text_tokens = None  # No longer needed since we use cached negative features
             
             self.optimizer.zero_grad()
             
@@ -442,12 +425,8 @@ class TrainEvalOrchestrator:
         total = 0
         with torch.no_grad():
             for batch in self.test_loader:
-                if isinstance(batch, dict):
-                    images = batch['images'].to(self.device)
-                    labels = batch['labels'].to(self.device)
-                else:
-                    images, labels, _ = batch
-                    images, labels = images.to(self.device), labels.to(self.device)
+                images, labels = batch
+                images, labels = images.to(self.device), labels.to(self.device)
                 
                 # Inference only needs images (labels are for metric calc only)
                 with autocast(): # 推理也使用FP16加速
@@ -475,7 +454,7 @@ class TrainEvalOrchestrator:
                 if isinstance(batch, dict):
                     images = batch['images'].to(self.device)
                 else:
-                    images, _, _ = batch
+                    images, _ = batch
                     images = images.to(self.device)
                 
                 with autocast():
@@ -493,7 +472,7 @@ class TrainEvalOrchestrator:
                 if isinstance(batch, dict):
                     images = batch['images'].to(self.device)
                 else:
-                    images, _, _ = batch
+                    images, _ = batch
                     images = images.to(self.device)
                 
                 with autocast():

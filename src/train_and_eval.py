@@ -197,9 +197,9 @@ class TrainEvalOrchestrator:
         )
         
         # Setup OOD data loaders
-        OOD_DATASETS = ['iNaturalist', 'SUN', 'Places', 'Textures']
+        # OOD_DATASETS = ['iNaturalist', 'SUN', 'Places', 'Textures']
         # You can reduce this list for faster debugging
-        # OOD_DATASETS = ['iNaturalist'] 
+        OOD_DATASETS = ['iNaturalist'] 
         
         for ood_dataset in OOD_DATASETS:
             try:

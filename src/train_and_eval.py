@@ -399,18 +399,27 @@ class TrainEvalOrchestrator:
                 correct += predicted.eq(labels).sum().item()
                 total += labels.size(0)
 
-            # Update progress bar (simplified)
-            pbar.set_postfix({
-                'Loss': f"{loss.item():.4f}", 
+            # Prepare loss info for display
+            loss_info = {
+                'Loss': f"{loss.item():.4f}",
+                'CE': f"{ce_loss.item():.4f}",
                 'Acc': f"{100.*correct/total:.2f}%"
-            })
+            }
             
-            # Debug log occasionally
+            # Add auxiliary losses to display
+            for k, v in aux_losses.items():
+                if v.requires_grad:
+                    loss_info[k] = f"{v.item():.4f}"
+            
+            # Update progress bar with detailed loss info
+            pbar.set_postfix(loss_info)
+            
+            # Log detailed loss info occasionally
             if batch_idx % 50 == 0:
                 loss_str = f"CE: {ce_loss.item():.4f}"
                 for k, v in aux_losses.items():
                     loss_str += f", {k}: {v.item():.4f}"
-                # self.logger.log(f"  Batch {batch_idx}: {loss_str}")
+                self.logger.log(f"  Batch {batch_idx}: {loss_str}")
 
         avg_loss = total_loss / len(self.train_loader) if len(self.train_loader) > 0 else 0
         train_acc = 100.0 * correct / total if total > 0 else 0

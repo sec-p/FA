@@ -499,7 +499,7 @@ class TrainEvalOrchestrator:
                 with autocast():
                     output_dict = self.model(images)
                     logits = output_dict['logits']
-                    scores = F.softmax(logits, dim=1).max(1)[0]
+                    scores =logits.max(1)[0]
                 
                 ood_scores.extend(scores.cpu().numpy())
         
@@ -630,15 +630,15 @@ class TrainEvalOrchestrator:
                 avg_fpr95 = eval_results["avg_ood_fpr95"]
                 self.logger.log(f'  Avg OOD AUROC: {avg_auroc:.2f}%, Avg OOD FPR95: {avg_fpr95:.2f}%')
             
-            # Save checkpoint (Every 5 epochs or best)
-            if (epoch % 5 == 0 or epoch == self.epochs - 1) and epoch+1>10:
-                self.save_checkpoint(epoch, eval_results)
+                # Save checkpoint (Every 5 epochs or best)
+                if (epoch % 5 == 0 or epoch == self.epochs - 1) and epoch+1>10:
+                    self.save_checkpoint(epoch, eval_results)
             
-            # Track best
-            if avg_auroc > best_avg_auroc:
-                best_avg_auroc = avg_auroc
-                self.save_checkpoint(999, eval_results) # 999 as code for 'best'
-                self.logger.log(f"  ★ New Best Avg AUROC: {best_avg_auroc:.2f}%")
+                # Track best
+                if avg_auroc > best_avg_auroc:
+                    best_avg_auroc = avg_auroc
+                    self.save_checkpoint(999, eval_results) # 999 as code for 'best'
+                    self.logger.log(f"  ★ New Best Avg AUROC: {best_avg_auroc:.2f}%")
             
             # Update history
             results_history.append({

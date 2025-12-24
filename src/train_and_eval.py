@@ -174,9 +174,9 @@ class TrainEvalOrchestrator:
         test_data = id_dataset.test if len(id_dataset.test) > 0 else id_dataset.val
         
         # Load class negatives
-        class_negatives = self._load_class_negatives()
-        if class_negatives:
-            self.logger.log(f"Loaded class negatives for {len(class_negatives)} classes")
+        self.class_negatives = self._load_class_negatives()
+        if self.class_negatives:
+            self.logger.log(f"Loaded class negatives for {len(self.class_negatives)} classes")
         else:
             self.logger.log("No class negatives loaded or file not found.")
         

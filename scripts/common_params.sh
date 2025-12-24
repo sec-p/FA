@@ -14,7 +14,7 @@ DEFAULT_SEED=42
 DEFAULT_BACKBONE="ViT-B/16"
 DEFAULT_ROOT_PATH="/data/ICML2026/clip/FA/my_dataset"
 DEFAULT_SHOTS=16
-DEFAULT_CLASS_NEGATIVES_PATH="/data/ICML2026/clip/FA/my_dataset/class_negatives.json"
+DEFAULT_CLASS_NEGATIVES_PATH="/root/class_negatives.json"
 
 # Hyperparameter search grids
 LEARNING_RATES=(0.01 0.001 0.002)

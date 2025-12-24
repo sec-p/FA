@@ -203,7 +203,7 @@ class CustomImageNet(DatasetBase):
             print(f"⚠️  Dataset directory does not exist: {self.image_dir}")
             print(f"   Expected structure: {root}/ImageNet-1K/images/{{train,val}}/{{class_folders}}/{{images}}")
 
-        text_file = os.path.join(self.dataset_dir, "classnames.txt")
+        text_file = os.path.join(self.dataset_dir, "classname.txt")
         classnames = self.read_classnames(text_file)
         train = self.read_data(classnames, "train")
         # Follow standard practice to perform evaluation on the val set

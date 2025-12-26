@@ -629,9 +629,9 @@ class ModularCustomCLIP(nn.Module):
             pos_text_feat = text_feats.mean(dim=0, keepdim=True).expand(B, -1)
             
         # 4. Fusion
-        final_feats = self.fuser(selected_feats, global_feat=image_features)
-        final_feats = F.normalize(image_features+final_feats, dim=-1)
-        # final_feats = F.normalize(image_features, dim=-1)
+        # final_feats = self.fuser(selected_feats, global_feat=image_features)
+        # final_feats = F.normalize(image_features+final_feats, dim=-1)
+        final_feats = F.normalize(image_features, dim=-1)
         # final_feats = F.normalize(final_feats, dim=-1)
 
         # 5. Logits

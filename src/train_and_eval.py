@@ -66,7 +66,7 @@ from src.model_modular import build_modular_model
 from my_dataset import build_dataset
 from my_dataset.utils import build_data_loader
 from src.utils import Logger, cls_acc
-
+import math
 
 class TrainEvalOrchestrator:
     """Orchestrates training and evaluation with per-epoch OOD testing."""
@@ -81,7 +81,7 @@ class TrainEvalOrchestrator:
                  selector_temperature: float = 1.0,
                  patches_per_slot_attn: int = 16,
                  # OOD score parameters
-                 score_type: str = 'MCM',
+                 score_type: str = 'GL-MCM',
                  temperature: float = 1.0,
                  lambda_local: float = 1.0):
         
@@ -466,6 +466,7 @@ class TrainEvalOrchestrator:
         self.model.eval()
         
         # 1. Get ID confidences
+        to_np = lambda x: x.data.cpu().numpy()
         id_scores = []
         with torch.no_grad():
             for batch in self.test_loader:
@@ -484,8 +485,10 @@ class TrainEvalOrchestrator:
                     text_feats = self.model._text_features.to(self.device)
                     
                     # Normalize features
-                    global_features = F.normalize(global_features, dim=-1)
-                    local_features = F.normalize(local_features, dim=-1)
+                    # global_features = F.normalize(global_features, dim=-1)
+                    global_features = global_features / global_features.norm(dim=-1, keepdim=True)
+                    # local_features = F.normalize(local_features, dim=-1)
+                    local_features = local_features / local_features.norm(dim=-1, keepdim=True)
                     
                     # Calculate logits (no logit_scale, consistent with GL-MCM)
                     output_global = global_features @ text_feats.T
@@ -502,19 +505,19 @@ class TrainEvalOrchestrator:
                         scores_np = entropy(smax_global_np, axis=1)
                         scores = torch.tensor(scores_np, device=self.device)
                     elif self.score_type == 'var':
-                        smax_global = F.softmax(output_global / self.temperature, dim=1)
+                        smax_global = to_np(F.softmax(output_global / self.temperature, dim=1))
                         # Convert to numpy for variance calculation
                         smax_global_np = smax_global.cpu().numpy()
                         scores_np = -np.var(smax_global_np, axis=1)
                         scores = torch.tensor(scores_np, device=self.device)
                     elif self.score_type == 'MCM':
-                        smax_global = F.softmax(output_global / self.temperature, dim=1)
-                        scores = -torch.max(smax_global, dim=1)[0]
+                        smax_global = to_np(F.softmax(output_global / self.temperature, dim=1))
+                        scores = -np.max(smax_global, dim=1)[0]
                     elif self.score_type == 'max-logit':
-                        scores = -torch.max(output_global, dim=1)[0]
+                        scores = -np.max(output_global, axis=1)[0]
                     elif self.score_type == 'L-MCM':
                         # Local MCM - calculate softmax over local features
-                        smax_local = F.softmax(output_local / self.temperature, dim=1)
+                        smax_local = to_np(F.softmax(output_local / self.temperature, dim=1))
                         # For ViT, local_features shape is (B, N, D) where N is number of patches
                         # We need to reshape to match GL-MCM's expected shape (B, H, W, C) for spatial dimensions
                         B, N, C = smax_local.shape
@@ -522,18 +525,20 @@ class TrainEvalOrchestrator:
                         H = W = int(math.sqrt(N))
                         smax_local_reshaped = smax_local.reshape(B, H, W, C)
                         # Get max over spatial dimensions (H, W)
-                        scores = -torch.max(smax_local_reshaped, dim=(1, 2, 3))[0]
+                        scores = -np.max(smax_local_reshaped, axis=(1, 2, 3))[0]
                     elif self.score_type == 'GL-MCM':
+                        import pdb
+                        pdb.set_trace()
                         # Global-Local MCM combination
-                        smax_global = F.softmax(output_global / self.temperature, dim=1)
-                        mcm_global_score = -torch.max(smax_global, dim=1)[0]
+                        smax_global = to_np(F.softmax(output_global / self.temperature, dim=1))
+                        mcm_global_score = -np.max(smax_global, axis=1)[0]
                         
                         # Local MCM component
-                        smax_local = F.softmax(output_local / self.temperature, dim=1)
+                        smax_local = to_np(F.softmax(output_local / self.temperature, dim=1))
                         B, N, C = smax_local.shape
                         H = W = int(math.sqrt(N))
                         smax_local_reshaped = smax_local.reshape(B, H, W, C)
-                        mcm_local_score = -torch.max(smax_local_reshaped, dim=(1, 2, 3))[0]
+                        mcm_local_score = -np.max(smax_local_reshaped, axis=(1, 2, 3))[0]
                         
                         # Combine with lambda_local weight
                         scores = mcm_global_score + self.lambda_local * mcm_local_score

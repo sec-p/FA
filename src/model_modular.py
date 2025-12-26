@@ -536,9 +536,9 @@ class ModularCustomCLIP(nn.Module):
                 texts = [t.format(classname) for t in templates]
                 texts = clip.tokenize(texts).to(self.device)
                 text_embeddings = self.text_encoder.encode_text(texts)
-                text_embeddings = text_embeddings / (text_embeddings.norm(dim=-1, keepdim=True) + 1e-8)
+                text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
                 text_feat = text_embeddings.mean(dim=0)
-                text_feat = text_feat / (text_feat.norm() + 1e-8)
+                text_feat = text_feat / text_feat.norm()
                 text_features_list.append(text_feat)
         
         self.text_features = torch.stack(text_features_list, dim=0).to(self.device).type(self.dtype)
@@ -574,9 +574,9 @@ class ModularCustomCLIP(nn.Module):
                     text_embeddings = self.text_encoder.encode_text(tokens)
                     
                     # Normalize and average
-                    text_embeddings = text_embeddings / (text_embeddings.norm(dim=-1, keepdim=True) + 1e-8)
+                    text_embeddings = text_embeddings / text_embeddings.norm(dim=-1, keepdim=True)
                     neg_feat = text_embeddings.mean(dim=0)
-                    neg_feat = neg_feat / (neg_feat.norm() + 1e-8)
+                    neg_feat = neg_feat / neg_feat.norm()
                     
                     neg_feats_list.append(neg_feat)
                 
@@ -615,8 +615,8 @@ class ModularCustomCLIP(nn.Module):
         image_features, local_features = self.image_encoder(image.type(self.dtype))
 
         
-        image_features = F.normalize(image_features, dim=-1)
-        local_features = F.normalize(local_features, dim=-1)
+        # image_features = F.normalize(image_features, dim=-1)
+        # local_features = F.normalize(local_features, dim=-1)
         
         # 2. Select Features (Mixed Precision managed internally)
         selected_feats, sel_aux_loss, bg_mask = self.selector(local_features)
@@ -631,7 +631,8 @@ class ModularCustomCLIP(nn.Module):
         # 4. Fusion
         # final_feats = self.fuser(selected_feats, global_feat=image_features)
         # final_feats = F.normalize(image_features+final_feats, dim=-1)
-        final_feats = F.normalize(image_features, dim=-1)
+        # final_feats = F.normalize(image_features, dim=-1)
+        final_feats = image_features / image_features.norm(dim=-1, keepdim=True)
         # final_feats = F.normalize(final_feats, dim=-1)
 
         # 5. Logits

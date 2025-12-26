@@ -731,7 +731,9 @@ class ModularCustomCLIP(nn.Module):
             'logits': logits,
             'aux_losses': aux_losses,
             'selected_feats': selected_feats,
-            'final_feats': final_feats
+            'final_feats': final_feats,
+            'global_features': image_features,
+            'local_features': local_features
         }
 
 

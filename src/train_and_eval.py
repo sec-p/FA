@@ -685,7 +685,8 @@ class TrainEvalOrchestrator:
     
         return fps[cutoff] / (np.sum(np.logical_not(y_true)))   # , fps[cutoff]/(fps[cutoff] + tps[cutoff])
     
-    def _compute_auroc(self, id_scores: np.ndarray, ood_scores: np.ndarray) -> float:
+    def get_measures(self, id_scores: np.ndarray, ood_scores: np.ndarray, recall_level=0.95):
+        """Calculate AUROC, AUPR and FPR95 using GL-MCM's method"""
         from sklearn.metrics import roc_auc_score, average_precision_score
         pos = np.array(id_scores[:]).reshape((-1, 1))
         neg = np.array(ood_scores[:]).reshape((-1, 1))
@@ -694,25 +695,23 @@ class TrainEvalOrchestrator:
         labels[:len(pos)] += 1
     
         try:
-            auroc = roc_auc_score(labels, examples) * 100
+            auroc = roc_auc_score(labels, examples)
+            aupr = average_precision_score(labels, examples)
+            fpr = self.fpr_and_fdr_at_recall(labels, examples, recall_level)
         except:
-            auroc = 0.0
-        return auroc
+            auroc, aupr, fpr = 0.0, 0.0, 0.0
+        
+        return auroc, aupr, fpr
+    
+    def _compute_auroc(self, id_scores: np.ndarray, ood_scores: np.ndarray) -> float:
+        """Compute AUROC (wrapped for backward compatibility)"""
+        auroc, _, _ = self.get_measures(id_scores, ood_scores)
+        return auroc * 100
     
     def _compute_fpr95(self, id_scores: np.ndarray, ood_scores: np.ndarray) -> float:
-        from sklearn.metrics import roc_auc_score, average_precision_score
-        pos = np.array(id_scores[:]).reshape((-1, 1))
-        neg = np.array(ood_scores[:]).reshape((-1, 1))
-        examples = np.squeeze(np.vstack((pos, neg)))
-        labels = np.zeros(len(examples), dtype=np.int32)
-        labels[:len(pos)] += 1
-    
-        try:
-            fpr = self.fpr_and_fdr_at_recall(labels, examples, recall_level=0.95)
-            fpr95 = fpr * 100
-        except:
-            fpr95 = 0.0
-        return fpr95
+        """Compute FPR95 (wrapped for backward compatibility)"""
+        _, _, fpr = self.get_measures(id_scores, ood_scores, recall_level=0.95)
+        return fpr * 100
     
     def evaluate_epoch(self, epoch: int) -> Dict:
         """Evaluate on ID and all OOD datasets."""

@@ -633,30 +633,100 @@ class TrainEvalOrchestrator:
         id_scores = np.array(id_scores)
         ood_scores = np.array(ood_scores)
         
-        auroc = self._compute_auroc(id_scores, ood_scores)
-        fpr95 = self._compute_fpr95(id_scores, ood_scores)
+        # 使用负号处理，与GL-MCM保持一致
+        auroc = self._compute_auroc(-id_scores, -ood_scores)
+        fpr95 = self._compute_fpr95(-id_scores, -ood_scores)
         
         return auroc, fpr95
     
+    def stable_cumsum(self, arr, rtol=1e-05, atol=1e-08):
+        """Use high precision for cumsum and check that final value matches sum
+        Parameters
+        ----------
+        arr : array-like
+            To be cumulatively summed as flat
+        rtol : float
+            Relative tolerance, see ``np.allclose``
+        atol : float
+            Absolute tolerance, see ``np.allclose``
+        """
+        out = np.cumsum(arr, dtype=np.float64)
+        expected = np.sum(arr, dtype=np.float64)
+        if not np.allclose(out[-1], expected, rtol=rtol, atol=atol):
+            raise RuntimeError('cumsum was found to be unstable: '
+                               'its last element does not correspond to sum')
+        return out
+    
+    def fpr_and_fdr_at_recall(self, y_true, y_score, recall_level=0.95, pos_label=None):
+        classes = np.unique(y_true)
+        if (pos_label is None and
+                not (np.array_equal(classes, [0, 1]) or
+                         np.array_equal(classes, [-1, 1]) or
+                         np.array_equal(classes, [0]) or
+                         np.array_equal(classes, [-1]) or
+                         np.array_equal(classes, [1]))):
+            raise ValueError("Data is not binary and pos_label is not specified")
+        elif pos_label is None:
+            pos_label = 1.
+    
+        # make y_true a boolean vector
+        y_true = (y_true == pos_label)
+    
+        # sort scores and corresponding truth values
+        desc_score_indices = np.argsort(y_score, kind="mergesort")[::-1]
+        y_score = y_score[desc_score_indices]
+        y_true = y_true[desc_score_indices]
+    
+        # y_score typically has many tied values. Here we extract
+        # the indices associated with the distinct values. We also
+        # concatenate a value for the end of the curve.
+        distinct_value_indices = np.where(np.diff(y_score))[0]
+        threshold_idxs = np.r_[distinct_value_indices, y_true.size - 1]
+    
+        # accumulate the true positives with decreasing threshold
+        tps = self.stable_cumsum(y_true)[threshold_idxs]
+        fps = 1 + threshold_idxs - tps      # add one because of zero-based indexing
+    
+        thresholds = y_score[threshold_idxs]
+    
+        recall = tps / tps[-1]
+    
+        last_ind = tps.searchsorted(tps[-1])
+        sl = slice(last_ind, None, -1)      # [last_ind::-1]
+        recall, fps, tps, thresholds = np.r_[recall[sl], 1], np.r_[fps[sl], 0], np.r_[tps[sl], 0], thresholds[sl]
+    
+        cutoff = np.argmin(np.abs(recall - recall_level))
+    
+        return fps[cutoff] / (np.sum(np.logical_not(y_true)))   # , fps[cutoff]/(fps[cutoff] + tps[cutoff])
+    
     def _compute_auroc(self, id_scores: np.ndarray, ood_scores: np.ndarray) -> float:
-        from sklearn.metrics import roc_auc_score
-        labels = np.concatenate([np.ones(len(id_scores)), np.zeros(len(ood_scores))])
-        scores = np.concatenate([id_scores, ood_scores])
+        from sklearn.metrics import roc_auc_score, average_precision_score
+        pos = np.array(id_scores[:]).reshape((-1, 1))
+        neg = np.array(ood_scores[:]).reshape((-1, 1))
+        examples = np.squeeze(np.vstack((pos, neg)))
+        labels = np.zeros(len(examples), dtype=np.int32)
+        labels[:len(pos)] += 1
+    
         try:
-            auroc = roc_auc_score(labels, scores) * 100
+            auroc = roc_auc_score(labels, examples) * 100
         except:
             auroc = 0.0
         return auroc
     
     def _compute_fpr95(self, id_scores: np.ndarray, ood_scores: np.ndarray) -> float:
-        id_sorted = np.sort(id_scores)
-        # We want to keep 95% of ID samples, so threshold is at the 5th percentile
-        thresh_idx = int(len(id_scores) * 0.05)
-        threshold = id_sorted[thresh_idx]
-        
-        # FPR = FP / N = sum(ood >= thresh) / len(ood)
-        fpr = np.sum(ood_scores >= threshold) / len(ood_scores)
-        return fpr * 100
+        from sklearn.metrics import roc_auc_score, average_precision_score
+        pos = np.array(id_scores[:]).reshape((-1, 1))
+        neg = np.array(ood_scores[:]).reshape((-1, 1))
+        examples = np.squeeze(np.vstack((pos, neg)))
+        labels = np.zeros(len(examples), dtype=np.int32)
+        labels[:len(pos)] += 1
+    
+        try:
+            fpr = self.fpr_and_fdr_at_recall(labels, examples, recall_level=0.95)
+            fpr95 = fpr * 100
+        except:
+            fpr95 = 0.0
+        return fpr95
     
     def evaluate_epoch(self, epoch: int) -> Dict:
         """Evaluate on ID and all OOD datasets."""
